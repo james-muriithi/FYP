@@ -410,6 +410,11 @@ require_once("includes/required_js.php");
 
         $('.textarea').wysihtml5();
 
+
+
+
+
+
     });
 </script>
 <script>

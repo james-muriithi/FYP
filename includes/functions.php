@@ -85,3 +85,29 @@ function time2str($ts) {
         return date('F Y', $ts);
     }
 }
+
+
+function getStudentData($id) {
+    global $conn;
+
+    // build the query
+    $sql = "SELECT * from student WHERE student.studentId = '$id' LIMIT 1";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+            $studentData = array(
+                "cms"=>$row['studentCMS'],
+                "name"=>$row['studentName'],
+                "email"=>$row['studentEmail'],
+                "gender"=>$row['studentGender'],
+            );
+
+            return $studentData;
+
+        }
+    } else {
+       return false;
+    }
+
+}

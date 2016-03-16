@@ -13,4 +13,7 @@
 <script src="plugins/iCheck/icheck.min.js"></script>
 <!-- Bootstrap WYSIHTML5 -->
 <script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
-<script>$("#groupRequestsMenu").load('requestsMenu.php');</script>
+<!-- SweetAlert -->
+<script src="plugins/sweet-alert/sweetalert.min.js"></script>
+<!--<script>$("#groupRequestsMenu").load('requestsMenu.php');</script>-->
+

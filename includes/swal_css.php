@@ -1,1 +1,0 @@
-<link rel="stylesheet" href="plugins/sweet-alert/sweetalert.css">
