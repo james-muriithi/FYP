@@ -1,38 +1,21 @@
-<?php 
-//****************************************************************************************************************************************************
-//
-//													Setting up global variables for header and page title use
-//
-//**************************************************************************************************************************************************** -->
-     
-$GLOBALS['title']="FYPMS";
-$GLOBALS['subtitle']="Set Deliverables";
+<?php
+$GLOBALS['title'] = "FYPMS";
+$GLOBALS['subtitle'] = "Set Deliverables";
 require_once("includes/header.php");
 require_once("includes/connection.php");
-$error="";
-
-//****************************************************************************************************************************************************
-//
-//													Starting session and checking session variables
-//
-//**************************************************************************************************************************************************** -->
-     
+$error = "";
 session_start();
-if(isset($_SESSION["isCord"]))
-{
-if($_SESSION["isCord"]==="0")
-{
-        header('Location: '.'index.php');
+if (isset($_SESSION["isCord"])) {
+    if ($_SESSION["isCord"] === "0") {
+        header('Location: ' . 'index.php');
+    }
+} else if (!isset($_SESSION["isCord"])) {
+    header('Location: ' . 'index.php');
 }
-}else if(!isset($_SESSION["isCord"]))
-{
-	header('Location: '.'index.php');
-}
-if(isset($_POST["deliverableID"]))
-{
-	$configid=$_POST["deliverableID"];
-	$configStat=$_POST["setDeliverableStatus"];
-	if ($conn->connect_error) {
+if (isset($_POST["deliverableID"])) {
+    $configid = $_POST["deliverableID"];
+    $configStat = $_POST["setDeliverableStatus"];
+    if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     } else {
 
@@ -42,217 +25,212 @@ if(isset($_POST["deliverableID"]))
 
         $conn->close();
     }
-	header("Location: setDeliverables.php");
+    header("Location: setDeliverables.php");
 }
 
 ?>
-<?php
-require_once 'includes/swal_css.php';
-?>
 </head>
 
-<body class="hold-transition skin-blue sidebar-mini">	
+<body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
-<!--//****************************************************************************************************************************************************
-//
-//													Including main bar and sidebar for the page
-//
-//**************************************************************************************************************************************************** -->
-     
     <?php require_once("includes/main-header.php"); ?>
     <?php require_once("includes/main-sidebar.php"); ?>
-    <div class="content-wrapper" >
-    <?php require_once("includes/content-header.php"); ?>
-     
-	 
-	
-    <section class="content" style="min-height: 700px">
-    <div class="row">
-    <div class="col-md-2"></div>        
-    <div class="col-md-8">   
-	
-	
-	
-	
-	
-	
-	            <section class="content" style="min-height: 700px">
-                <div class="row">
+    <div class="content-wrapper">
+        <?php require_once("includes/content-header.php"); ?>
 
-                    <!--	<div class="col-md-1"></div>        -->
-                    <div class="col-md-12"> 
+        <section class="content" style="min-height: 700px">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
 
-                        <div class="box">
+                    <section class="content" style="min-height: 700px">
+                        <div class="row">
 
-                            <p class="register-box-msg"><b>Part 1</b></p>
-                            <?php
-                             if (isset($success_msg)){
-                                 echo "<p class='text-green'>$success_msg</p>";
-                             }else if (isset($error_msg)){
-                                 echo "<p class='text-green'>$error_msg</p>";
-                             }
-                            ?>    
-                            <!-- /.box-header -->
-                            <div class="box-body table-responsive no-padding">
-                                <table class="table table-hover">
-                                    <tr>
-                                        <th>Week</th>
-                                        <th>Task</th>
-                                        <th>Deadline</th>
-                                        <th>Action</th>
-                                        
-                                    </tr>
-									<?php
-									if ($conn->connect_error) {
-										die("Connection failed: " . $conn->connect_error);
-									} else {
+                            <!--	<div class="col-md-1"></div>        -->
+                            <div class="col-md-12">
 
-										$sql = "SELECT * FROM configurations WHERE configurationType='default' AND projectPart='1' ORDER BY week";
-										$result = $conn->query($sql);
-										//$result2 = $conn->query($sql2);
-										$check = 0;
-										if ($result->num_rows > 0) {
-											// output data of each row
-											while ($row = $result->fetch_assoc()) {
-												?>
-                                                <tr>
-                                                    <td><?php echo $row["week"]; ?></td>
-                                                    <td><?php echo $row["taskName"]; ?></td>
-                                                    <td><?php echo $row["deadline"]; ?></td>
-													
-													<form id="setDeliverableStatus" action="setDeliverables.php" method="post">
-														<td>
-														<div class="form-group has-feedback">
-															<input type= "hidden" name="deliverableID" value="<?php echo $row["configurationId"]; ?>"/>
-															<input name="setDeliverableStatus" class="btn btn-sm"type="submit" value="open"/>
-														</div>
-														
-													
-														<div class="form-group has-feedback">
-														
-															<input type= "hidden" name="deliverableID" value="<?php echo $row["configurationId"]; ?>"/>
-															<input name="setDeliverableStatus" class="btn btn-danger"type="submit" value="close"/>
-														</div>
-														</td>
-													</form>
-                                                
-													
+                                <div class="box">
 
-                                                </tr>
-                                                
-                                                <?php
-                                            }
-                                        }
-                                    }
-                                    ?>
-                                    
-                                </table>
-                            </div>
-                            <!-- /.box-body -->
-                        </div>
-                        <!-- /.box -->
-
-                        <div class="box">
-
-                            <p class="register-box-msg"><b>Part 2</b></p>
-
-                            <!-- /.box-header -->
-                            <div class="box-body table-responsive no-padding">
-                                <table class="table table-hover">
-                                    <tr>
-                                        <th>Week</th>
-                                        <th>Task</th>
-                                        <th>Deadline</th>
-                                        <th>Action</th>
-                                    </tr>
+                                    <p class="register-box-msg"><b>Part 1</b></p>
                                     <?php
-                                    if ($conn->connect_error) {
-                                        die("Connection failed: " . $conn->connect_error);
-                                    } else {
-
-                                        $sql = "SELECT * FROM configurations WHERE configurationType='default' AND projectPart='2' ORDER BY week";
-                                        $result = $conn->query($sql);
-                                        //$result2 = $conn->query($sql2);
-                                        $check = 0;
-                                        if ($result->num_rows > 0) {
-                                            // output data of each row
-                                            while ($row = $result->fetch_assoc()) {
-                                                ?>
-                                                <tr>
-                                                    <td><?php echo $row["week"]; ?></td>
-                                                    <td><?php echo $row["taskName"]; ?></td>
-                                                    <td><?php echo $row["deadline"]; ?></td>
-													
-													<form id="setDeliverableStatus" action="setDeliverables.php" method="post">
-														<td>
-														<div class="form-group has-feedback">
-														
-															<input type= "hidden" name="deliverableID" value="<?php echo $row["configurationId"]; ?>"/>
-															<input name="setDeliverableStatus" class="btn btn-sm"type="submit" value="open"/>
-														</div>
-													
-													
-														<div class="form-group has-feedback">
-															<input type= "hidden" name="deliverableID" value="<?php echo $row["configurationId"]; ?>"/>
-															<input name="setDeliverableStatus" class="btn btn-danger"type="submit" value="close"/>
-														</div>
-														</td>
-													</form>
-													
-                                                </tr>
-                                                <?php
-                                            }
-                                        }
+                                    if (isset($success_msg)) {
+                                        echo "<p class='text-green'>$success_msg</p>";
+                                    } else if (isset($error_msg)) {
+                                        echo "<p class='text-green'>$error_msg</p>";
                                     }
                                     ?>
-                                    
-                                </table>
-                            </div>
-                            <!-- /.box-body -->
-                        </div>
-                        <!-- /.box -->
-                    </div>
-                </div>
-				<form id="Save" action="CreateBatch.php" method="post">
-				<br/>
-					<div class="row">
-						<div class="col-lg-12">
-						  <button type="submit" name="save" class="btn btn-primary btn-block btn-flat">Save</button>
-						</div>
-						<!-- /.col -->
-					</div>
-				</form>
-				<form id="Cancel" action="home.php" method="post">
-				<br/>
-					<div class="row">
-						<div class="col-lg-12">
-						  <button type="submit" name="Cancel" class="btn btn-primary btn-block btn-flat">Cancel</button>
-						</div>
-						<!-- /.col -->
-					</div>
-				</form>
-            </section>
-        </div>
-    </div>
-	
-	</div>
-	
-	</section>
-	
-	</div>
-	
-	
-	
-	
-	
-	
-	    <?php
+                                    <!-- /.box-header -->
+                                    <div class="box-body table-responsive no-padding">
+                                        <table class="table table-hover">
+                                            <tr>
+                                                <th>Week</th>
+                                                <th>Task</th>
+                                                <th>Deadline</th>
+                                                <th>Action</th>
 
-    require_once("includes/main-footer.php");
-    require_once("includes/required_js.php");
-    require_once("includes/swal_js.php");
-    ?> 
-    
- 
+                                            </tr>
+                                            <?php
+                                            if ($conn->connect_error) {
+                                                die("Connection failed: " . $conn->connect_error);
+                                            } else {
+
+                                                $sql = "SELECT * FROM configurations WHERE configurationType='default' AND projectPart='1' ORDER BY week";
+                                                $result = $conn->query($sql);
+                                                //$result2 = $conn->query($sql2);
+                                                $check = 0;
+                                                if ($result->num_rows > 0) {
+                                                    // output data of each row
+                                                    while ($row = $result->fetch_assoc()) {
+                                                        ?>
+                                                        <tr>
+                                                            <td><?php echo $row["week"]; ?></td>
+                                                            <td><?php echo $row["taskName"]; ?></td>
+                                                            <td><?php echo $row["deadline"]; ?></td>
+
+                                                            <form id="setDeliverableStatus" action="setDeliverables.php"
+                                                                  method="post">
+                                                                <td>
+                                                                    <div class="form-group has-feedback">
+                                                                        <input type="hidden" name="deliverableID"
+                                                                               value="<?php echo $row["configurationId"]; ?>"/>
+                                                                        <input name="setDeliverableStatus"
+                                                                               class="btn btn-sm" type="submit"
+                                                                               value="open"/>
+                                                                    </div>
+
+
+                                                                    <div class="form-group has-feedback">
+
+                                                                        <input type="hidden" name="deliverableID"
+                                                                               value="<?php echo $row["configurationId"]; ?>"/>
+                                                                        <input name="setDeliverableStatus"
+                                                                               class="btn btn-danger" type="submit"
+                                                                               value="close"/>
+                                                                    </div>
+                                                                </td>
+                                                            </form>
+
+
+                                                        </tr>
+
+                                                        <?php
+                                                    }
+                                                }
+                                            }
+                                            ?>
+
+                                        </table>
+                                    </div>
+                                    <!-- /.box-body -->
+                                </div>
+                                <!-- /.box -->
+
+                                <div class="box">
+
+                                    <p class="register-box-msg"><b>Part 2</b></p>
+
+                                    <!-- /.box-header -->
+                                    <div class="box-body table-responsive no-padding">
+                                        <table class="table table-hover">
+                                            <tr>
+                                                <th>Week</th>
+                                                <th>Task</th>
+                                                <th>Deadline</th>
+                                                <th>Action</th>
+                                            </tr>
+                                            <?php
+                                            if ($conn->connect_error) {
+                                                die("Connection failed: " . $conn->connect_error);
+                                            } else {
+
+                                                $sql = "SELECT * FROM configurations WHERE configurationType='default' AND projectPart='2' ORDER BY week";
+                                                $result = $conn->query($sql);
+                                                //$result2 = $conn->query($sql2);
+                                                $check = 0;
+                                                if ($result->num_rows > 0) {
+                                                    // output data of each row
+                                                    while ($row = $result->fetch_assoc()) {
+                                                        ?>
+                                                        <tr>
+                                                            <td><?php echo $row["week"]; ?></td>
+                                                            <td><?php echo $row["taskName"]; ?></td>
+                                                            <td><?php echo $row["deadline"]; ?></td>
+
+                                                            <form id="setDeliverableStatus" action="setDeliverables.php"
+                                                                  method="post">
+                                                                <td>
+                                                                    <div class="form-group has-feedback">
+
+                                                                        <input type="hidden" name="deliverableID"
+                                                                               value="<?php echo $row["configurationId"]; ?>"/>
+                                                                        <input name="setDeliverableStatus"
+                                                                               class="btn btn-sm" type="submit"
+                                                                               value="open"/>
+                                                                    </div>
+
+
+                                                                    <div class="form-group has-feedback">
+                                                                        <input type="hidden" name="deliverableID"
+                                                                               value="<?php echo $row["configurationId"]; ?>"/>
+                                                                        <input name="setDeliverableStatus"
+                                                                               class="btn btn-danger" type="submit"
+                                                                               value="close"/>
+                                                                    </div>
+                                                                </td>
+                                                            </form>
+
+                                                        </tr>
+                                                        <?php
+                                                    }
+                                                }
+                                            }
+                                            ?>
+
+                                        </table>
+                                    </div>
+                                    <!-- /.box-body -->
+                                </div>
+                                <!-- /.box -->
+                            </div>
+                        </div>
+                        <form id="Save" action="CreateBatch.php" method="post">
+                            <br/>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <button type="submit" name="save" class="btn btn-primary btn-block btn-flat">Save
+                                    </button>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                        </form>
+                        <form id="Cancel" action="home.php" method="post">
+                            <br/>
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <button type="submit" name="Cancel" class="btn btn-primary btn-block btn-flat">
+                                        Cancel
+                                    </button>
+                                </div>
+                                <!-- /.col -->
+                            </div>
+                        </form>
+                    </section>
+                </div>
+            </div>
+
+    </div>
+
+    </section>
+
+</div>
+
+
+<?php
+
+require_once("includes/main-footer.php");
+require_once("includes/required_js.php");
+?>
+
+
 </body>
 </html>

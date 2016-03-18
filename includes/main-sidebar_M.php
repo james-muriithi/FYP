@@ -36,7 +36,7 @@
             <i class="fa fa-dashboard"></i> <span>Dashboard</span> <i class="fa fa-angle-left pull-right"></i>
           </a>
             <ul class="treeview-menu">
-              <li id="timeline"><a href="home.php"><i class="fa fa-circle-o"></i>
+              <li id="timeline"><a href="../home.php"><i class="fa fa-circle-o"></i>
                 Timeline
               </a></li>
             </ul>
@@ -62,20 +62,20 @@
               <?php 
               if($_SESSION["isLead"]!="1" && $_SESSION["GroupID"]==="0")
               {?>
-              <li><a id="InitiateGroup" href="initGroupForm.php"><i class="fa fa-circle-o"></i>Initiate Group</a></li>
-              <li><a id="JoinGroup" href="joinGroup.php"><i class="fa fa-circle-o"></i>Join Group</a></li>
+              <li><a id="InitiateGroup" href="../initGroupForm.php"><i class="fa fa-circle-o"></i>Initiate Group</a></li>
+              <li><a id="JoinGroup" href="../joinGroup.php"><i class="fa fa-circle-o"></i>Join Group</a></li>
               <?php
               }?>
               
               <?php 
               if($_SESSION["isLead"]=="1" )
               {?>
-              <li><a id="chooseSupervisor" href="chooseSupervisor.php"><i class="fa fa-circle-o"></i>Choose Supervisor</a></li>
+              <li><a id="chooseSupervisor" href="../chooseSupervisor.php"><i class="fa fa-circle-o"></i>Choose Supervisor</a></li>
               <?php
               }?>              
               
               
-			  <li><a id="uploadDeliverables" href="uploadDeliverables.php"><i class="fa fa-circle-o"></i>Deliverables</a></li>
+			  <li><a id="uploadDeliverables" href="../uploadDeliverables.php"><i class="fa fa-circle-o"></i>Deliverables</a></li>
                 
           </ul>
         </li>
@@ -89,9 +89,9 @@
                         <i class="fa fa-graduation-cap "></i> <span>Batch</span> <i class="fa fa-angle-left pull-right"></i>
                     </a>
                     <ul class="treeview-menu">
-                        <li><a href="createBatch.php"><i class="fa fa-plus"></i> <span>Create Batch</span></a> </li>
-                        <li><a href="deleteBatch.php"><i class="fa fa-minus "></i> <span>Delete Batch</span></a> </li>
-						<li><a href="setDeliverables.php"><i class="fa fa-circle-o"></i> <span>Deliverables</span></a> </li>
+                        <li><a href="../createBatch.php"><i class="fa fa-plus"></i> <span>Create Batch</span></a> </li>
+                        <li><a href="../deleteBatch.php"><i class="fa fa-minus "></i> <span>Delete Batch</span></a> </li>
+						<li><a href="../setDeliverables.php"><i class="fa fa-circle-o"></i> <span>Deliverables</span></a> </li>
                     </ul>
                 </li>
 
@@ -109,8 +109,8 @@
                     <i class="fa fa-user-plus "></i> <span>Register Users</span> <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="registerStudents.php"><i class="fa fa-plus"></i> <span>Register Students</span></a> </li>
-                    <li><a href="registerFaculty.php"><i class="fa fa-plus "></i> <span>Register Faculty Member</span></a> </li>
+                    <li><a href="../registerStudents.php"><i class="fa fa-plus"></i> <span>Register Students</span></a> </li>
+                    <li><a href="../registerFaculty.php"><i class="fa fa-plus "></i> <span>Register Faculty Member</span></a> </li>
                 </ul>
             </li>
 
@@ -119,9 +119,9 @@
                     <i class="fa  fa-pencil-square-o  "></i> <span>Manage</span> <i class="fa fa-angle-left pull-right"></i>
                 </a>
                 <ul class="treeview-menu">
-                    <li><a href="manageStudents.php"><i class="fa fa-circle-o"></i> <span>Manage Students</span></a> </li>
-                    <li><a href="manageGroups.php"><i class="fa fa-circle-o"></i> <span>Manage Student Groups</span></a> </li>
-                    <li><a href="manageFaculty.php"><i class="fa fa-circle-o "></i> <span>Manage Faculty</span></a> </li>
+                    <li><a href="../manageStudents.php"><i class="fa fa-circle-o"></i> <span>Manage Students</span></a> </li>
+                    <li><a href="../manageGroups.php"><i class="fa fa-circle-o"></i> <span>Manage Student Groups</span></a> </li>
+                    <li><a href="../manageFaculty.php"><i class="fa fa-circle-o "></i> <span>Manage Faculty</span></a> </li>
                 </ul>
             </li>
 
@@ -131,14 +131,14 @@
 		<?php if($_SESSION["type"]==="Faculty")//if faculty member
         {?>
 			<li>
-			    <a href="superviseGroup.php">
+			    <a href="../superviseGroup.php">
 				<i class="fa fa-user-plus"></i> <span>Supervise Group</span>
 			  </a>
 			</li>
 		<?php   
         }?>
         <li>
-          <a href="mailbox.php">
+          <a href="../mailbox.php">
             <i class="fa fa-envelope"></i> <span>Mailbox</span>
           </a>
         </li>

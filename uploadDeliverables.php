@@ -1,43 +1,21 @@
 <?php 
-//****************************************************************************************************************************************************
-//
-//													Setting up global variables for header and page title use
-//
-//**************************************************************************************************************************************************** -->
-     
 $GLOBALS['title']="FYPMS";
 $GLOBALS['subtitle']="Upload Deliverables";
 require_once("includes/header.php");
 require_once("includes/connection.php");
 $error="";
-
-//****************************************************************************************************************************************************
-//
-//													Starting session and checking session variables
-//
-//**************************************************************************************************************************************************** -->
-     
 session_start();
 if(!isset($_SESSION["usrCMS"]))
 {
         header('Location: '.'index.php');
 }
 
-if(isset(S_POST[""]))
-?>
-<?php
-require_once 'includes/swal_css.php';
+if(isset($_POST[""]))
 ?>
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">	
 <div class="wrapper">
-<!--//****************************************************************************************************************************************************
-//
-//													Including main bar and sidebar for the page
-//
-//**************************************************************************************************************************************************** -->
-     
     <?php require_once("includes/main-header.php"); ?>
     <?php require_once("includes/main-sidebar.php"); ?>
     <div class="content-wrapper" >
@@ -211,8 +189,7 @@ if ($conn->connect_error) {
 
     require_once("includes/main-footer.php");
     require_once("includes/required_js.php");
-    require_once("includes/swal_js.php");
-    ?> 
+    ?>
     
  
 </body>

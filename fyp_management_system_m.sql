@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 11, 2016 at 07:33 AM
+-- Generation Time: Mar 17, 2016 at 07:11 PM
 -- Server version: 5.6.20
 -- PHP Version: 5.5.15
 
@@ -85,10 +85,17 @@ CREATE TABLE IF NOT EXISTS `external_examiner` (
   `examinerName` varchar(255) NOT NULL,
   `examinerPhone` int(255) NOT NULL,
   `examinerEmail` varchar(255) NOT NULL,
+  `externalPassword` varchar(11) NOT NULL,
   `company` varchar(255) NOT NULL,
-  `slotPresentation` varchar(255) NOT NULL,
-  `groupId` int(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='examinerInfo' AUTO_INCREMENT=1 ;
+  `slotPresentation` varchar(255) DEFAULT NULL
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='examinerInfo' AUTO_INCREMENT=3 ;
+
+--
+-- Dumping data for table `external_examiner`
+--
+
+INSERT INTO `external_examiner` (`examinerId`, `examinerName`, `examinerPhone`, `examinerEmail`, `externalPassword`, `company`, `slotPresentation`) VALUES
+(1, 'Umair', 2147483647, 'umair@gmail.com', '123', 'riphah', NULL);
 
 -- --------------------------------------------------------
 
@@ -399,7 +406,7 @@ MODIFY `configurationId` int(255) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 -- AUTO_INCREMENT for table `external_examiner`
 --
 ALTER TABLE `external_examiner`
-MODIFY `examinerId` int(255) NOT NULL AUTO_INCREMENT;
+MODIFY `examinerId` int(255) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `faculty`
 --

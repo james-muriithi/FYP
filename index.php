@@ -15,9 +15,12 @@ $userEmail =  filter_input(INPUT_POST, "email");
 $userPass = filter_input(INPUT_POST, "pasword");
 $sql = "SELECT studentId, studentName, studentCMS, studentPhoneNo, studentEmail, studentGender, studentPassword,student_image, groupId, isLeader, batchId FROM student";
 $sql2 = "SELECT facultyId, designation, facultyName, facultyPhoneNo, facultyEmail, facultyPassword, isAdmin, isCoordinator FROM faculty";
+$sql3 ="SELECT * FROM external_examiner";
 
 $result = $conn->query($sql);
 $result2 = $conn->query($sql2);
+$result3 = $conn->query($sql3);
+
 $check=0;
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
@@ -46,8 +49,8 @@ $check=0;
                     //$variabl = $row["studentName"];
                     //echo $variabl;
                     $check=1;
-                    //$_POST[$variabl];
-                    //echo "id: " . $row["studentId"]. " - Name: " . $row["studentName"]. " " . $row["studentPassword"]. "<br>";
+                    $_POST[$variabl];
+                    echo "id: " . $row["studentId"]. " - Name: " . $row["studentName"]. " " . $row["studentPassword"]. "<br>";
                     header('Location: '.'home.php');
             }
         }
@@ -86,6 +89,34 @@ $check=0;
             }
         }
     }
+	if ($result3->num_rows > 0) {
+        while($row3 = $result3->fetch_assoc()) {
+            if($row3["examinerEmail"]==$userEmail && $row3["externalPassword"]==$userPass)
+            {
+//****************************************************************************************************************************************************
+//
+//													setting up session variables
+//
+//**************************************************************************************************************************************************** -->
+     
+                session_start();
+                $_SESSION["examinerId"]=$row3["examinerId"];
+                $_SESSION["usrnm"]=$row3["examinerName"];
+				$examiner=$row3["examinerId"];
+                $_SESSION["design"]="External Examiner";
+                $_SESSION["type"]="Examiner";
+                $_SESSION["image"]=$row2["profileImage"];
+                    
+                //$variabl = $row["studentName"];
+                //echo $variabl;
+                $check=1;
+				//echo $row3["examinerName"];
+                //$_POST[$variabl];
+                //echo "id: " . $row["studentId"]. " - Name: " . $row["studentName"]. " " . $row["studentPassword"]. "<br>";
+                header('Location: '.'home.php');
+            }
+        }
+    }
 
     if($check==0)
     {
@@ -105,6 +136,12 @@ $check=0;
 <title>Login | FYP Management System</title>
 </head>
 
+<!--//****************************************************************************************************************************************************
+//
+//													Page content/ body
+//
+//**************************************************************************************************************************************************** -->
+     
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
@@ -115,7 +152,12 @@ $check=0;
     <p class="login-box-msg">Sign in to start your session</p>
 
     <form action="index.php" method="POST">
-
+<!--//****************************************************************************************************************************************************
+//
+//													Login form
+//
+//**************************************************************************************************************************************************** -->
+     
       <div class="form-group has-feedback">
         <input type="email" class="form-control" name="email" placeholder="Email">
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -142,7 +184,12 @@ $check=0;
   <!-- /.login-box-body -->
 </div>
 <!-- REQUIRED JS SCRIPTS -->
-
+<!--//****************************************************************************************************************************************************
+//
+//													Javascript and jquery includes
+//
+//**************************************************************************************************************************************************** -->
+     
 <!-- jQuery 2.1.4 -->
 <script src="plugins/jQuery/jQuery-2.1.4.min.js"></script>
 <!-- Bootstrap 3.3.5 -->
@@ -152,3 +199,9 @@ $check=0;
 
 </body>
 </html>
+<!--//****************************************************************************************************************************************************
+//
+//													End of page
+//
+//**************************************************************************************************************************************************** -->
+     

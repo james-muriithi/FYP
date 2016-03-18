@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if (!$delete_row) {
             //If mysql delete query was unsuccessful, output error
-            header('HTTP/1.1 500 Could not delete request!');
+            //header('HTTP/1.1 500 Could not delete request!');
             exit();
         }
 
@@ -36,14 +36,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $delete_row = $conn->query("DELETE FROM group_requests WHERE requestId=" . $requestId);
         }
         else{
-            header('HTTP/1.1 500 Error occurred, Could not accept request!');
+           // header('HTTP/1.1 500 Error occurred, Could not accept request!');
             exit();
         }
         $conn->close(); //close db connection
 
     } else {
         //Output error
-        header('HTTP/1.1 500 Error occurred, Could not process request!');
+        //header('HTTP/1.1 500 Error occurred, Could not process request!');
         exit();
     }
 

@@ -42,9 +42,28 @@
                 Timeline
               </a></li>
             </ul>
+
+
+
+
       
         
-        <?php 
+        <?php
+
+        if ($_SESSION["type"] === "Examiner"){ ?>
+
+          <li class="treeview">
+              <a href="#">
+                  <i class="fa fa-graduation-cap "></i> <span>Grade Students</span> <i class="fa fa-angle-left pull-right"></i>
+              </a>
+              <ul class="treeview-menu">
+                  <li><a href=""><i class="fa fa-plus"></i> <span>Submenu 1</span></a> </li>
+                  <li><a href=""><i class="fa fa-plus"></i> <span>Submenu 2</span></a> </li>
+              </ul>
+          </li>
+
+
+        <?php }
 
      
         if($_SESSION["type"]==="Student")
@@ -70,8 +89,8 @@
               {?>
               <li><a id="chooseSupervisor" href="chooseSupervisor.php"><i class="fa fa-circle-o"></i>Choose Supervisor</a></li>
               <?php
-              }?>              
-              
+              }?>
+              <li><a id="uploadDeliverables" href="uploadDeliverables.php"><i class="fa fa-upload"></i>Deliverables</a></li>
               
 			  
                 
@@ -89,6 +108,7 @@
                     <ul class="treeview-menu">
                         <li><a href="createBatch.php"><i class="fa fa-plus"></i> <span>Create Batch</span></a> </li>
                         <li><a href="deleteBatch.php"><i class="fa fa-minus "></i> <span>Delete Batch</span></a> </li>
+                        <li><a href="setDeliverables.php"><i class="fa fa-circle-o"></i> <span>Deliverables</span></a> </li>
                     </ul>
                 </li>
 
