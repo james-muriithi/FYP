@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 10, 2016 at 08:00 PM
+-- Generation Time: Mar 18, 2016 at 07:06 AM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -81,6 +81,30 @@ INSERT INTO `configurations` (`configurationId`, `week`, `taskName`, `taskDetail
 
 CREATE TABLE `external_examiner` (
   `examinerId` int(255) NOT NULL,
+  `examinerName` varchar(100) NOT NULL,
+  `examinerPhone` varchar(50) NOT NULL,
+  `examinerEmail` varchar(255) NOT NULL,
+  `externalPassword` varchar(255) NOT NULL,
+  `company` varchar(255) NOT NULL,
+  `designation` varchar(50) DEFAULT NULL,
+  `slotPresentation` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='examinerGroupInfo';
+
+--
+-- Dumping data for table `external_examiner`
+--
+
+INSERT INTO `external_examiner` (`examinerId`, `examinerName`, `examinerPhone`, `examinerEmail`, `externalPassword`, `company`, `designation`, `slotPresentation`) VALUES
+(0, 'Examiner 01', '1234567', 'examiner@gmail.com', '123', 'GOOGLE', NULL, '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `external_examiner_old`
+--
+
+CREATE TABLE `external_examiner_old` (
+  `examinerId` int(255) NOT NULL,
   `examinerName` varchar(255) NOT NULL,
   `examinerPhone` int(255) NOT NULL,
   `examinerEmail` varchar(255) NOT NULL,
@@ -88,17 +112,6 @@ CREATE TABLE `external_examiner` (
   `slotPresentation` varchar(255) NOT NULL,
   `groupId` int(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='examinerInfo';
-
--- --------------------------------------------------------
-
---
--- Table structure for table `external_examiner_group`
---
-
-CREATE TABLE `external_examiner_group` (
-  `examinerId` int(255) NOT NULL,
-  `groupId` int(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='examinerGroupInfo';
 
 -- --------------------------------------------------------
 
@@ -203,7 +216,7 @@ CREATE TABLE `student` (
 INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentPhoneNo`, `studentEmail`, `studentGender`, `studentPassword`, `student_image`, `groupId`, `isLeader`, `batchId`, `isCompleted`) VALUES
 (14, 'Muneeb Khan', '7757', '01234565', 'muneeb_420@gmail.com', 'male', '123', NULL, 9, 1, 2, '0'),
 (15, 'Umair Qamar', '10776', '03458541454', 'umairqamar@live.com', 'male', '123', NULL, 0, 0, 2, '0'),
-(16, 'Abdul Saboor', '7783', '03335385896', 'saboor@gmail.com', 'male', '123', NULL, 0, 0, 2, '0');
+(16, 'Abdul Saboor', '7783', '03335385896', 'saboor@gmail.com', 'male', '123', NULL, 9, 0, 2, '0');
 
 -- --------------------------------------------------------
 
@@ -225,10 +238,6 @@ CREATE TABLE `student_group` (
 --
 
 INSERT INTO `student_group` (`groupId`, `projectName`, `projectPart`, `groupLimit`, `inGroup`, `leaderId`) VALUES
-(1, NULL, 1, 3, 0, 1),
-(2, NULL, 1, 3, 2, 4),
-(3, NULL, 1, 3, 0, 3),
-(8, NULL, 1, 3, 1, 7),
 (9, NULL, 1, 3, 1, 14);
 
 -- --------------------------------------------------------
@@ -322,9 +331,9 @@ ALTER TABLE `configurations`
   ADD PRIMARY KEY (`configurationId`);
 
 --
--- Indexes for table `external_examiner`
+-- Indexes for table `external_examiner_old`
 --
-ALTER TABLE `external_examiner`
+ALTER TABLE `external_examiner_old`
   ADD PRIMARY KEY (`examinerId`);
 
 --
@@ -396,9 +405,9 @@ ALTER TABLE `batch`
 ALTER TABLE `configurations`
   MODIFY `configurationId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
--- AUTO_INCREMENT for table `external_examiner`
+-- AUTO_INCREMENT for table `external_examiner_old`
 --
-ALTER TABLE `external_examiner`
+ALTER TABLE `external_examiner_old`
   MODIFY `examinerId` int(255) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `faculty`
@@ -439,7 +448,7 @@ ALTER TABLE `tasks`
 -- AUTO_INCREMENT for table `timeline`
 --
 ALTER TABLE `timeline`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `work_load`
 --
