@@ -1,15 +1,11 @@
 <?php 
-//****************************************************************************************************************************************************
-//
-//											Setting up global variables for header, breadcrumvbs and title purpose
-//
-//**************************************************************************************************************************************************** -->
-     
 $GLOBALS['title']="FYPMS";
 $GLOBALS['subtitle']="Register Faculty Members";
 require_once("includes/header.php");
 require_once("includes/config.php");
-$error="";
+require("libs/sendgrid-php/sendgrid-php.php");
+require_once("includes/mail-tempelates.php");
+require_once("includes/functions.php");
 session_start();
 if(!isset($_SESSION["isAdmin"]))
 {
@@ -24,7 +20,16 @@ if((isset($_POST['facultyName'])) && (isset($_POST['facultyDesign'])) && (isset(
     $facultyDesign = $_POST['facultyDesign'];
     $facultyEmail = $_POST['facultyEmail'];
     $facultyPhone = $_POST['phoneNumber'];
-    $facultyPass = $_POST['facultyPass'];
+
+      if (isset($_POST['facultyPass'])){
+          $facultyPass = $_POST['facultyPass'];
+      }
+        else{
+            $facultyPass =  random_password();
+        }
+
+
+
 	if(isset($_POST['isAdmin'])){
 		$facultyIsAdmin = $_POST['isAdmin'];
 	}
@@ -74,7 +79,13 @@ if((isset($_POST['facultyName'])) && (isset($_POST['facultyDesign'])) && (isset(
 				//setting up the work load of added Faculty Member
 				$sqlFacultyLoad="INSERT INTO work_load ( facultyid, designation, totalLoad ) VALUES ('$FacultyId','$facultyDesign','$facultyQuota')";
 				if ($conn->query($sqlFacultyLoad) === TRUE) {
-					$error="Successfully Regstered";
+					//User Registered Successfully
+
+                    //Check for checkbox
+                    if ($_POST['emailSend'] != 'false'){
+                        mail_user_registration($facultyEmail,$facultyName,$facultyPass);
+                    }
+
 					
 					header('Location: registerFaculty.php?status=t');
 				}
@@ -173,10 +184,14 @@ if((isset($_POST['facultyName'])) && (isset($_POST['facultyDesign'])) && (isset(
         <span class="glyphicon glyphicon-shopping-cart form-control-feedback"></span>
 	  </div>
       <div class="form-group has-feedback">
-        <input type="password" name="facultyPass" class="form-control" placeholder="Password" required/>
+        <input type="text" name="facultyPass" class="form-control" placeholder="Password" />
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
+        <p class="help-block">Leave password field empty for random password</p>
+
+
       <div class="form-group has-feedback">
+          <p class="help-block">Set Role (if any)</p>
          <input type="checkbox" name="isAdmin" value="1"> System Administrator &nbsp;
           <input type="checkbox" name="isCord" value="1"> Coordinator<br>
       </div>

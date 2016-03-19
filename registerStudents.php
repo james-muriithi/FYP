@@ -19,11 +19,19 @@ if ((isset($_POST['studentName'])) && (isset($_POST['studentCMS'])) && (isset($_
         $StudentEmail = $_POST['studentEmail'];
         $StudentPhone = $_POST['phoneNumber'];
         $StudentBatch = $_POST['Batch'];
-        $StudentPass = $_POST['studentPass'];
-        $StudentPass = random_password(); //Generate Random password and mail to user
+//        $StudentPass = $_POST['studentPass'];
+//        $StudentPass = random_password(); //Generate Random password and mail to user
         $GroupId = 0;
         $StudentGender = $_POST['gender'];
-        echo "batch is" . $StudentBatch . $StudentCMS . $StudentEmail . $StudentName . $StudentPhone;
+
+        if (isset($_POST['studentPass'])){
+            $StudentPass = $_POST['studentPass'];
+        }
+        else{
+            $StudentPass =  random_password();
+        }
+
+        //echo "batch is" . $StudentBatch . $StudentCMS . $StudentEmail . $StudentName . $StudentPhone;
 
         if ($conn->connect_error) {
             trigger_error('Database connection failed:' . $conn->connect_error, E_USER_ERROR);
@@ -168,13 +176,21 @@ if ((isset($_POST['studentName'])) && (isset($_POST['studentCMS'])) && (isset($_
                                 </select>
                             </div>
 
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="emailSend" value="false"> Do not send email to user
-                                </label>
+                            <div class="form-group has-feedback">
+                                <input type="text" name="studentPass" class="form-control" placeholder="Password" />
+                                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
                             </div>
 
+                            <p class="help-block">Leave password field empty for random password</p>
+
+
+
                             <div class="box-footer ">
+                                <div class="checkbox pull-left">
+                                    <label>
+                                        <input type="checkbox" name="emailSend" value="false"> Do not send email to user
+                                    </label>
+                                </div>
                                 <div class="form-group pull-right">
                                 <button type="submit" name="AddStudent" class="btn btn-primary">Register</button>
                                 </div>
