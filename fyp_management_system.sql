@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 18, 2016 at 07:06 AM
+-- Generation Time: Mar 19, 2016 at 07:26 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -312,7 +312,8 @@ CREATE TABLE `work_load` (
 INSERT INTO `work_load` (`loadId`, `facultyId`, `designation`, `totalLoad`, `currentLoad`) VALUES
 (1, 8, 'Teaching Fellow', 2, 0),
 (2, 1, 'Assistant Professor', 6, 1),
-(3, 8, 'Assocaite Professor', 2, 0);
+(3, 8, 'Assocaite Professor', 2, 0),
+(4, 13, 'Captain America', 3, 0);
 
 --
 -- Indexes for dumped tables
@@ -413,7 +414,7 @@ ALTER TABLE `external_examiner_old`
 -- AUTO_INCREMENT for table `faculty`
 --
 ALTER TABLE `faculty`
-  MODIFY `facultyId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `facultyId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT for table `faculty_student_group`
 --
@@ -433,7 +434,7 @@ ALTER TABLE `group_requests`
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `studentId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `studentId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 --
 -- AUTO_INCREMENT for table `student_group`
 --
@@ -453,7 +454,7 @@ ALTER TABLE `timeline`
 -- AUTO_INCREMENT for table `work_load`
 --
 ALTER TABLE `work_load`
-  MODIFY `loadId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `loadId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
