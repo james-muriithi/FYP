@@ -168,7 +168,7 @@ $check=0;
       </div>
     </form>
     <br />
-    <a href="password_reset.php">I forgot my password</a><br>
+    <a href="forgotPassword.php">I forgot my password</a><br>
 
   </div>
   <!-- /.login-box-body -->

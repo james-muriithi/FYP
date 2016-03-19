@@ -18,7 +18,7 @@ if((isset($_POST['facultyName'])) && (isset($_POST['facultyDesign'])) && (isset(
     //echo $_POST['facultyName']." ".$_POST['facultyCMS']." ".$_POST['facultyEmail']." ".$_POST['phoneNumber']." ".$_POST['batch']." ".$_POST['facultyPass'];
     $facultyName = $_POST['facultyName'];
     $facultyDesign = $_POST['facultyDesign'];
-    $facultyEmail = $_POST['facultyEmail'];
+    $facultyEmail = strtolower($_POST['facultyEmail']);
     $facultyPhone = $_POST['phoneNumber'];
 
       if (isset($_POST['facultyPass'])){

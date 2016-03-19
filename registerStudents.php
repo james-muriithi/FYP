@@ -16,7 +16,7 @@ if ((isset($_POST['studentName'])) && (isset($_POST['studentCMS'])) && (isset($_
         //echo $_POST['studentName']." ".$_POST['studentCMS']." ".$_POST['studentEmail']." ".$_POST['phoneNumber']." ".$_POST['batch']." ".$_POST['studentPass'];
         $StudentName = $_POST['studentName'];
         $StudentCMS = $_POST['studentCMS'];
-        $StudentEmail = $_POST['studentEmail'];
+        $StudentEmail = strtolower($_POST['studentEmail']);
         $StudentPhone = $_POST['phoneNumber'];
         $StudentBatch = $_POST['Batch'];
 //        $StudentPass = $_POST['studentPass'];
