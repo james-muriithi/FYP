@@ -1,15 +1,11 @@
 <?php
-//****************************************************************************************************************************************************
-//
-//													Setting global variables for title breadrumbs and header puposes
-//
-//**************************************************************************************************************************************************** -->
-
 $GLOBALS['title'] = "FYPMS";
 $GLOBALS['subtitle'] = "Register Students";
 require_once("includes/header.php");
-require_once("includes/connection.php");
-$error = "";
+require_once("includes/config.php");
+require("libs/sendgrid-php/sendgrid-php.php");
+require_once("includes/mail-tempelates.php");
+require_once("includes/functions.php");
 session_start();
 if (!isset($_SESSION["isAdmin"])) {
     header('Location: ' . 'index.php');
@@ -24,6 +20,7 @@ if ((isset($_POST['studentName'])) && (isset($_POST['studentCMS'])) && (isset($_
         $StudentPhone = $_POST['phoneNumber'];
         $StudentBatch = $_POST['Batch'];
         $StudentPass = $_POST['studentPass'];
+        $StudentPass = random_password(); //Generate Random password and mail to user
         $GroupId = 0;
         $StudentGender = $_POST['gender'];
         echo "batch is" . $StudentBatch . $StudentCMS . $StudentEmail . $StudentName . $StudentPhone;
@@ -46,7 +43,13 @@ if ((isset($_POST['studentName'])) && (isset($_POST['studentCMS'])) && (isset($_
                     ?>
                     <?php
                 } else {
-                    $error = "";
+                    //Student Registration Successfull
+
+                    //Check for checkbox
+                    if ($_POST['emailSend'] != 'false'){
+                        mail_user_registration($StudentEmail,$StudentName,$StudentPass);
+                    }
+
                     header('Location: registerStudents.php?status=t');
                 }
             } else {
@@ -76,9 +79,7 @@ if ((isset($_POST['studentName'])) && (isset($_POST['studentCMS'])) && (isset($_
     }
 }
 ?>
-<?php
-require_once 'includes/swal_css.php';
-?>
+
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -166,10 +167,11 @@ require_once 'includes/swal_css.php';
                                     <span class="glyphicon glyphicon-education form-control-feedback"></span>
                                 </select>
                             </div>
-                            <div class="form-group has-feedback">
-                                <input type="password" name="studentPass" class="form-control" placeholder="Password"
-                                       required/>
-                                <span class="glyphicon glyphicon-lock form-control-feedback"></span>
+
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="emailSend" value="false"> Do not send email to user
+                                </label>
                             </div>
 
                             <div class="box-footer ">
@@ -199,7 +201,6 @@ require_once 'includes/swal_css.php';
 
     require_once("includes/main-footer.php");
     require_once("includes/required_js.php");
-    require_once("includes/swal_js.php");
     ?>
     <script>
         function goBack() {

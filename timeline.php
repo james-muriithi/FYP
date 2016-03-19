@@ -4,7 +4,7 @@
 <ul class="timeline">
 <?php
 require_once ("includes/functions.php");
-require_once ("includes/connection.php");
+require_once("includes/config.php");
 //Get Values from Database
 $sql = "SELECT * FROM timeline ORDER BY created_dtm DESC ";//Chronoligical Order
 $result = $conn->query($sql);

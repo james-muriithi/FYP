@@ -1,5 +1,5 @@
 <?php
-require_once('includes/connection.php');
+require_once('includes/config.php');
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (isset($_POST["recordToDelete"]) && strlen($_POST["recordToDelete"]) > 0 && is_numeric($_POST["recordToDelete"])) {

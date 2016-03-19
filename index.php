@@ -2,7 +2,7 @@
 $GLOBALS['title']="FYPMS";
 $GLOBALS['subtitle']="Login";
 require_once("includes/header.php");
-require_once("includes/connection.php");
+require_once("includes/config.php");
 session_start();
 $error="";
 if(isset($_SESSION["usrnm"]))
@@ -26,12 +26,7 @@ $check=0;
         while($row = $result->fetch_assoc()) {
             if($row["studentEmail"]==$userEmail && $row["studentPassword"]==$userPass)
             {
-//****************************************************************************************************************************************************
-//
-//													Setting up seeion variables
-//
-//**************************************************************************************************************************************************** -->
-     
+
                     $_SESSION["usrId"]=$row["studentId"];
                     $_SESSION["usrnm"]=$row["studentName"];
                     $_SESSION["usrCMS"]=$row["studentCMS"];
@@ -54,12 +49,7 @@ $check=0;
                     header('Location: '.'home.php');
             }
         }
-//****************************************************************************************************************************************************
-//
-//													Verifying user credentials as faculty member or admin and coordinator
-//
-//**************************************************************************************************************************************************** -->
-     
+
     }
     if ($result2->num_rows > 0) {
         while($row2 = $result2->fetch_assoc()) {

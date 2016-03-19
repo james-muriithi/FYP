@@ -1,7 +1,7 @@
 <?php
 $GLOBALS['title']="FYPMS";
 $GLOBALS['subtitle']="Edit Profile";
-require_once("includes/connection.php");
+require_once("includes/config.php");
 require_once("includes/header.php");
 session_start();
 //Check if user is logged in Else logg out

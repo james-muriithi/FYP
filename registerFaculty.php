@@ -8,7 +8,7 @@
 $GLOBALS['title']="FYPMS";
 $GLOBALS['subtitle']="Register Faculty Members";
 require_once("includes/header.php");
-require_once("includes/connection.php");
+require_once("includes/config.php");
 $error="";
 session_start();
 if(!isset($_SESSION["isAdmin"]))
@@ -107,9 +107,6 @@ if((isset($_POST['facultyName'])) && (isset($_POST['facultyDesign'])) && (isset(
     }
 }
 ?>
-<?php
-require_once 'includes/swal_css.php';
-?>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -180,16 +177,27 @@ require_once 'includes/swal_css.php';
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">
-         <input type="checkbox" name="isAdmin" value="1"> System Administrator<br>
+         <input type="checkbox" name="isAdmin" value="1"> System Administrator &nbsp;
+          <input type="checkbox" name="isCord" value="1"> Coordinator<br>
       </div>
-	  <div class="form-group has-feedback">
-         <input type="checkbox" name="isCord" value="1"> Coordinator<br>
-      </div>
-	 
+
+
+
+
+
+
+
+
 
         <div class="box-footer ">
+            <div class="checkbox pull-left">
+                <label>
+                    <input type="checkbox" name="emailSend" value="false"> Do not send email to user
+                </label>
+            </div>
+
             <div class="form-group pull-right">
-                <a href="<?php echo $_SERVER['PHP_SELF']; ?>"  class="btn btn-danger">Back </a>
+                <a href="<?php echo siteroot ?>"  class="btn btn-danger">Back </a>
                 <button type="submit" name="AddFaculty" class="btn btn-primary">Register</button>
             </div>
         </div>
@@ -208,15 +216,9 @@ require_once 'includes/swal_css.php';
     </div>
     
     <?php
-	//****************************************************************************************************************************************************
-//
-//																Footer includes
-//
-//**************************************************************************************************************************************************** -->
-     
+
     require_once("includes/main-footer.php");
     require_once("includes/required_js.php");
-    require_once("includes/swal_js.php");
     ?>
     <script>
         function goBack() {

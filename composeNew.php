@@ -3,7 +3,7 @@
 $GLOBALS['title']="FYPMS";
 $GLOBALS['subtitle']="Mailbox";
 require_once("includes/header.php");
-require_once("includes/connection.php");
+require_once("includes/config.php");
 $error="";
 session_start();
 ?>

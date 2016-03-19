@@ -2,7 +2,7 @@
 $GLOBALS['title'] = "FYPMS";
 $GLOBALS['subtitle'] = "Set Deliverables";
 require_once("includes/header.php");
-require_once("includes/connection.php");
+require_once("includes/config.php");
 $error = "";
 session_start();
 if (isset($_SESSION["isCord"])) {

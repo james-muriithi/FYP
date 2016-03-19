@@ -8,7 +8,7 @@
 $GLOBALS['title']="FYPMS";
 $GLOBALS['subtitle']="Supervise Group";
 require_once("includes/header.php");
-require_once("includes/connection.php");
+require_once("includes/config.php");
 $error="";
 
 //****************************************************************************************************************************************************

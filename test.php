@@ -1,6 +1,6 @@
 <?php
 
-require_once ("includes/connection.php");
+require_once("includes/config.php");
 //Get group id
 $groupId = $conn->query("SELECT groupId FROM group_requests WHERE requestId =34  ")->fetch_object()->groupId;
 //Get student id

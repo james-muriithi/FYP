@@ -1,7 +1,7 @@
 <?php
 $GLOBALS['title']="FYPMS";
 $GLOBALS['subtitle']="Initiate Group";
-require_once("../includes/connection.php");
+require_once("../includes/config.php");
 require_once("../includes/header.php");
 $error="";
 session_start();

@@ -2,7 +2,7 @@
 $GLOBALS['title']="FYPMS";
 $GLOBALS['subtitle']="Timeline";
 require_once("includes/header.php");
-require_once("includes/connection.php");
+require_once("includes/config.php");
 session_start();
 $_GLOBALS["usr_image"]= $_SESSION["image"];
 if(isset($_POST['Status']))

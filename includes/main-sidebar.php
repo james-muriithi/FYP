@@ -111,11 +111,6 @@
                         <li><a href="setDeliverables.php"><i class="fa fa-circle-o"></i> <span>Deliverables</span></a> </li>
                     </ul>
                 </li>
-
-
-
-
-
                  <?php
                 }?>
 				
@@ -130,7 +125,7 @@
                 </a>
                 <ul class="treeview-menu">
                     <li><a href="registerStudents.php"><i class="fa fa-plus"></i> <span>Register Students</span></a> </li>
-                    <li><a href="registerFaculty.php"><i class="fa fa-plus "></i> <span>Register Faculty Member</span></a> </li>
+                    <li><a href="registerFaculty.php"><i class="fa fa-plus"></i> <span>Register Faculty Member</span></a> </li>
                 </ul>
             </li>
 
@@ -146,6 +141,12 @@
                 </ul>
             </li>
 
+            <li>
+                <a href="sendEmail.php">
+                    <i class="fa fa-envelope-o"></i> <span>Send Email</span>
+                </a>
+            </li>
+
 		<?php   
         }?>
 
@@ -158,11 +159,7 @@
 			</li>
 		<?php   
         }?>
-        <li>
-          <a href="mailbox.php">
-            <i class="fa fa-envelope"></i> <span>Mailbox</span>
-          </a>
-        </li>
+
 
         <li>
           <a href="#">
