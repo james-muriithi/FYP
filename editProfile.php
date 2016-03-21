@@ -4,8 +4,8 @@ $GLOBALS['subtitle']="Edit Profile";
 require_once("includes/config.php");
 require_once("includes/header.php");
 session_start();
-//Check if user is logged in Else logg out
-if(!isset($_SESSION["usrCMS"]))
+//Check if user is logged in Else log out
+if(!isset($_SESSION["usrId"]))
 {
         header('Location: '.'index.php');
 }
@@ -88,7 +88,7 @@ if (isset($_FILES['image'])){
 }
 
 ?>
-<?php require_once 'includes/sweet-alert.php';?>
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
