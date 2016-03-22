@@ -75,7 +75,7 @@
         <li>
           <a href="#"><i class="fa fa-users"></i> <span>Group</span> <i class="fa fa-angle-left pull-right"></i></a>
           <ul class="treeview-menu">
-              <li><a id="group_members" href="#"><i class="fa fa-circle-o"></i>Group Members</a></li>
+              <li><a id="group_members" href="groupMembers.php"><i class="fa fa-circle-o"></i>Group Members</a></li>
               <?php 
               if($_SESSION["isLead"]!="1" && $_SESSION["GroupID"]==="0")
               {?>
