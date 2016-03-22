@@ -59,7 +59,7 @@ if((isset($_POST['Batch'])) && (isset($_POST['batchYear']))) {
 
 ?>
 
-
+</head>
 <body class="hold-transition skin-blue sidebar-mini">	
 <div class="wrapper">
 
@@ -175,18 +175,14 @@ if((isset($_POST['Batch'])) && (isset($_POST['batchYear']))) {
     </div>
     </section>
     </div>
-    </div>
-    <?php
-//****************************************************************************************************************************************************
-//
-//																	Page Footer
-//
-//**************************************************************************************************************************************************** -->
-     
-    require_once("includes/main-footer.php");
-    ?> 
-    <?php
-    require_once("includes/required_js.php");
-    ?>
-	
+
+<?php
+require_once("includes/main-footer.php");
+?>
+</div>
+<!-- ./wrapper -->
+<?php
+require_once("includes/required_js.php");
+?>
 </body>
+</html>

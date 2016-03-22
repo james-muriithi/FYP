@@ -136,11 +136,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             </div>
         </section>
-    </div>
-</div>
+    </div><!-- ./content-wrapper -->
+<!--</div>-->
 <?php
 require_once("includes/main-footer.php");
 ?>
+</div>
+<!-- ./wrapper -->
 <?php
 require_once("includes/required_js.php");
 ?>

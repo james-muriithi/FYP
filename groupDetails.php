@@ -1,0 +1,69 @@
+<?php
+$GLOBALS['title']="FYPMS";
+$GLOBALS['subtitle']="Group Details";
+require_once("includes/header.php");
+require_once("includes/config.php");
+session_start();
+if(!isset($_SESSION["usrCMS"]))
+{
+    header('Location: '.'index.php');
+}
+
+
+
+//Check if form is submitted by GET
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+
+
+}
+
+//Check if form is submitted by POST
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+}
+
+
+
+?>
+<!-- DataTables -->
+<link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+    <?php require_once("includes/main-header.php"); ?>
+    <?php require_once("includes/main-sidebar.php"); ?>
+    <div class="content-wrapper" >
+        <?php require_once("includes/content-header.php"); ?>
+
+        <section class="content" style="min-height: 700px">
+            <div class="row">
+
+
+            </div>
+        </section>
+    </div>
+</div>
+<?php
+require_once("includes/main-footer.php");
+?>
+<?php
+require_once("includes/required_js.php");
+?>
+<!-- DataTables -->
+<script src="plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('#manageStudents').DataTable({
+            "paging": false,
+            "lengthChange": false,
+            "searching": false,
+            "ordering": true,
+            "info": false,
+            "autoWidth": false
+        });
+    } );
+</script>
+</body>

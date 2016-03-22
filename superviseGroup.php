@@ -1,41 +1,24 @@
 <?php 
-//****************************************************************************************************************************************************
-//
-//													Setting up global variables for header and page title use
-//
-//**************************************************************************************************************************************************** -->
-     
+
 $GLOBALS['title']="FYPMS";
 $GLOBALS['subtitle']="Supervise Group";
 require_once("includes/header.php");
 require_once("includes/config.php");
 $error="";
 
-//****************************************************************************************************************************************************
-//
-//													Starting session and checking session variables
-//
-//**************************************************************************************************************************************************** -->
-     
+
 session_start();
 if(!isset($_SESSION["design"]))
 {
         header('Location: '.'index.php');
 }
 ?>
-<?php
-require_once 'includes/swal_css.php';
-?>
+
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">	
 <div class="wrapper">
-<!--//****************************************************************************************************************************************************
-//
-//													Including main bar and sidebar for the page
-//
-//**************************************************************************************************************************************************** -->
-     
+
     <?php require_once("includes/main-header.php"); ?>
     <?php require_once("includes/main-sidebar.php"); ?>
     <div class="content-wrapper" >
@@ -45,12 +28,6 @@ require_once 'includes/swal_css.php';
     <div class="row">
     <div class="col-md-2"></div>        
     <div class="col-md-8">   
-<!--//****************************************************************************************************************************************************
-//
-//													Displaying groups which need supervsor along with group ids and their members
-//
-//**************************************************************************************************************************************************** -->
-     
 
 <!--Actual Code for joinGroup starts from here    -->
 <div class="box">
@@ -75,12 +52,7 @@ require_once 'includes/swal_css.php';
                 die("Connection failed: " . $conn->connect_error);
         }
         else{
-//****************************************************************************************************************************************************
-//
-//													gathering part 1 groups from the database who need supervisor
-//
-//**************************************************************************************************************************************************** -->
-     
+
         $sql = "SELECT student.studentName, student.studentCMS, student.groupId, student.isLeader, student.isCompleted, student_group.projectPart FROM student INNER JOIN student_group ON student.groupId=student_group.groupId AND student_group.projectPart='1' AND student.isLeader = '1' AND student.isCompleted = '0' ORDER BY student.studentName"; 
         
         //$sql2 = "SELECT facultyId, designation, facultyName, facultyPhoneNo, facultyEmail, facultyPassword, currentLoad, isAdmin, isCoordinator FROM faculty";
@@ -147,13 +119,7 @@ require_once 'includes/swal_css.php';
 </div>
 <!--joinGroup ends here -->
 
-<!--//****************************************************************************************************************************************************
-//
-//													End of the table displaying groups and their information
-//
-//**************************************************************************************************************************************************** -->
-     
-	
+
 	
 	
 	
@@ -162,12 +128,7 @@ require_once 'includes/swal_css.php';
     </div>
     </section>
     </div>
-<!--//****************************************************************************************************************************************************
-//
-//													Page footer content includes
-//
-//**************************************************************************************************************************************************** -->
-     
+
     <?php
     require_once("includes/main-footer.php");
     require_once("includes/required_js.php");

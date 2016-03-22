@@ -1,0 +1,548 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>
+        FYPMS | Create Batch</title>
+    <!-- Tell the browser to be responsive to screen width -->
+    <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+    <!-- Favicon -->
+    <link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
+    <!-- Bootstrap 3.3.5 -->
+    <link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="plugins/font-awesome/css/font-awesome.min.css">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="plugins/ionicons/css/ionicons.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/AdminLTE.min.css">
+    <!-- AdminLTE Skins. Choose a skin from the css/skins
+         folder instead of downloading all of them to reduce the load. -->
+    <link rel="stylesheet" href="dist/css/skins/skin-blue.min.css">
+    <!-- bootstrap wysihtml5 - text editor -->
+    <link rel="stylesheet" href="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
+    <!-- Sweet Alert -->
+    <link rel="stylesheet" href="plugins/sweet-alert/sweetalert.css">
+
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+
+</head>
+<body class="hold-transition skin-blue sidebar-mini">
+<div class="wrapper">
+
+    <header class="main-header">
+        <a href=/fyp/createBatch.php class="logo">
+            <!-- mini logo for sidebar mini 50x50 pixels -->
+            <span class="logo-mini"><b>FYP</b></span>
+            <!-- logo for regular state and mobile devices -->
+            <span class="logo-lg"><b>FYP</b><small>Management System</small></span>
+        </a>
+        <!-- Header Navbar: style can be found in header.less -->
+        <nav class="navbar navbar-static-top" role="navigation">
+            <!-- Sidebar toggle button-->
+            <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
+                <span class="sr-only">Toggle navigation</span>
+            </a>
+
+            <div class="navbar-custom-menu">
+                <ul class="nav navbar-nav">
+                    <!-- Messages: style can be found in dropdown.less-->
+                    <li class="dropdown messages-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-envelope-o"></i>
+                            <span class="label label-success">4</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li class="header">You have 4 messages</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                    <li><!-- start message -->
+                                        <a href="#">
+                                            <div class="pull-left">
+                                                <img src="dist/img/user1-128x128.jpg" class="img-circle" alt="User Image">
+                                            </div>
+                                            <h4>
+                                                Support Team
+                                                <small><i class="fa fa-clock-o"></i> 5 mins</small>
+                                            </h4>
+                                            <p>Why not buy a new awesome theme?</p>
+                                        </a>
+                                    </li>
+                                    <!-- end message -->
+                                    <li>
+                                        <a href="#">
+                                            <div class="pull-left">
+                                                <img src="dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
+                                            </div>
+                                            <h4>
+                                                AdminLTE Design Team
+                                                <small><i class="fa fa-clock-o"></i> 2 hours</small>
+                                            </h4>
+                                            <p>Why not buy a new awesome theme?</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <div class="pull-left">
+                                                <img src="dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
+                                            </div>
+                                            <h4>
+                                                Developers
+                                                <small><i class="fa fa-clock-o"></i> Today</small>
+                                            </h4>
+                                            <p>Why not buy a new awesome theme?</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <div class="pull-left">
+                                                <img src="dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
+                                            </div>
+                                            <h4>
+                                                Sales Department
+                                                <small><i class="fa fa-clock-o"></i> Yesterday</small>
+                                            </h4>
+                                            <p>Why not buy a new awesome theme?</p>
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a href="#">
+                                            <div class="pull-left">
+                                                <img src="dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
+                                            </div>
+                                            <h4>
+                                                Reviewers
+                                                <small><i class="fa fa-clock-o"></i> 2 days</small>
+                                            </h4>
+                                            <p>Why not buy a new awesome theme?</p>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#">See All Messages</a></li>
+                        </ul>
+                    </li>
+
+                    <!-- Requests: style can be found in dropdown.less -->
+
+
+                    <li class="dropdown notifications-menu " id="requests-menu">
+
+
+                        <!-- Tasks: style can be found in dropdown.less -->
+
+                        <!-- Notifications: style can be found in dropdown.less -->
+
+                    <li class="dropdown notifications-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <i class="fa fa-bell-o"></i>
+                            <span class="label label-warning">1</span>
+                        </a>
+
+                        <ul class="dropdown-menu">
+                            <li class="header">You have 1 notifications</li>
+                            <li>
+                                <!-- inner menu: contains the actual data -->
+                                <ul class="menu">
+                                    <li>
+                                        <i class="fa fa-users text-aqua"></i> Muhammad Muneeb sent you group request
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="footer"><a href="#">View all</a></li>
+                        </ul>
+                    </li>
+                    <!-- Tasks: style can be found in dropdown.less -->
+
+                    <li id="groupRequestsMenu" class="dropdown tasks-menu">
+
+                    </li>
+
+                    <!-- User Account: style can be found in dropdown.less -->
+                    <li class="dropdown user user-menu">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                            <img src="public/profile_images/dummy.png" class="user-image" alt="User Image">
+                            <span class="hidden-xs">Saud Khan</span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            <!-- User image -->
+                            <li class="user-header">
+                                <img src="public/profile_images/dummy.png"
+                                     class="img-circle" alt="User Image">
+                                <p>
+                                    <!--if student then show its CMS if other show its designation-->
+                                    Saud Khan                <small>[
+                                    Lecturer                    ]</small>
+                                </p>
+                            </li>
+                            <!-- Menu Body -->
+                            <li class="user-body">
+                                <div class="row">
+                                    <div class="col-xs-4 text-center">
+                                        <a href="editProfile.php">Profile</a>
+                                    </div>
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">Settings</a>
+                                    </div>
+                                    <div class="col-xs-4 text-center">
+                                        <a href="#">Groups</a>
+                                    </div>
+                                </div>
+                                <!-- /.row -->
+                            </li>
+                            <!-- Menu Footer-->
+                            <li class="user-footer">
+                                <div class="pull-left">
+                                    <a href="editProfile.php" class="btn btn-default btn-flat">Profile</a>
+                                </div>
+                                <div class="pull-right">
+                                    <form id="signout" action="home.php" method="post">
+                                        <a href="signout.php"  class="btn btn-default btn-flat">Sign out</a>
+                                        <input type="hidden" name="signout" value="signout"/>
+                                    </form>
+
+                                </div>
+                            </li>
+                        </ul>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+    </header>
+    <aside class="main-sidebar">
+        <section class="sidebar">
+            <!-- Sidebar user panel -->
+            <div class="user-panel">
+                <div class="pull-left image">
+                    <img src="public/profile_images/dummy.png" class="img-circle" alt="User Image">
+                </div>
+                <div class="pull-left info">
+                    <p>Saud Khan</p>
+                    <p>Lecturer(Cordinator)</p>
+                </div>
+            </div>
+
+
+            <!-- sidebar menu: : style can be found in sidebar.less -->
+            <ul class="sidebar-menu">
+                <li class="header">MAIN NAVIGATION</li>
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-dashboard"></i> <span>Dashboard</span> <i class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li id="timeline"><a href="home.php"><i class="fa fa-circle-o"></i>
+                            Timeline
+                        </a></li>
+                    </ul>
+
+
+
+                    <!-- check if coordinator logged in-->
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-graduation-cap "></i> <span>Batch</span> <i
+                            class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="createBatch.php"><i class="fa fa-plus"></i> <span>Create Batch</span></a></li>
+                        <li><a href="deleteBatch.php"><i class="fa fa-minus "></i> <span>Delete Batch</span></a></li>
+                        <li><a href="setDeliverables.php"><i class="fa fa-circle-o"></i> <span>Deliverables</span></a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa fa-user-plus "></i> <span>Register Users</span> <i
+                            class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="registerStudents.php"><i class="fa fa-plus"></i> <span>Register Students</span></a>
+                        </li>
+                        <li><a href="registerFaculty.php"><i class="fa fa-plus"></i>
+                            <span>Register Faculty Member</span></a></li>
+                    </ul>
+                </li>
+
+                <li class="treeview">
+                    <a href="#">
+                        <i class="fa  fa-pencil-square-o  "></i> <span>Manage</span> <i
+                            class="fa fa-angle-left pull-right"></i>
+                    </a>
+                    <ul class="treeview-menu">
+                        <li><a href="manageStudents.php"><i class="fa fa-circle-o"></i> <span>Manage Students</span></a>
+                        </li>
+                        <li><a href="manageGroups.php"><i class="fa fa-circle-o"></i> <span>Manage Student Groups</span></a>
+                        </li>
+                        <li><a href="manageFaculty.php"><i class="fa fa-circle-o "></i> <span>Manage Faculty</span></a>
+                        </li>
+                        <li><a href="manageTimeline.php"><i class="fa fa-circle-o "></i>
+                            <span>Manage Timeline</span></a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="sendEmail.php">
+                        <i class="fa fa-envelope-o"></i> <span>Send Email</span>
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="superviseGroup.php">
+                        <i class="fa fa-user-plus"></i> <span>Supervise Group</span>
+                    </a>
+                </li>
+
+
+                <li>
+                    <a href="#">
+                        <i class="fa fa-bell-o"></i> <span>Notifications</span>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="#">
+                        <i class="fa fa-calendar"></i> <span>Calendar</span>
+                    </a>
+                </li>
+
+                <li><a href="#"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
+                <li><a href="#"><i class="fa fa-question"></i> <span>Help</span></a></li>
+            </ul>
+        </section>
+        <!-- /.sidebar -->
+    </aside>
+
+    <div class="content-wrapper" >
+        <section class="content-header">
+            <ol class="breadcrumb">
+                <li><a href="home.php"><i class="fa fa-dashboard"></i> Home</a></li>
+                <li class="active">Create Batch</li>
+            </ol><br/>
+            <h1>Create Batch</h1>
+
+        </section>
+
+        <section class="content" style="min-height: 700px">
+            <div class="row">
+                <div class="col-md-2"></div>
+                <div class="col-md-8">
+
+                    <!-- Code for createBatch starts here-->
+                    <div class="register-box-body">
+                        <div class="box-header">
+                            <a href="home.php" ><i class="fa fa-arrow-left"></i></a>
+                            <h4 class="text-center ">Create Batch</h4>
+                        </div>
+
+                        <form id="CreateBatch" action="createBatch.php" method="post">
+                            <div class="form-group has-feedback">
+                                <b>Batch</b>
+                                <select name="Batch" class="form-control">
+                                    <option value="Fall">Fall</option>
+                                    <option value="Spring">Spring</option>
+                                    <span class="glyphicon glyphicon-education form-control-feedback"></span>
+                                </select>
+                            </div>
+                            <div class="form-group has-feedback">
+                                <b>Year</b>
+                                <input type="text" name="batchYear" class="form-control bfh-year" placeholder="2016" required />
+                            </div>
+
+                            <div class="form-group has-feedback">
+                                <b>Starting Date Of semester</b>
+                                <input type="date" name="Starting" class="form-control bfh-Date" required/>
+                            </div>
+                            <b>Configure Batch</b>
+
+                            <div class="form-group has-feedback">
+                                <input type="radio" name="configs" value="default" required="required"/> Load Default Configurations
+
+
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-flat btn-xs" data-toggle="modal" data-target="#defaultConfigs">
+                                    Show Default Configurations
+                                </button>
+                                <!-- Modal -->
+                                <div class="modal fade" id="defaultConfigs" tabindex="-1" role="dialog">
+                                    <div class="modal-dialog modal-lg" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                <h4 class="modal-title" id="myModalLabel">Default Configurations</h4>
+                                            </div>
+                                            <div class="modal-body">
+                                                <!-- /.row -->
+                                                <div class="row">
+                                                    <div class="col-xs-12">
+                                                        <div class="box no-border">
+                                                            <div class="box-header">
+                                                                <h3 class="box-title">Senior Design Project Part - I</h3>
+                                                            </div>
+                                                            <!-- /.box-header -->
+                                                            <div class="box-body table-responsive no-padding">
+                                                                <table class="table table-condensed">
+                                                                    <tr>
+                                                                        <th>Week</th>
+                                                                        <th>Task Name</th>
+                                                                        <th>Description</th>
+                                                                        <th>Deadline</th>
+                                                                        <th>Attachment</th>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td>1</td>
+                                                                        <td>Orientation Presentation</td>
+                                                                        <td></td>
+                                                                        <td>0000-00-00 00:00:00</td>
+                                                                        <td></td>
+                                                                    <tr>
+                                                                        <td>2</td>
+                                                                        <td>Deliverable 01: Project Team List</td>
+                                                                        <td><ul><li>Use "Template-01" to fill in the...</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                    <tr>
+                                                                        <td>3</td>
+                                                                        <td>Deliverable 02: Project Proposal</td>
+                                                                        <td><ul>
+                                                                            <li>Use "Template-2 " to write down...</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                    <tr>
+                                                                        <td>5</td>
+                                                                        <td>Project Proposal Presentation</td>
+                                                                        <td>SDP (Part I) Proposal Presentations will be...</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                    <tr>
+                                                                        <td>6</td>
+                                                                        <td>Proposal Presentation: Submission</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                    <tr>
+                                                                        <td>6</td>
+                                                                        <td>Final Project Proposal</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                    <tr>
+                                                                        <td>14</td>
+                                                                        <td>Open House (Fall 2015)</td>
+                                                                        <td><ul>
+                                                                            <li>Date for Open House (Fall 2015) has...</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                    <tr>
+                                                                        <td>20</td>
+                                                                        <td>Progress Presentations</td>
+                                                                        <td><ul>
+                                                                            <li>SDP (Part 1) project progress...</td>
+                                                                        <td></td>
+                                                                        <td></td>
+
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                            <!-- /.box-body -->
+                                                            <div class="box-header">
+                                                                <h3 class="box-title">Senior Design Project Part - II</h3>
+                                                            </div>
+                                                            <!-- /.box-header -->
+                                                            <div class="box-body table-responsive no-padding">
+                                                                <table class="table table-condensed">
+                                                                    <tr>
+                                                                        <th>Week</th>
+                                                                        <th>Task Name</th>
+                                                                        <th>Description</th>
+                                                                        <th>Deadline</th>
+                                                                        <th>Attachment</th>
+                                                                    </tr>
+
+                                                                    <tr>
+                                                                        <td>3</td>
+                                                                        <td>Final Report (Latest Version)</td>
+                                                                        <td></td>
+                                                                        <td></td>
+                                                                        <td></td>
+
+                                                                    </tr>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <!-- /.box -->
+                                                    </div>
+                                                </div>                        </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+
+                            </div>
+
+
+                            <div class="form-group has-feedback">
+                                <input type="radio" name="configs" value="custom" required="required"/> Custom Configurations
+                                <a href="createCustomConfigs.php" class="btn btn-default btn-xs">Create Custom Configurations</a>
+                            </div>
+
+                            <div class="box-footer ">
+                                <div class="form-group pull-right">
+                                    <button type="submit" name="CreateBatch" class="btn btn-primary">Create</button>
+                                </div>
+                            </div>
+
+                        </form>
+
+
+                    </div>
+                    <!-- Code for createBatch ends here-->
+                </div>
+                <div class="col-md-2"></div>
+            </div>
+        </section>
+    </div>
+</div>
+<!-- Main Footer -->
+<footer class="main-footer">
+    <!-- To the right -->
+    <div class="pull-right hidden-xs">
+        Admin LTE theme by <a href="http://www.almsaeedstudio.com" target="_blank">almsaeedstudio</a>
+    </div>
+    <!-- Default to the left -->
+    <strong>Copyright &copy; 2016 <a href="https://riphah.edu.pk/" target="_blank">Riphah International University</a>.</strong> All rights reserved.
+</footer>
+<!-- REQUIRED JS SCRIPTS -->
+<!-- jQuery 2.2.0 -->
+<script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
+<!-- Bootstrap 3.3.5 -->
+<script src="bootstrap/js/bootstrap.min.js"></script>
+<!-- AdminLTE App -->
+<script src="dist/js/app.min.js"></script>
+<!-- Bootstrap WYSIHTML5 -->
+<script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
+<!-- SweetAlert -->
+<script src="plugins/sweet-alert/sweetalert.min.js"></script>
+</body>

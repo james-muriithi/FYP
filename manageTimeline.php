@@ -382,11 +382,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         </section>
     </div>
-</div>
 <?php
 
 require_once("includes/main-footer.php");
-
+?>
+</div>
+<?php
 require_once("includes/required_js.php");
 ?>
 <!-- Select2 -->

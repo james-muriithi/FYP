@@ -134,14 +134,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <!-- /. box -->
 
                 </div class="col-md-1">
+                <div class="col-md-1"></div>
             </div>
-    </div>
     </section>
-</div>
 </div>
 <?php
 require_once("includes/main-footer.php");
 ?>
+</div>
 <?php
 require_once("includes/required_js.php");
 ?>
