@@ -207,7 +207,7 @@ if((isset($_POST['facultyName'])) && (isset($_POST['facultyDesign'])) && (isset(
         <div class="box-footer ">
             <div class="checkbox pull-left">
                 <label>
-                    <input type="checkbox" name="emailSend" value="false"> Do not send email to user
+                    <input type="checkbox" name="emailSend" value="false" checked> Do not send email to user
                 </label>
             </div>
 

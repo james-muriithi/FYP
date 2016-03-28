@@ -188,7 +188,7 @@ if ((isset($_POST['studentName'])) && (isset($_POST['studentCMS'])) && (isset($_
                             <div class="box-footer ">
                                 <div class="checkbox pull-left">
                                     <label>
-                                        <input type="checkbox" name="emailSend" value="false"> Do not send email to user
+                                        <input type="checkbox" name="emailSend" value="false" checked> Do not send email to user
                                     </label>
                                 </div>
                                 <div class="form-group pull-right">
