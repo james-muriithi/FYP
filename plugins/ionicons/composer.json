@@ -32,5 +32,8 @@
         "web font"
     ],
     "homepage": "http://ionicons.com/",
-    "description": "The premium icon font for Ionic Framework."
+    "description": "The premium icon font for Ionic Framework.",
+    "require": {
+        "mikehaertl/phpwkhtmltopdf": "2.1.1"
+    }
 }

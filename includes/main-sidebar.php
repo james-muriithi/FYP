@@ -71,7 +71,8 @@
                         <li><a id="group_members" href="groupDetails.php"><i class="fa fa-circle-o"></i>Group
                                 Members</a></li>
                         <?php
-                        if ($_SESSION["isLead"] != "1" && $_SESSION["GroupID"] === "0") {
+
+                        if ($_SESSION["isLead"] != "1" && is_null($_SESSION["GroupID"])) {
                             ?>
                             <li><a id="InitiateGroup" href="initGroupForm.php"><i class="fa fa-circle-o"></i>Initiate
                                     Group</a></li>
@@ -112,6 +113,7 @@
             <?php if ($_SESSION["type"] === "Faculty" || isset($_SESSION["isCord"]))//if coordinator
             {
                 ?>
+                <li class="header">COORDINATOR MENU</li>
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-graduation-cap "></i> <span>Batch</span> <i
@@ -133,6 +135,7 @@
             if ($_SESSION["type"] === "Faculty" && $_SESSION["isAdmin"] === "1")//if Administrator
             {
                 ?>
+                <li class="header">ADMIN MENU</li>
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-user-plus "></i> <span>Register Users</span> <i
@@ -175,6 +178,7 @@
             <?php if ($_SESSION["type"] === "Faculty")//if faculty member
             {
                 ?>
+                <li class="header">SUPERVISOR MENU</li>
                 <li>
                     <a href="superviseGroup.php">
                         <i class="fa fa-user-plus"></i> <span>Supervise Group</span>
