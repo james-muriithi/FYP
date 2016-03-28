@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 19, 2016 at 07:26 PM
+-- Generation Time: Mar 28, 2016 at 08:20 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -175,6 +175,15 @@ CREATE TABLE `group_requests` (
   `groupId` int(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `group_requests`
+--
+
+INSERT INTO `group_requests` (`requestId`, `studentId`, `groupId`) VALUES
+(1, 16, 11),
+(2, 16, 9),
+(3, 16, 11);
+
 -- --------------------------------------------------------
 
 --
@@ -203,10 +212,10 @@ CREATE TABLE `student` (
   `studentGender` varchar(10) CHARACTER SET utf8 NOT NULL,
   `studentPassword` varchar(255) CHARACTER SET utf8 NOT NULL,
   `student_image` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
-  `groupId` int(255) NOT NULL,
+  `groupId` int(255) DEFAULT NULL,
   `isLeader` int(1) NOT NULL,
   `batchId` int(255) NOT NULL,
-  `isCompleted` varchar(50) NOT NULL DEFAULT '0'
+  `isCompleted` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='FYP Student Records';
 
 --
@@ -214,9 +223,10 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentPhoneNo`, `studentEmail`, `studentGender`, `studentPassword`, `student_image`, `groupId`, `isLeader`, `batchId`, `isCompleted`) VALUES
-(14, 'Muneeb Khan', '7757', '01234565', 'muneeb_420@gmail.com', 'male', '123', NULL, 9, 1, 2, '0'),
-(15, 'Umair Qamar', '10776', '03458541454', 'umairqamar@live.com', 'male', '123', NULL, 0, 0, 2, '0'),
-(16, 'Abdul Saboor', '7783', '03335385896', 'saboor@gmail.com', 'male', '123', NULL, 9, 0, 2, '0');
+(14, 'Muneeb Khan', '7757', '01234565', 'muneeb_420@gmail.com', 'male', '123', NULL, 9, 1, 2, 0),
+(15, 'Umair Qamar', '10776', '03458541454', 'umairqamar@live.com', 'male', '123', NULL, 9, 0, 2, 0),
+(16, 'Abdul Saboor', '7783', '03335385896', 'saboor@gmail.com', 'male', '123', NULL, NULL, 0, 2, 0),
+(19, 'Bilal Hassan', '7731', '1212', 'bilalhassan@live.com', 'male', '123', NULL, 0, 0, 5, 0);
 
 -- --------------------------------------------------------
 
@@ -238,7 +248,9 @@ CREATE TABLE `student_group` (
 --
 
 INSERT INTO `student_group` (`groupId`, `projectName`, `projectPart`, `groupLimit`, `inGroup`, `leaderId`) VALUES
-(9, NULL, 1, 3, 1, 14);
+(9, NULL, 1, 3, 1, 14),
+(10, NULL, 1, 3, 1, 17),
+(11, NULL, 1, 3, 1, 18);
 
 -- --------------------------------------------------------
 
@@ -414,7 +426,7 @@ ALTER TABLE `external_examiner_old`
 -- AUTO_INCREMENT for table `faculty`
 --
 ALTER TABLE `faculty`
-  MODIFY `facultyId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `facultyId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `faculty_student_group`
 --
@@ -429,7 +441,7 @@ ALTER TABLE `faculty_student_request`
 -- AUTO_INCREMENT for table `group_requests`
 --
 ALTER TABLE `group_requests`
-  MODIFY `requestId` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `requestId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `student`
 --
@@ -439,7 +451,7 @@ ALTER TABLE `student`
 -- AUTO_INCREMENT for table `student_group`
 --
 ALTER TABLE `student_group`
-  MODIFY `groupId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `groupId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `tasks`
 --
