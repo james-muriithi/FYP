@@ -97,7 +97,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
 
 
-                <?php } else if (is_null($_SESSION["GroupID"])) { ?>
+                <?php } else if ($_SESSION["GroupID"] == 0) { ?>
 
                     <div class="col-md-12">
                         <div class="callout callout-info">

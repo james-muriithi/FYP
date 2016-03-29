@@ -72,7 +72,7 @@
                                 Members</a></li>
                         <?php
 
-                        if ($_SESSION["isLead"] != "1" && is_null($_SESSION["GroupID"])) {
+                        if ($_SESSION["isLead"] != "1" && $_SESSION["GroupID"]== 0 ) {
                             ?>
                             <li><a id="InitiateGroup" href="initGroupForm.php"><i class="fa fa-circle-o"></i>Initiate
                                     Group</a></li>
