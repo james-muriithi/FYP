@@ -1,5 +1,22 @@
 <?php
 require_once('includes/config.php');
+require_once('includes/functions.php');
+
+//Check if user is leader of a group
+if (isset($_SESSION["isLead"])) {
+    if ($_SESSION["isLead"] == 1) {
+
+    //Check if he has group requests
+        $leaderId = $_SESSION['usrId'];
+        $sql = "SELECT * from student_group JOIN group_requests WHERE leaderId = '$leaderId'  ";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            $numOfRequests = $result->num_rows;
+        }
+
+    }
+}
+//Check if form is submitted by POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (isset($_POST["recordToDelete"]) && strlen($_POST["recordToDelete"]) > 0 && is_numeric($_POST["recordToDelete"])) {
@@ -36,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $delete_row = $conn->query("DELETE FROM group_requests WHERE requestId=" . $requestId);
         }
         else{
-           // header('HTTP/1.1 500 Error occurred, Could not accept request!');
+            // header('HTTP/1.1 500 Error occurred, Could not accept request!');
             exit();
         }
         $conn->close(); //close db connection
@@ -48,24 +65,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
 
+
 }
 
 ?>
 
 
-<li class="dropdown notifications-menu " id="requests-menu">
-    <?php
-    require_once('includes/functions.php');
-    //Check if user i leader of a group
-    if (isset($_SESSION["isLead"])){
-    if ($_SESSION["isLead"] == 1){
-    //Check if he has group requests
-    $leaderId = $_SESSION['usrId'];
-    $sql = "SELECT * from student_group JOIN group_requests WHERE leaderId = '$leaderId'  ";
-    $result = $conn->query($sql);
-    if ($result->num_rows > 0) {
-    $numOfRequests = $result->num_rows;
-    ?>
+<li class="dropdown notifications-menu " id="requests-student">
+
     <script>
         $(document).ready(function () {
 
@@ -181,43 +188,48 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     </script>
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         <i class="fa fa-user"></i>
-        <span class="label label-primary"><?php if (isset($numOfRequests)){echo $numOfRequests;}  ?></span>
+        <span class="label label-primary"><?php  if (isset($numOfRequests)){echo $numOfRequests;}else{echo "0";};  ?></span>
     </a>
     <ul class="dropdown-menu">
-        <li class="header">You have <?php if (isset($numOfRequests)){echo $numOfRequests;} ?> request(s)</li>
+        <li class="header">You have <?php if (isset($numOfRequests)){echo $numOfRequests;}else{echo "0";}; ?> request(s)</li>
         <li>
             <!-- inner menu: contains the actual data -->
             <ul class="menu">
-                <?php
+            <?php
+            if (isset($numOfRequests)){
 
-                while ($row = $result->fetch_assoc()) {
-                    $requestFrom = getStudentData($row['studentId']);
-                    ?>
+                $leaderId = $_SESSION['usrId'];
+                $sql = "SELECT * from student_group JOIN group_requests WHERE leaderId = '$leaderId'  ";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                    while ($row = $result->fetch_assoc()) {
+                        $requestFrom = getStudentData($row['studentId']); ?>
 
-                    <li>
-                        <i class="fa fa-user text-aqua"></i><?php echo $requestFrom['name']; ?> sent you group request
-                        <div id="requestActions" class="text-right">
-                            <button id="accept-<?php echo $row['requestId']; ?>"
-                                    class="accept_button btn btn-primary btn-xs">Accept
-                            </button>
-                            <button id="del-<?php echo $row['requestId']; ?>" class="del_button btn btn-danger btn-xs ">
-                                Delete
-                            </button>
-                        </div>
-                    </li>
+                        <li>
+                            <i class="fa fa-user text-aqua"></i><?php echo $requestFrom['name']; ?> sent you group request
+                            <div id="requestActions" class="text-right">
+                                <button id="accept-<?php echo $row['requestId']; ?>" class="accept_button btn btn-primary btn-xs">Accept</button>
+                                <button id="del-<?php echo $row['requestId']; ?>" class="del_button btn btn-danger btn-xs ">Delete</button>
+                            </div>
+                        </li>
+                   <?php }
+                }
 
-                <?php } ?>
+            }
+
+
+            ?>
+
             </ul>
         </li>
+        <?php if (isset($numOfRequests)){ ?>
+            <li class="footer"><a href="#">View all</a></li>
+         <?php  }
+         ?>
 
-        <li class="footer"><a href="#">View all</a></li>
     </ul>
 </li>
 
-<?php
-}
-}
-}
-?>
+
 
 

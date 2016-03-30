@@ -51,8 +51,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
     <section class="content" style="min-height: 700px">
     <div class="row">
-    <div class="col-md-2"></div>        
-    <div class="col-md-8">   
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
 
         <?php
      if (isset($_GET['status'])){
@@ -112,53 +112,45 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             // output data of each row
                                 while($row = $result->fetch_assoc()) {
                                     ?>
-                <tr>
-                  <td><?php echo $row["facultyId"]; ?></td>
-                  <td><?php echo $row["facultyName"]; ?></td>
-                  <td><?php echo $row["designation"]; ?></td>
-                  <td><?php echo $row["totalLoad"]; ?></td>
-                  <td><?php echo $row["currentLoad"]; ?></td>
-                  <td><span class="label label-success">Available</span></td>
-                <td>
-                <div class="tools">
-                    <form id="ChooseSupervisor" action="chooseSupervisor.php" method="post">
-                        <button id="Formlink" class="btn btn-block btn-primary btn-xs" href="javascript:;" value="<?php echo $row["facultyId"];?>"> Select Supervisor</button>
-                        <input type= "hidden" name="ChooseSupervisor" value="<?php echo $row["facultyId"];?>"/>
-                    </form>
-                  </div>
-                </td>
-                </tr>
+                                    <tr>
+                                      <td><?php echo $row["facultyId"]; ?></td>
+                                      <td><?php echo $row["facultyName"]; ?></td>
+                                      <td><?php echo $row["designation"]; ?></td>
+                                      <td><?php echo $row["totalLoad"]; ?></td>
+                                      <td><?php echo $row["currentLoad"]; ?></td>
+                                      <td><span class="label label-success">Available</span></td>
+                                    <td>
+                                    <div class="tools">
+                                        <form id="ChooseSupervisor" action="chooseSupervisor.php" method="post">
+                                            <button id="Formlink" class="btn btn-block btn-primary btn-xs" href="javascript:;" value="<?php echo $row["facultyId"];?>"> Send Request</button>
+                                            <input type= "hidden" name="ChooseSupervisor" value="<?php echo $row["facultyId"];?>"/>
+                                        </form>
+                                      </div>
+                                    </td>
+                                    </tr>
                                 <?php }
                             }
                             }?>
               </table>
+                <div class="box-footer  pull-right">
+
+                </div>
             </div>
             <!-- /.box-body -->
           </div>
           <!-- /.box -->
 
     </div>
-    <div class="col-md-2"></div>
+    <div class="col-md-1"></div>
 
     </div>
-	<form id="Cancel" action="home.php" method="post">
-	<br/>
-		<div class="row">
-			<div class="col-lg-12">
-			  <button type="submit" name="Cancel" class="btn btn-primary btn-block btn-flat">Cancel</button>
-			</div>
-			<!-- /.col -->
-        </div>
-	</form>
+
     </section>
     </div>
-    </div>
-    <?php
-
-    require_once("includes/main-footer.php");
-    require_once("includes/required_js.php");
-    require_once("includes/swal_js.php");
-    ?> 
+<!--    </div>-->
+<?php require_once("includes/main-footer.php");?>
+</div>
+<?php require_once("includes/required_js.php");?>
     
  
 </body>

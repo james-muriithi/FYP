@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <?php } else if ($_GET['status'] == 't') { ?>
                                 <div style="text-align:center;" class="alert alert-success" role="alert">
                                     <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                    Student Registered
+                                    Project Name Changed Successfully
                                     <button type="button" class="close" data-dismiss="alert">x</button>
                                 </div>
                             <?php }

@@ -143,7 +143,7 @@ if ((isset($_POST['studentName'])) && (isset($_POST['studentCMS'])) && (isset($_
                             </div>
                             <div class="form-group has-feedback">
                                 <label>Gender </label>
-                                <input type="radio" name="gender" value="male"> Male
+                                <input type="radio" name="gender" value="male" checked> Male
                                 <input type="radio" name="gender" value="female"> Female<br>
                             </div>
 

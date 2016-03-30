@@ -1,5 +1,5 @@
 <header class="main-header">
-<a href=<?php echo $_SERVER['REQUEST_URI']?> class="logo">
+<a href=<?php echo siteroot?> class="logo">
   <!-- mini logo for sidebar mini 50x50 pixels -->
   <span class="logo-mini"><b>FYP</b></span>
   <!-- logo for regular state and mobile devices -->
@@ -11,6 +11,8 @@
   <a href="#" class="sidebar-toggle" data-toggle="offcanvas" role="button">
     <span class="sr-only">Toggle navigation</span>
   </a>
+
+ 
 
   <div class="navbar-custom-menu">
     <ul class="nav navbar-nav">
@@ -38,54 +40,6 @@
                 </a>
               </li>
               <!-- end message -->
-              <li>
-                <a href="#">
-                  <div class="pull-left">
-                    <img src="dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                  </div>
-                  <h4>
-                    AdminLTE Design Team
-                    <small><i class="fa fa-clock-o"></i> 2 hours</small>
-                  </h4>
-                  <p>Why not buy a new awesome theme?</p>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <div class="pull-left">
-                    <img src="dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                  </div>
-                  <h4>
-                    Developers
-                    <small><i class="fa fa-clock-o"></i> Today</small>
-                  </h4>
-                  <p>Why not buy a new awesome theme?</p>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <div class="pull-left">
-                    <img src="dist/img/user3-128x128.jpg" class="img-circle" alt="User Image">
-                  </div>
-                  <h4>
-                    Sales Department
-                    <small><i class="fa fa-clock-o"></i> Yesterday</small>
-                  </h4>
-                  <p>Why not buy a new awesome theme?</p>
-                </a>
-              </li>
-              <li>
-                <a href="#">
-                  <div class="pull-left">
-                    <img src="dist/img/user4-128x128.jpg" class="img-circle" alt="User Image">
-                  </div>
-                  <h4>
-                    Reviewers
-                    <small><i class="fa fa-clock-o"></i> 2 days</small>
-                  </h4>
-                  <p>Why not buy a new awesome theme?</p>
-                </a>
-              </li>
             </ul>
           </li>
           <li class="footer"><a href="#">See All Messages</a></li>
@@ -93,7 +47,25 @@
       </li>
 
       <!-- Requests: style can be found in dropdown.less -->
-        <?php require_once ('requests.php');?>
+
+        <!--Check type of user and load requests menu-->
+
+        <?php
+
+        //Student
+        if(isset ($_SESSION["usrCMS"]) ){
+            require_once ('requests-student.php');
+        }
+        //Supervisor
+        else if (isset ($_SESSION["facultyId"]) ){
+            require_once ('requests-faculty.php');
+        }
+
+
+
+        ?>
+
+
       <!-- Tasks: style can be found in dropdown.less -->
 
       <!-- Notifications: style can be found in dropdown.less -->

@@ -42,7 +42,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="box box-solid">
                             <!-- /.box-header -->
                             <div class="box-body">
-                                <h3>Project Name:<?php echo $conn->query("SELECT projectName FROM student_group WHERE groupId = '$groupId' ")->fetch_object()->projectName; ?></h3>
+                                <h3>Project Name:<?php
+
+                                    $name = $conn->query("SELECT projectName FROM student_group WHERE groupId = '$groupId' ")->fetch_object()->projectName;
+                                    if ($name){echo $name; }else{echo " --- ";}
+
+
+                                    ?></h3>
                                 <h4>Supervisor:</h4>
                             </div>
                             <!-- /.box-body -->
@@ -81,6 +87,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <?php }
                                     ?>
                                 </table>
+                                
+                                
                             </div>
                             <!-- /.box-body -->
 

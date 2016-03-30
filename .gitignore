@@ -1,4 +1,5 @@
 .idea
+/nbproject
 
 /vendor/
-/nbproject/private/
+/nbproject/

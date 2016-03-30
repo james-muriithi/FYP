@@ -8,23 +8,13 @@ $GLOBALS['title']="FYPMS";
 $GLOBALS['subtitle']="Initiate Group";
 require_once("includes/config.php");
 require_once("includes/header.php");
-$error="";
 
-//****************************************************************************************************************************************************
-//
-//													setting up session and cheching session variables
-//
-//****************************************************************************************************************************************************
 session_start();
 if(!isset($_SESSION["usrCMS"]))
 {
         header('Location: '.'index.php');
 }
-//****************************************************************************************************************************************************
-//
-//													iniatiating group and saving to database
-//
-//****************************************************************************************************************************************************
+
 if((isset($_POST['projectPart'])))
 {
         if(($_POST['projectPart']!=""))
@@ -60,11 +50,6 @@ if((isset($_POST['projectPart'])))
                                     </div>	
                             <?php	
                         }
-//****************************************************************************************************************************************************
-//
-//													Updating student properties as new group id assigned and leader attributes to database
-//
-//****************************************************************************************************************************************************
                 $chkLeader = "SELECT groupId FROM student_group WHERE leaderId='$stuId'";
                 $grpId=$conn->query($chkLeader);
                 $row = $grpId->fetch_assoc();
@@ -81,6 +66,7 @@ if((isset($_POST['projectPart'])))
                 unset($projectPart);
                 $_POST = array();
                 $conn->close();
+                
                 header('Location: '.'index.php');
                 die;
         }
@@ -92,12 +78,6 @@ if((isset($_POST['projectPart'])))
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
 
-<!--//****************************************************************************************************************************************************
-//
-//													Global Variables For headings and bread crumbs
-//
-//****************************************************************************************************************************************************
--->
     <?php require_once("includes/main-header.php"); ?>
     <?php require_once("includes/main-sidebar.php"); ?>
     <div class="content-wrapper" >
@@ -105,14 +85,8 @@ if((isset($_POST['projectPart'])))
         
     <section class="content" style="min-height: 700px">
     <div class="row">
-        <div class="col-md-4"></div>
-    <div class="col-md-4">
-<!--       HTML code for initGroupForm starts from here
-//****************************************************************************************************************************************************
-//
-//													Verification for creating a group as group leader
-//
-//**************************************************************************************************************************************************** -->
+        <div class="col-md-3"></div>
+    <div class="col-md-6">
      <div class="register-box-body">
 	 
         <p class="login-box-msg">Initiate Group</p>
@@ -128,7 +102,6 @@ if((isset($_POST['projectPart'])))
                             
                       </select>
                     </div>
-                    <div class="error"><?php echo $error;?></div>
                     <div class="row">
                             <div class="col-lg-12">
                               <button type="submit" name="initGroup" class="btn btn-primary btn-block btn-flat">Create Group</button>
@@ -138,16 +111,11 @@ if((isset($_POST['projectPart'])))
     </div>	
         
     </div>
-        <div class="col-md-4"></div>
+        <div class="col-md-3"></div>
     </div>
 	<form id="Cancel" action="home.php" method="post">
 	<br/>
-		<div class="row">
-			<div class="col-lg-12">
-			  <button type="submit" name="Cancel" class="btn btn-primary btn-block btn-flat">Cancel</button>
-			</div>
-			<!-- /.col -->
-        </div>
+
 	</form>
     </section>
     </div>
