@@ -7,6 +7,7 @@ session_start();
 if (!isset($_SESSION["usrCMS"])) {
     header('Location: ' . 'index.php');
 }
+$groupId = $_SESSION["GroupID"];
 
 
 //Check if form is submitted by GET
@@ -22,8 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 ?>
-<!-- DataTables -->
-<link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -37,19 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <section class="content" style="min-height: 700px">
             <div class="row">
                 <?php
-
                 if (isset($_SESSION["GroupID"])   ) { ?>
 
                     <div class="col-md-12">
                         <div class="box box-solid">
-                            <div class="box-header with-border">
-                                <i class="fa fa-info-circle"></i>
-
-                                <h3 class="box-title">Group Detail</h3>
-                            </div>
                             <!-- /.box-header -->
                             <div class="box-body">
-                                <h3>Project Name:</h3>
+                                <h3>Project Name:<?php echo $conn->query("SELECT projectName FROM student_group WHERE groupId = '$groupId' ")->fetch_object()->projectName; ?></h3>
                                 <h4>Supervisor:</h4>
                             </div>
                             <!-- /.box-body -->
@@ -67,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <th>CMS</th>
                                         <th>Name</th>
                                         <th>Email</th>
-                                        <th>Actions</th>
+                                        <th>Contact</th>
                                     </tr>
                                     </thead>
                                     <?php
@@ -77,12 +70,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     while ($row = $result->fetch_assoc()) { ?>
                                         <tr>
                                             <td><?php echo $row['studentCMS']; ?></td>
-                                            <td><?php echo $row['studentName']; ?></td>
+                                            <td><?php echo $row['studentName'];
+                                            if ($row['isLeader'] == 1){
+                                               echo '  <span class="label label-primary">Leader</span>'; 
+                                            }
+                                            ?></td>
                                             <td><?php echo $row['studentEmail']; ?></td>
-                                            <td>
-                                                <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['studentId']; ?>"
-                                                   class="btn  btn-primary btn-xs">Details</a>
-                                            </td>
+                                            <td><?php echo $row['studentPhoneNo']; ?></td>
                                         </tr>
                                     <?php }
                                     ?>

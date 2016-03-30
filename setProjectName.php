@@ -7,7 +7,7 @@ session_start();
 if (!isset($_SESSION["usrCMS"])) {
     header('Location: ' . 'index.php');
 }
-
+$groupId = $_SESSION["GroupID"];
 
 
 
@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (isset($_POST['btnChangeName'])) {
         if ($_POST['projectName'] != "") {
-            $groupId = $_SESSION["GroupID"];
+            
             $projectName = filter_input(INPUT_POST, "projectName", FILTER_SANITIZE_SPECIAL_CHARS);
             
                  $sql = "UPDATE student_group SET projectName='$projectName' WHERE groupId='$groupId'  ";
@@ -33,7 +33,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 
 </head>
-
 <body class="hold-transition skin-blue sidebar-mini">
     <div class="wrapper">
 
@@ -80,11 +79,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="box-body">
                                     
                                     
-                                    <h4>Project Name:</h4>
+                                    <h4>Project Name: <?php echo $conn->query("SELECT projectName FROM student_group WHERE groupId = '$groupId' ")->fetch_object()->projectName; ?></h4><br/>
                                     <div class="form-group">
-                                        <label for="projectName" class="col-sm-2 control-label">Project Name</label>
+                                        <!--<label for="projectName" class="col-sm-2 control-label">Project Name</label>-->
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="projectName" id="projectName" placeholder="Project Name" required>
+                                            <input type="text" class="form-control" name="projectName" id="projectName" placeholder="Set Project name or Update existing one" required>
                                         </div>
                                     </div>
                                 </div>
