@@ -146,6 +146,7 @@
                         </li>
                         <li><a href="registerFaculty.php"><i class="fa fa-plus"></i>
                                 <span>Register Faculty Member</span></a></li>
+						<li><a href="registerExternal.php"><i class="fa fa-plus "></i> <span>Register External Examiner</span></a> </li>
                     </ul>
                 </li>
 

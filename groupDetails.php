@@ -51,7 +51,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="box-body">
                                 <h3>Project Name:</h3>
                                 <h4>Supervisor:</h4>
-                                <p>Group Members:</p>
                             </div>
                             <!-- /.box-body -->
 

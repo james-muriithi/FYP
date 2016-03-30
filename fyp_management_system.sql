@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.5.1
+-- version 4.3.11
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 28, 2016 at 08:20 PM
--- Server version: 10.1.10-MariaDB
--- PHP Version: 7.0.3
+-- Generation Time: Mar 30, 2016 at 10:57 AM
+-- Server version: 5.6.24
+-- PHP Version: 5.6.8
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -14,7 +14,7 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8mb4 */;
+/*!40101 SET NAMES utf8 */;
 
 --
 -- Database: `fyp_management_system`
@@ -26,11 +26,11 @@ SET time_zone = "+00:00";
 -- Table structure for table `batch`
 --
 
-CREATE TABLE `batch` (
+CREATE TABLE IF NOT EXISTS `batch` (
   `batchId` int(255) NOT NULL,
   `batchName` varchar(255) NOT NULL,
   `configurationType` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='batchDeadlinesInfo';
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8 COMMENT='batchDeadlinesInfo';
 
 --
 -- Dumping data for table `batch`
@@ -47,7 +47,7 @@ INSERT INTO `batch` (`batchId`, `batchName`, `configurationType`) VALUES
 -- Table structure for table `configurations`
 --
 
-CREATE TABLE `configurations` (
+CREATE TABLE IF NOT EXISTS `configurations` (
   `configurationId` int(255) NOT NULL,
   `week` int(11) NOT NULL,
   `taskName` varchar(255) NOT NULL,
@@ -56,7 +56,7 @@ CREATE TABLE `configurations` (
   `deadline` datetime DEFAULT NULL,
   `attachment` varchar(50) DEFAULT NULL,
   `configurationType` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Default Configurations';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='Default Configurations';
 
 --
 -- Dumping data for table `configurations`
@@ -79,23 +79,23 @@ INSERT INTO `configurations` (`configurationId`, `week`, `taskName`, `taskDetail
 -- Table structure for table `external_examiner`
 --
 
-CREATE TABLE `external_examiner` (
+CREATE TABLE IF NOT EXISTS `external_examiner` (
   `examinerId` int(255) NOT NULL,
   `examinerName` varchar(100) NOT NULL,
   `examinerPhone` varchar(50) NOT NULL,
   `examinerEmail` varchar(255) NOT NULL,
-  `externalPassword` varchar(255) NOT NULL,
+  `examinerPassword` varchar(255) NOT NULL,
   `company` varchar(255) NOT NULL,
-  `designation` varchar(50) DEFAULT NULL,
-  `slotPresentation` varchar(50) DEFAULT NULL
+  `isActive` tinyint(4) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='examinerGroupInfo';
 
 --
 -- Dumping data for table `external_examiner`
 --
 
-INSERT INTO `external_examiner` (`examinerId`, `examinerName`, `examinerPhone`, `examinerEmail`, `externalPassword`, `company`, `designation`, `slotPresentation`) VALUES
-(0, 'Examiner 01', '1234567', 'examiner@gmail.com', '123', 'GOOGLE', NULL, '');
+INSERT INTO `external_examiner` (`examinerId`, `examinerName`, `examinerPhone`, `examinerEmail`, `examinerPassword`, `company`, `isActive`) VALUES
+(0, 'Examiner 01', '1234567', 'examiner@gmail.com', '123', 'GOOGLE', 0),
+(0, 'haj', '', 'haj@gmail.com', '123', 'Google', 1);
 
 -- --------------------------------------------------------
 
@@ -103,7 +103,7 @@ INSERT INTO `external_examiner` (`examinerId`, `examinerName`, `examinerPhone`, 
 -- Table structure for table `external_examiner_old`
 --
 
-CREATE TABLE `external_examiner_old` (
+CREATE TABLE IF NOT EXISTS `external_examiner_old` (
   `examinerId` int(255) NOT NULL,
   `examinerName` varchar(255) NOT NULL,
   `examinerPhone` int(255) NOT NULL,
@@ -119,7 +119,7 @@ CREATE TABLE `external_examiner_old` (
 -- Table structure for table `faculty`
 --
 
-CREATE TABLE `faculty` (
+CREATE TABLE IF NOT EXISTS `faculty` (
   `facultyId` int(255) NOT NULL,
   `designation` varchar(255) NOT NULL,
   `facultyName` varchar(255) NOT NULL,
@@ -128,7 +128,7 @@ CREATE TABLE `faculty` (
   `facultyPassword` varchar(255) NOT NULL,
   `isAdmin` tinyint(1) NOT NULL,
   `isCoordinator` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Faculty Details';
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8 COMMENT='Faculty Details';
 
 --
 -- Dumping data for table `faculty`
@@ -144,7 +144,7 @@ INSERT INTO `faculty` (`facultyId`, `designation`, `facultyName`, `facultyPhoneN
 -- Table structure for table `faculty_student_group`
 --
 
-CREATE TABLE `faculty_student_group` (
+CREATE TABLE IF NOT EXISTS `faculty_student_group` (
   `facultyStudent` int(255) NOT NULL,
   `groupId` int(255) NOT NULL,
   `facultyId` int(255) NOT NULL
@@ -156,7 +156,7 @@ CREATE TABLE `faculty_student_group` (
 -- Table structure for table `faculty_student_request`
 --
 
-CREATE TABLE `faculty_student_request` (
+CREATE TABLE IF NOT EXISTS `faculty_student_request` (
   `requestId` int(11) NOT NULL,
   `request_dtm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `facultyId` int(11) DEFAULT NULL,
@@ -166,14 +166,27 @@ CREATE TABLE `faculty_student_request` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `grades`
+--
+
+CREATE TABLE IF NOT EXISTS `grades` (
+  `id` int(11) DEFAULT NULL,
+  `studnet_id` int(11) DEFAULT NULL,
+  `sdp_part` int(11) DEFAULT NULL,
+  `grade` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf32;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `group_requests`
 --
 
-CREATE TABLE `group_requests` (
+CREATE TABLE IF NOT EXISTS `group_requests` (
   `requestId` int(255) NOT NULL,
   `studentId` int(255) NOT NULL,
   `groupId` int(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `group_requests`
@@ -190,7 +203,7 @@ INSERT INTO `group_requests` (`requestId`, `studentId`, `groupId`) VALUES
 -- Table structure for table `messages`
 --
 
-CREATE TABLE `messages` (
+CREATE TABLE IF NOT EXISTS `messages` (
   `facultyId` int(11) NOT NULL,
   `studentId` int(11) NOT NULL,
   `message` varchar(500) NOT NULL,
@@ -203,7 +216,7 @@ CREATE TABLE `messages` (
 -- Table structure for table `student`
 --
 
-CREATE TABLE `student` (
+CREATE TABLE IF NOT EXISTS `student` (
   `studentId` int(255) NOT NULL,
   `studentName` varchar(255) CHARACTER SET utf8 NOT NULL,
   `studentCMS` varchar(50) CHARACTER SET utf8 NOT NULL,
@@ -212,11 +225,11 @@ CREATE TABLE `student` (
   `studentGender` varchar(10) CHARACTER SET utf8 NOT NULL,
   `studentPassword` varchar(255) CHARACTER SET utf8 NOT NULL,
   `student_image` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
-  `groupId` int(255) DEFAULT NULL,
+  `groupId` int(255) DEFAULT '0',
   `isLeader` int(1) NOT NULL,
   `batchId` int(255) NOT NULL,
   `isCompleted` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='FYP Student Records';
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=latin1 COMMENT='FYP Student Records';
 
 --
 -- Dumping data for table `student`
@@ -234,21 +247,21 @@ INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentPhoneNo
 -- Table structure for table `student_group`
 --
 
-CREATE TABLE `student_group` (
+CREATE TABLE IF NOT EXISTS `student_group` (
   `groupId` int(255) NOT NULL,
   `projectName` varchar(255) DEFAULT NULL,
   `projectPart` int(1) NOT NULL,
   `groupLimit` int(1) NOT NULL DEFAULT '3',
   `inGroup` int(255) NOT NULL DEFAULT '1',
   `leaderId` int(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='groupInfo';
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='groupInfo';
 
 --
 -- Dumping data for table `student_group`
 --
 
 INSERT INTO `student_group` (`groupId`, `projectName`, `projectPart`, `groupLimit`, `inGroup`, `leaderId`) VALUES
-(9, NULL, 1, 3, 1, 14),
+(9, 'Fyp Management System', 1, 3, 1, 14),
 (10, NULL, 1, 3, 1, 17),
 (11, NULL, 1, 3, 1, 18);
 
@@ -258,7 +271,7 @@ INSERT INTO `student_group` (`groupId`, `projectName`, `projectPart`, `groupLimi
 -- Table structure for table `tasks`
 --
 
-CREATE TABLE `tasks` (
+CREATE TABLE IF NOT EXISTS `tasks` (
   `TaskId` int(255) NOT NULL,
   `taskName` varchar(255) NOT NULL,
   `deadline` date NOT NULL,
@@ -272,7 +285,7 @@ CREATE TABLE `tasks` (
 -- Table structure for table `timeline`
 --
 
-CREATE TABLE `timeline` (
+CREATE TABLE IF NOT EXISTS `timeline` (
   `item_id` int(11) NOT NULL,
   `title` text NOT NULL,
   `details` longtext NOT NULL,
@@ -281,7 +294,7 @@ CREATE TABLE `timeline` (
   `created_dtm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` varchar(50) NOT NULL,
   `visibility` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `timeline`
@@ -296,7 +309,7 @@ INSERT INTO `timeline` (`item_id`, `title`, `details`, `type`, `sdp_part`, `crea
 -- Table structure for table `wbs_status`
 --
 
-CREATE TABLE `wbs_status` (
+CREATE TABLE IF NOT EXISTS `wbs_status` (
   `groupId` int(255) NOT NULL,
   `wbsTask` text NOT NULL,
   `wbsTaskDeadline` varchar(255) NOT NULL,
@@ -309,13 +322,13 @@ CREATE TABLE `wbs_status` (
 -- Table structure for table `work_load`
 --
 
-CREATE TABLE `work_load` (
+CREATE TABLE IF NOT EXISTS `work_load` (
   `loadId` int(255) NOT NULL,
   `facultyId` int(255) NOT NULL,
   `designation` varchar(255) NOT NULL,
   `totalLoad` int(255) NOT NULL,
   `currentLoad` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='workload_Info';
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COMMENT='workload_Info';
 
 --
 -- Dumping data for table `work_load`
@@ -411,12 +424,12 @@ ALTER TABLE `work_load`
 -- AUTO_INCREMENT for table `batch`
 --
 ALTER TABLE `batch`
-  MODIFY `batchId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `batchId` int(255) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `configurations`
 --
 ALTER TABLE `configurations`
-  MODIFY `configurationId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `configurationId` int(255) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `external_examiner_old`
 --
@@ -426,7 +439,7 @@ ALTER TABLE `external_examiner_old`
 -- AUTO_INCREMENT for table `faculty`
 --
 ALTER TABLE `faculty`
-  MODIFY `facultyId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `facultyId` int(255) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT for table `faculty_student_group`
 --
@@ -441,17 +454,17 @@ ALTER TABLE `faculty_student_request`
 -- AUTO_INCREMENT for table `group_requests`
 --
 ALTER TABLE `group_requests`
-  MODIFY `requestId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `requestId` int(255) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `studentId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `studentId` int(255) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=20;
 --
 -- AUTO_INCREMENT for table `student_group`
 --
 ALTER TABLE `student_group`
-  MODIFY `groupId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `groupId` int(255) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `tasks`
 --
@@ -461,12 +474,12 @@ ALTER TABLE `tasks`
 -- AUTO_INCREMENT for table `timeline`
 --
 ALTER TABLE `timeline`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `work_load`
 --
 ALTER TABLE `work_load`
-  MODIFY `loadId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `loadId` int(255) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

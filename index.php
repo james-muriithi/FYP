@@ -11,8 +11,8 @@ if(isset($_SESSION["usrnm"]))
 }
 if(isset($_POST["email"]) && isset($_POST["pasword"]))
 {
-$userEmail =  filter_input(INPUT_POST, "email",FILTER_SANITIZE_SPECIAL_CHARS);
-$userPass = filter_input(INPUT_POST, "pasword",FILTER_SANITIZE_SPECIAL_CHARS);
+$userEmail =  filter_input(INPUT_POST, "email");
+$userPass = filter_input(INPUT_POST, "pasword");
 $sql = "SELECT studentId, studentName, studentCMS, studentPhoneNo, studentEmail, studentGender, studentPassword,student_image, groupId, isLeader, batchId FROM student";
 $sql2 = "SELECT facultyId, designation, facultyName, facultyPhoneNo, facultyEmail, facultyPassword, isAdmin, isCoordinator FROM faculty";
 $sql3 ="SELECT * FROM external_examiner";
@@ -26,7 +26,12 @@ $check=0;
         while($row = $result->fetch_assoc()) {
             if($row["studentEmail"]==$userEmail && $row["studentPassword"]==$userPass)
             {
-
+//****************************************************************************************************************************************************
+//
+//													Setting up seeion variables
+//
+//**************************************************************************************************************************************************** -->
+     
                     $_SESSION["usrId"]=$row["studentId"];
                     $_SESSION["usrnm"]=$row["studentName"];
                     $_SESSION["usrCMS"]=$row["studentCMS"];
@@ -37,19 +42,28 @@ $check=0;
                     $_SESSION["isLead"]=$row["isLeader"];
                     $_SESSION["GroupID"]=$row["groupId"];
 					$_SESSION["BatchID"]=$row["batchId"];
-					echo $row["batchId"];
-                    $_SESSION["image"]=$row["profileImage"];
+//					echo $row["batchId"];
+//                    $_SESSION["image"]=$row["profileImage"];
                     $_SESSION["usrEmail"]=$row["studentEmail"];
                     $_SESSION["image"]=$row["student_image"];
-                    //$variabl = $row["studentName"];
+//                    $variabl = $row["studentName"];
                     //echo $variabl;
                     $check=1;
-                    $_POST[$variabl];
-                    echo "id: " . $row["studentId"]. " - Name: " . $row["studentName"]. " " . $row["studentPassword"]. "<br>";
-                    header('Location: '.'home.php');
+//                    $_POST[$variabl];
+                    //echo "id: " . $row["studentId"]. " - Name: " . $row["studentName"]. " " . $row["studentPassword"]. "<br>";
+                    
+					
+					
+					
+					header('Location: '.'home.php');
             }
         }
-
+//****************************************************************************************************************************************************
+//
+//													Verifying user credentials as faculty member or admin and coordinator
+//
+//**************************************************************************************************************************************************** -->
+     
     }
     if ($result2->num_rows > 0) {
         while($row2 = $result2->fetch_assoc()) {
@@ -81,7 +95,7 @@ $check=0;
     }
 	if ($result3->num_rows > 0) {
         while($row3 = $result3->fetch_assoc()) {
-            if($row3["examinerEmail"]==$userEmail && $row3["externalPassword"]==$userPass)
+            if($row3["examinerEmail"]==$userEmail && $row3["examinerPassword"]==$userPass)
             {
 //****************************************************************************************************************************************************
 //
@@ -168,7 +182,7 @@ $check=0;
       </div>
     </form>
     <br />
-    <a href="forgotPassword.php">I forgot my password</a><br>
+    <a href="password_reset.php">I forgot my password</a><br>
 
   </div>
   <!-- /.login-box-body -->
