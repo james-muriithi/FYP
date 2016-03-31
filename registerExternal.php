@@ -123,7 +123,7 @@ if((isset($_POST['externalName'])) && (isset($_POST['externalEmail']))) {
           else if ($_GET['status']=='t'){ ?>
               <div style="text-align:center;" class="alert alert-success" role="alert">
                   <span class="glyphicon glyphicon-exclamation-sign"></span>
-                  Faculty Registered
+                  External Examiner Registered
                   <button type="button" class="close" data-dismiss="alert">x</button>
               </div>
           <?php }

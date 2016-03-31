@@ -126,7 +126,7 @@ if (isset($_GET['group_id'])){
                     <li>You already have a group supervisor</li>
                     <!--<li>You have sent request to a supervisor</li>-->
                     <form action="<?php echo $_SERVER['PHP_SELF'];?>" id="cancel_request" method="POST">
-                      <li >You have sent request to a supervisor already <input type="submit" class="btn btn-xs" name="cancel_request" value="Cancel Request"></li>
+                      <li >You have sent request to a supervisor already</li>
                     </form>
                 </ul>
                   

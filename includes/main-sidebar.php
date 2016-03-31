@@ -41,20 +41,8 @@
 
 
                 <?php
-
                 if ($_SESSION["type"] === "Examiner"){ ?>
-
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-graduation-cap "></i> <span>Grade Students</span> <i
-                        class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href=""><i class="fa fa-plus"></i> <span>Submenu 1</span></a></li>
-                    <li><a href=""><i class="fa fa-plus"></i> <span>Submenu 2</span></a></li>
-                </ul>
-            </li>
-
+            <li><a href="gradeStudents.php"><i class="fa fa-graduation-cap"></i> <span>Grade Students</span></a></li>
 
             <?php }
 
