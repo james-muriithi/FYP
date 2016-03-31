@@ -1,22 +1,40 @@
 <?php 
-    
 $GLOBALS['title']="FYPMS";
 $GLOBALS['subtitle']="Choose Supervisor";
-   
 require_once("includes/header.php");
 require_once("includes/config.php");
-$error="";
-
 session_start();
+
 if($_SESSION["isLead"]!="1")
 {
     header('Location: '.'index.php');
 }
+//Check if request is sent to a supervisor already
+
+$group_id = $_SESSION["GroupID"];
+
+$sql_check = "SELECT requestId FROM faculty_student_request WHERE groupId = '$group_id ' LIMIT 1";
+$result = $conn->query($sql_check);
+ if ($result->num_rows > 0) {
+     $request_sent = true; //User has already sent request to a supervisor
+     
+ }
+ else{
+    //Check if group has a supervisor already
+    $sql_check = "SELECT facultyStudentId FROM faculty_student_group WHERE groupId = '$group_id ' LIMIT 1 ";
+    $result = $conn->query($sql_check);
+     if ($result->num_rows > 0) {
+         $request_sent = true; //User has already a supervisor
+
+     }else{
+        $request_sent = false;
+     }
+ }
 
 //If form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $faculty_id = $_POST['ChooseSupervisor'];
-    $group_id = $_SESSION["GroupID"];
+    
     
     $sql = "INSERT INTO faculty_student_request (facultyId, groupId ) VALUES ('$faculty_id','$group_id')";
 
@@ -36,6 +54,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
+
+if (isset($_GET['group_id'])){
+        //$group_id = $_GET['group_id'];
+        
+        //Check if group with id exist
+        $sql_check = "SELECT student_group_id from student_groups WHERE student_group_id = '$group_id'";
+        $result = $conn->query($sql_check);
+        if ($result->num_rows > 0) {
+            $sql_request = "INSERT INTO student_group_requests (student_id,group_id) VALUES ('$user_id' , '$group_id')";
+            if ($conn->query($sql_request) === TRUE) {
+                header('Location:' . 'join_group.php?status=t');
+            }
+        
+        }else{
+            header('Location:' . 'join_group.php?status=f');
+        }
+        
+    }
 
 ?>
 </head>
@@ -79,12 +115,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
      ?>
           <div class="box">
             <div class="box-header">
-			
               <h3 class="box-title">Request Supervisor</h3>
-
-
             </div>
-            <!-- /.box-header -->
+              <?php 
+              //If request is sent to supervisor or group already has a supervisor
+              if ($request_sent == true){ ?>
+              <h4>You can not sent request to supervisor</h4>
+                <p>This may be due to reasons</p>
+                <ul>
+                    <li>You already have a group supervisor</li>
+                    <!--<li>You have sent request to a supervisor</li>-->
+                    <form action="<?php echo $_SERVER['PHP_SELF'];?>" id="cancel_request" method="POST">
+                      <li >You have sent request to a supervisor already <input type="submit" class="btn btn-xs" name="cancel_request" value="Cancel Request"></li>
+                    </form>
+                </ul>
+                  
+            <?php  }
+            //If request is not sent
+              else{ ?>
+              
+               <!-- /.box-header -->
             <div class="box-body table-responsive no-padding">
               <table class="table table-hover">
                 <tr>
@@ -96,14 +146,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                   <th>Status</th>
                   <th>Action</th>
                 </tr>
-                
                     <?php
                             if ($conn->connect_error) {
                                 die("Connection failed: " . $conn->connect_error);
                             }
                             else{
 
-                                    $batch=$_SESSION["BatchID"];
+                            $batch=$_SESSION["BatchID"];
                             $sql = "SELECT * FROM faculty INNER JOIN work_load ON work_load.totalLoad > work_load.currentLoad AND work_load.facultyId = faculty.facultyId";
                             $result = $conn->query($sql);
                             //$result2 = $conn->query($sql2);
@@ -133,10 +182,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             }?>
               </table>
                 <div class="box-footer  pull-right">
-
                 </div>
             </div>
             <!-- /.box-body -->
+                  
+            <?php  } ?>
+              
+           
           </div>
           <!-- /.box -->
 

@@ -9,6 +9,23 @@ if (!isset($_SESSION["usrCMS"])) {
 }
 $groupId = $_SESSION["GroupID"];
 
+//Getting supervisor id and name
+$sql = "SELECT facultyId FROM faculty_student_group WHERE faculty_student_group.groupId = '$groupId' LIMIT 1 ";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+        $supervisorId =  $row["facultyId"];
+    }
+    $sql_name = "SELECT facultyName FROM faculty WHERE faculty.facultyId = '$supervisorId' ";
+    $result = $conn->query($sql_name);
+            if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+            $supervisorName =  $row["facultyName"];
+            }
+
+        }
+}
 
 //Check if form is submitted by GET
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -49,7 +66,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
                                     ?></h3>
-                                <h4>Supervisor:</h4>
+                                <!--Supervisor Name-->
+                                <h4>Supervisor:<?php
+                                if (isset($supervisorName)){
+                                    echo $supervisorName;
+                                }else{ 
+                                echo ' --- ';
+                            }
+                                
+                                ?></h4>
                             </div>
                             <!-- /.box-body -->
 

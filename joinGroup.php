@@ -3,12 +3,10 @@ $GLOBALS['title']="FYPMS";
 $GLOBALS['subtitle']="Join Group";
 require_once("includes/header.php");
 require_once("includes/config.php");
-$error="";
-
 session_start();
 if(!isset($_SESSION["usrCMS"]))
 {
-        header('Location: '.'index.php');
+        header('Location:' . 'index.php?status=logged_out');
 }
 
 if(isset($_POST['JoinGroup'])) {

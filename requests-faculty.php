@@ -16,22 +16,65 @@ if (isset($_SESSION["facultyId"])) {
 
 
 }
-//Check if form is submitted by POST
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-   if (isset($_POST['btnAccept']) OR isset($_POST['btnDelete'])){
-        echo 'form submitted';
-       echo 'value:'. $_POST['requestId'];
-       exit();
-   }
+//Check if form is submitted by GET
+if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    
+    //Function for delete Request
+    if (isset($_GET["delete"]) and is_numeric($_GET["delete"]) ){
 
+        $id = filter_input(INPUT_GET, 'delete');
+         
+        //Check if there is a request with this id
+        $request = $conn->query("SELECT requestId FROM faculty_student_request WHERE requestId = '$id' ")->fetch_object()->requestId; 
+        if ($request){
+            // sql to delete a record
+            $sql = "DELETE FROM faculty_student_request WHERE requestId='$id' ";
+            if ($conn->query($sql) === TRUE) {
+                
+               header('Location:' . $_SERVER['PHP_SELF'] . '?status=t'); 
+            } 
+        }
+        
+    }
+    
+    //Function for accept Request
+    if (isset($_GET["accept"]) and is_numeric($_GET["accept"]) ){
 
+        $id = filter_input(INPUT_GET, 'accept');
+         
+        //Check if there is a request with this id
+        $request = $conn->query("SELECT requestId FROM faculty_student_request WHERE requestId = '$id' ")->fetch_object()->requestId; 
+        if ($request){
+            
+            $groupId = $conn->query("SELECT groupId FROM faculty_student_request WHERE requestId = '$id' ")->fetch_object()->groupId; ;
+            $facultyId= $_SESSION['facultyId'] ;
+            // sql to accept a request
+            $sql = "INSERT INTO faculty_student_group (groupId, facultyId)VALUES ('$groupId', '$facultyId')";
 
+            if ($conn->query($sql) === TRUE) {
+               //If request accepted delete request from record
+                 $sql = "DELETE FROM faculty_student_request WHERE requestId='$id' ";
+                if ($conn->query($sql) === TRUE) {
+                    //Record also deleted
+                    
+                    //Increament value of currentload
+                    $sql = "UPDATE work_load SET currentLoad = currentLoad +1 WHERE facultyId = '$facultyId'";
+                    if ($conn->query($sql) === TRUE) {
+                        header('Location:' . $_SERVER['PHP_SELF'] );    
+                    }
+
+                    
+                }
+            } 
+            
+            
+        }
+            
+        }
 
 }
-
 ?>
-
 
 <li class="dropdown notifications-menu " id="requests-faculty">
 
@@ -62,19 +105,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $requestFrom = getStudentData($row['leaderId']); ?>
                             <li>
                                 <i class="fa fa-user text-aqua"></i><?php echo $requestFrom['name'] ." [".$row['projectName']." ]"; ?> sent you request
-                                <form role="form" action="<?php echo $_SERVER['PHP_SELF']; ?>" id="requestForm" method="POST">
-
                                     <div id="requestActions" class="text-right">
-                                        <input type="hidden" name="requestId" value="<?php echo $row['requestId']; ?>">
-                                        <button type="submit" name="btnAccept" form="requestForm" class="btn btn-primary btn-xs">Accept</button>
-                                        <button type="submit" name="btnDelete" form="requestForm" class="btn btn-danger btn-xs">Delete</button>
-
-<!--                                        <button id="accept---><?php //echo $row['requestId']; ?><!--" class="accept_button btn btn-primary btn-xs">Accept</button>-->
-<!--                                        <button id="del---><?php //echo $row['requestId']; ?><!--" class="del_button btn btn-danger btn-xs ">Delete</button>-->
+                                        <a href="<?php echo $_SERVER['PHP_SELF'] . '?accept=' . $row['requestId']; ?>"  class="btn btn-primary btn-xs">Accept</a>
+                                        <a href="<?php echo $_SERVER['PHP_SELF'] . '?delete=' . $row['requestId']; ?>"  class="btn btn-danger btn-xs">Delete</a>
                                     </div>
-
-                                </form>
-
                             </li>
                         <?php }
                     }
