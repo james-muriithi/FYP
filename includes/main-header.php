@@ -57,10 +57,11 @@
             require_once ('requests-student.php');
         }
         //Supervisor
-        else if (isset ($_SESSION["facultyId"]) ){
+       if (isset ($_SESSION["facultyId"]) ){
             require_once ('requests-faculty.php');
         }
-
+         //Coordinator
+       
 
 
         ?>

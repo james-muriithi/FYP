@@ -33,8 +33,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
 //Check if form is submitted by POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    echo $_POST['studentCMS'];exit;
+    //Validations
+    
+   
+    
+    if (isset($_POST["studentToGrade"]) && strlen($_POST["studentToGrade"]) > 0 && is_numeric($_POST["studentToGrade"])) {
+        if (isset($_POST['comments'])){
+           
+        }else{
+             header('HTTP/1.1 500 Cant!');    
+        }
+        
+        
+    }else{
+        header('HTTP/1.1 500 Could not delete request!');
+    }
 }
+
 
 
 
@@ -42,7 +57,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 </head>
 
+
 <body class="hold-transition skin-blue sidebar-mini">
+    
 <div class="wrapper">
 
     <?php require_once("includes/main-header.php"); ?>
@@ -158,6 +175,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             </select>
                                         </td>
                                         <td><input type="text" class="form-control" id="comments" name="comments" placeholder="Comments/Reviews if any"></td>
+                                        <td><div id="gradeActions" class="text-right"><button id="grade-<?php echo $row['studentId']; ?>" class="grade_button btn btn-default btn-sm ">Grade Student</button></div></td>
                                         <?php } } ?>
                                     </tr>
 
@@ -167,7 +185,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                                 <div class="box-footer">
                                     <a href="<?php echo $_SERVER['PHP_SELF'];?>" class="btn btn-default" >Cancel</a>
-                                    <button type="submit" name="btnGrade" form="gradeStudents" class="btn btn-primary pull-right">Grade Students</button>
+                                    <!--<button type="submit" name="btnGrade" form="gradeStudents" class="btn btn-primary pull-right">Grade Students</button>-->
                                 </div>
 
                             <?php   }else{ ?>
@@ -198,5 +216,65 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <?php
 require_once("includes/required_js.php");
 ?>
+<!--PAGE SCRIPT-->
 
+<script>
+    $(document).ready(function () {
+
+    //Delete Button Action
+    $("body").on("click", "#gradeActions .grade_button", function (e) {
+        e.preventDefault();
+
+        var clickedID = this.id.split('-'); //Split ID string (Split works as PHP explode)
+        var DbNumberID = clickedID[1]; //and get number from array
+
+        swal({
+            title: "Are you sure?",
+
+            type: "info",
+            showCancelButton: true,
+            confirmButtonColor: "#8CD4F5",
+            confirmButtonText: "Yes, Grade student",
+            cancelButtonText: "No",
+            closeOnConfirm: false,
+            closeOnCancel: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+
+                var myData = 'studentToGrade=' + DbNumberID; //build a post data structure
+                $.ajax({
+                    type: "POST", // HTTP method POST or GET
+                    url: "gradeStudents.php", //Where to make Ajax calls
+                    dataType: "text", // Data type, HTML, json etc.
+                    data: myData, //Form variables
+                    success: function (response) {
+                        swal({
+                            title: "Success!",
+                            text: "Request deleted",
+                            type: "success",
+                            confirmButtonColor: "#8CD4F5",
+                            confirmButtonText: "Okay",
+                            closeOnConfirm: false
+                        }, function () {
+                            //location.reload();
+                        });
+
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        //On error, we alert user
+                        alert(thrownError);
+                    }
+                });
+            } else {
+                swal("Cancelled", "Operation has been cancelled:)", "error");
+            }
+        });
+
+
+    });
+
+   
+
+    });
+</script>
 </body>
