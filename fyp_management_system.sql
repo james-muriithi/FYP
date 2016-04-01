@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 31, 2016 at 09:33 PM
+-- Generation Time: Apr 01, 2016 at 07:13 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -180,10 +180,9 @@ CREATE TABLE `faculty_student_request` (
 
 CREATE TABLE `grades` (
   `id` int(11) NOT NULL,
-  `studentCMS` int(11) DEFAULT NULL,
   `studentId` int(11) DEFAULT NULL,
   `groupId` int(11) DEFAULT NULL,
-  `sdp_part` int(11) DEFAULT NULL,
+  `sdpPart` int(11) DEFAULT NULL,
   `comments` text,
   `grade` varchar(50) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf32;
@@ -466,12 +465,12 @@ ALTER TABLE `faculty_student_group`
 -- AUTO_INCREMENT for table `faculty_student_request`
 --
 ALTER TABLE `faculty_student_request`
-  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `grades`
 --
 ALTER TABLE `grades`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 --
 -- AUTO_INCREMENT for table `group_requests`
 --
