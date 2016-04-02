@@ -23,7 +23,7 @@ if((isset($_POST['externalName'])) && (isset($_POST['externalEmail']))) {
     $ExternalCompany = $_POST['externalCompany'];
 	$ExternalName = $_POST['externalName'];
     $ExternalDesign = $_POST['externalDesign'];
-    $ExternalEmail = $_POST['externalEmail'];
+    $ExternalEmail = strtolower($_POST['externalEmail']);
     $ExternalPhone = $_POST['externalNumber'];
     $ExternalPass = $_POST['externalPass'];
 	

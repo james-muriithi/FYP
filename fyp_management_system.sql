@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 01, 2016 at 07:13 PM
+-- Generation Time: Apr 02, 2016 at 08:02 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -238,10 +238,10 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentPhoneNo`, `studentEmail`, `studentGender`, `studentPassword`, `student_image`, `groupId`, `isLeader`, `batchId`, `isCompleted`) VALUES
-(14, 'Muneeb Khan', '7757', '01234565', 'muneeb_420@gmail.com', 'male', '123', NULL, 9, 1, 2, 0),
-(15, 'Umair Qamar', '10776', '03458541454', 'umairqamar@live.com', 'male', '123', NULL, 9, 0, 2, 0),
+(14, 'Muneeb Khan', '7757', '01234565', 'muneeb_420@gmail.com', 'male', '123', '56fff928b82971.36534035.jpg', 9, 1, 2, 0),
+(15, 'Umair Qamar', '10776', '03458541454', 'umairqamar@live.com', 'male', '123', '56fff632e226e7.95020533.jpg', 9, 0, 2, 0),
 (16, 'Abdul Saboor', '7783', '03335385896', 'saboor@gmail.com', 'male', '123', NULL, 9, 0, 2, 0),
-(21, 'Bilal Hassan', '7737', '+923458541454', 'bilalhassan@live.com', 'male', '123', NULL, 14, 1, 5, 0);
+(21, 'Bilal Hassan', '7737', '+923458541454', 'bilalhassan@live.com', 'male', '123', '56fff9374231d1.64504225.jpg', 14, 1, 5, 0);
 
 -- --------------------------------------------------------
 
@@ -470,7 +470,7 @@ ALTER TABLE `faculty_student_request`
 -- AUTO_INCREMENT for table `grades`
 --
 ALTER TABLE `grades`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `group_requests`
 --

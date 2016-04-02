@@ -46,6 +46,7 @@ $check=0;
 //                    $_SESSION["image"]=$row["profileImage"];
                     $_SESSION["usrEmail"]=$row["studentEmail"];
                     $_SESSION["image"]=$row["student_image"];
+                    $_SESSION["contact"]=$row["studentPhoneNo"];
 //                    $variabl = $row["studentName"];
                     //echo $variabl;
                     $check=1;

@@ -112,10 +112,11 @@
             </p>
           </li>
           <!-- Menu Body -->
-          <li class="user-body">
+ <!--         <li class="user-body">
             <div class="row">
               <div class="col-xs-4 text-center">
-                <a href="editProfile.php">Profile</a>
+
+                  <a href="#" >Profile</a>
               </div>
               <div class="col-xs-4 text-center">
                 <a href="#">Settings</a>
@@ -123,13 +124,34 @@
               <div class="col-xs-4 text-center">
                 <a href="#">Groups</a>
               </div>
-            </div>
+            </div> -->
             <!-- /.row -->
           </li>
           <!-- Menu Footer-->
           <li class="user-footer">
             <div class="pull-left">
-              <a href="editProfile.php" class="btn btn-default btn-flat">Profile</a>
+                <?php
+                //Check type of user
+
+                //Student
+                if(isset ($_SESSION["usrCMS"]) ){ ?>
+                    <a href="studentProfile.php" class="btn btn-default btn-flat">Profile</a>
+                    <?php
+                }
+                //Faculty
+                else if(isset ($_SESSION["facultyId"]) ){ ?>
+                    <a href="facultyProfile.php" class="btn btn-default btn-flat">Profile</a>
+                    <?php
+                }
+                //Other users
+                else { ?>
+                    <button class="btn btn-default btn-flat" disabled>Profile</button>
+                    <?php
+                }
+
+
+                ?>
+
             </div>
             <div class="pull-right">
             <form id="signout" action="home.php" method="post">
