@@ -13,6 +13,9 @@ if(!isset($_SESSION["usrnm"]))
 {
         header('Location: '.'index.php');
 }
+
+
+
      
 if(isset($_POST['signout'])) { // logout button
         // Clear and destroy sessions and redirect user to home page url.

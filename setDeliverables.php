@@ -3,8 +3,9 @@ $GLOBALS['title'] = "FYPMS";
 $GLOBALS['subtitle'] = "Set Deliverables";
 require_once("includes/header.php");
 require_once("includes/config.php");
-$error = "";
 session_start();
+
+//Check if Coordinator is loggedin
 if (isset($_SESSION["isCord"])) {
     if ($_SESSION["isCord"] === "0") {
         header('Location: ' . 'index.php');
@@ -12,21 +13,69 @@ if (isset($_SESSION["isCord"])) {
 } else if (!isset($_SESSION["isCord"])) {
     header('Location: ' . 'index.php');
 }
-if (isset($_POST["deliverableID"])) {
-    $configid = $_POST["deliverableID"];
-    $configStat = $_POST["setDeliverableStatus"];
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    } else {
 
-        $sqlUpdNoti = "UPDATE configurations SET status='$configStat' WHERE configurationId='$configid'";
 
-        $conn->query($sqlUpdNoti);
+//Check if form is submitted by POST
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST["deliverableID"])) {
 
-        $conn->close();
+
+        $configid = filter_input(INPUT_POST,'deliverableID',FILTER_SANITIZE_SPECIAL_CHARS);//$_POST["deliverableID"];
+        $configStatus  = filter_input(INPUT_POST,'setDeliverableStatus',FILTER_SANITIZE_SPECIAL_CHARS); //$_POST["setDeliverableStatus"];
+
+        $sql = "UPDATE configurations SET status='$configStatus' WHERE configurationId ='$configid' ";
+
+        if ($configStatus == 'close'){
+            if ($conn->query($sql) === TRUE) {
+                //Check if config exist in timeline
+
+
+            }
+
+        }else if ($configStatus == 'open'){
+            if ($conn->query($sql) === TRUE) {
+
+                $sql = "SELECT * FROM configurations WHERE configurationId = '$configid' LIMIT 1";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    // output data of each row
+                    while($row = $result->fetch_assoc()) {
+                        $title = $row['taskName'];
+                        $details = $row['taskDetails'];
+                        $type = 'task';
+                        $sdp_part = $row['projectPart'];
+                        $batch_id = "12";
+                    }
+
+                    //Add notification to timeline
+                    $sql = "INSERT INTO timeline (title, details, type, sdp_part, batch_id)VALUES ('$title', '$details', '$type', '$sdp_part', '$sdp_part')";
+
+                    if ($conn->query($sql) === TRUE) {
+                        header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');
+                    } else {
+                        header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
+                    }
+
+                }
+
+
+            } else {
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
+            }
+
+        }
+
+
+
     }
-    header("Location: setDeliverables.php");
+
+
+
 }
+
+
+
 ?>
 
 </head>
@@ -40,27 +89,43 @@ if (isset($_POST["deliverableID"])) {
 
         <section class="content" style="min-height: 700px">
             <div class="row">
-                <div class="col-md-2"></div>
-                <div class="col-md-8">
+                <div class="col-md-1"></div>
+                <div class="col-md-10">
+
+
+                    <?php
+                    if (isset($_GET['status'])) {
+                        if ($_GET['status'] == 'f') { ?>
+
+                            <div style="text-align:center;" class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                Something Went Wrong
+                                <button type="button" class="close" data-dismiss="alert">x</button>
+                            </div>
+
+                        <?php } else if ($_GET['status'] == 't') { ?>
+                            <div style="text-align:center;" class="alert alert-success" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                Changes Saved Successfully!
+                                <button type="button" class="close" data-dismiss="alert">x</button>
+                            </div>
+                        <?php }
+
+                    }
+
+                    ?>
 
                     <!-- Code for setDeliverables starts here-->
                     <div class="box">
-                        <p class="register-box-msg"><b>Part 1</b></p>
-                        <?php
-                        if (isset($success_msg)) {
-                            echo "<p class='text-green'>$success_msg</p>";
-                        } else if (isset($error_msg)) {
-                            echo "<p class='text-green'>$error_msg</p>";
-                        }
-                        ?>
+                        <h4 class="register-box-msg"><b>SDP - Part 1</b></h4>
                         <!-- /.box-header -->
                         <div class="box-body table-responsive no-padding">
-                            <table class="table table-hover">
+                            <table class="table table-condensed">
                                 <tr>
                                     <th>Week</th>
                                     <th>Task</th>
                                     <th>Deadline</th>
-                                    <th>Action</th>
+                                    <th>Actions</th>
 
                                 </tr>
                                 <?php
@@ -81,25 +146,15 @@ if (isset($_POST["deliverableID"])) {
                                                 <td><?php echo $row["taskName"]; ?></td>
                                                 <td><?php echo $row["deadline"]; ?></td>
 
-                                                <form id="setDeliverableStatus" action="setDeliverables.php"
-                                                      method="post">
+                                                <form id="setDeliverableStatus" action="<?php echo $_SERVER['PHP_SELF']; ?>"  method="post">
                                                     <td>
                                                         <div class="form-group has-feedback">
-                                                            <input type="hidden" name="deliverableID"
-                                                                   value="<?php echo $row["configurationId"]; ?>"/>
-                                                            <input name="setDeliverableStatus"
-                                                                   class="btn btn-sm" type="submit"
-                                                                   value="open"/>
-                                                        </div>
+                                                            <input type="hidden" name="deliverableID" value="<?php echo $row["configurationId"]; ?>"/>
+                                                            <input name="setDeliverableStatus"  class="btn btn-sm  btn-primary" type="submit" value="open"/>
 
 
-                                                        <div class="form-group has-feedback">
-
-                                                            <input type="hidden" name="deliverableID"
-                                                                   value="<?php echo $row["configurationId"]; ?>"/>
-                                                            <input name="setDeliverableStatus"
-                                                                   class="btn btn-danger" type="submit"
-                                                                   value="close"/>
+                                                            <input type="hidden" name="deliverableID"  value="<?php echo $row["configurationId"]; ?>"/>
+                                                            <input name="setDeliverableStatus" class="btn btn-danger  btn-sm" type="submit"  value="close"/>
                                                         </div>
                                                     </td>
                                                 </form>
@@ -117,17 +172,15 @@ if (isset($_POST["deliverableID"])) {
 
 
 
-                        </div>
-                        <!-- /.box-body -->
+
                     </div>
                     <!-- /.box -->
-                    <div class="box">
 
-                        <p class="register-box-msg"><b>Part 2</b></p>
+                        <h4 class="register-box-msg"><b>SDP - Part 2</b></h4>
 
                         <!-- /.box-header -->
                         <div class="box-body table-responsive no-padding">
-                            <table class="table table-hover">
+                            <table class="table table-condensed">
                                 <tr>
                                     <th>Week</th>
                                     <th>Task</th>
@@ -156,21 +209,13 @@ if (isset($_POST["deliverableID"])) {
                                                       method="post">
                                                     <td>
                                                         <div class="form-group has-feedback">
-
-                                                            <input type="hidden" name="deliverableID"
-                                                                   value="<?php echo $row["configurationId"]; ?>"/>
-                                                            <input name="setDeliverableStatus"
-                                                                   class="btn btn-sm" type="submit"
-                                                                   value="open"/>
-                                                        </div>
+                                                            <input type="hidden" name="deliverableID" value="<?php echo $row["configurationId"]; ?>"/>
+                                                            <input name="setDeliverableStatus" class="btn btn-sm  btn-primary" type="submit" value="Open"/>
 
 
-                                                        <div class="form-group has-feedback">
-                                                            <input type="hidden" name="deliverableID"
-                                                                   value="<?php echo $row["configurationId"]; ?>"/>
-                                                            <input name="setDeliverableStatus"
-                                                                   class="btn btn-danger" type="submit"
-                                                                   value="close"/>
+
+                                                            <input type="hidden" name="deliverableID"  value="<?php echo $row["configurationId"]; ?>"/>
+                                                            <input name="setDeliverableStatus" class="btn btn-danger  btn-sm" type="submit"  value="Close"/>
                                                         </div>
                                                     </td>
                                                 </form>
@@ -183,37 +228,20 @@ if (isset($_POST["deliverableID"])) {
                                 ?>
 
                             </table>
+
+                            <div class="box-footer ">
+                                <a href="<?php echo siteroot?>" class="btn  btn-default btn-sm ">Back</a>
+                            </div>
                         </div>
                         <!-- /.box-body -->
-                    </div>
-                    <!-- /.box -->
-
-                    <form id="Save" action="CreateBatch.php" method="post">
-                        <br/>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <button type="submit" name="save" class="btn btn-primary btn-block btn-flat">Save
-                                </button>
-                            </div>
-                            <!-- /.col -->
-                        </div>
-                    </form>
-                    <form id="Cancel" action="home.php" method="post">
-                        <br/>
-                        <div class="row">
-                            <div class="col-lg-12">
-                                <button type="submit" name="Cancel" class="btn btn-primary btn-block btn-flat">
-                                    Cancel
-                                </button>
-                            </div>
-                            <!-- /.col -->
-                        </div>
-                    </form>
 
 
-                    <!-- Code for createBatch ends here-->
+
+
+
+                    <!-- Code for setDeliverables ends here-->
                 </div>
-                <div class="col-md-2"></div>
+                <div class="col-md-1"></div>
             </div>
         </section>
     </div>

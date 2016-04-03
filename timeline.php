@@ -1,16 +1,30 @@
-
-
-
 <ul class="timeline">
 <?php
 require_once ("includes/functions.php");
 require_once("includes/config.php");
+session_start();
 
-function show_timeline($batchId,$publicity){
-
+//If student is logged in
+if (isset($_SESSION['usrCMS'])){
+    //$batchId = $_SESSION['BatchID'];
+    //$whereSQL = "WHERE batch_id = '$batchId' ";
 }
+
+
+// check for optional where clause
+$whereSQL = 'WHERE is_active = 1 ';
+if (!empty($where_clause)) {
+    // check to see if the 'where' keyword exists
+    if (substr(strtoupper(trim($where_clause)), 0, 5) != 'WHERE') {
+        // not found, add keyword
+        $whereSQL = " WHERE " . $where_clause;
+    } else {
+        $whereSQL = " " . trim($where_clause);
+    }
+}
+
 //Get Values from Database
-$sql = "SELECT * FROM timeline ORDER BY created_dtm DESC ";//Chronoligical Order
+$sql = "SELECT * FROM timeline ".$whereSQL." ORDER BY created_dtm DESC  ";//Chronoligical Order
 $result = $conn->query($sql);
 while ($row = $result->fetch_assoc()) { ?>
 
