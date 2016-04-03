@@ -164,6 +164,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <label for="type">Notification Type</label>
                                     <select name="type" class="form-control">
                                         <option value="info">Info</option>
+                                        <option value="task">Task</option>
                                         <option value="email">Email</option>
                                         <option value="other">Other</option>
                                     </select>

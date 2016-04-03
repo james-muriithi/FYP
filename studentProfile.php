@@ -5,7 +5,7 @@ require_once("includes/config.php");
 require_once("includes/header.php");
 session_start();
 //Check if user is logged in Else log out
-if(!isset($_SESSION["usrId"]))
+if(!isset($_SESSION["usrId"]) )
 {
         header('Location: '.'index.php');
 }
@@ -99,10 +99,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $name = '--';
         $cms = '--';
         $email = '--';
-        $batch = '--';
+        $batchName = '--';
         $contact = '--';
-        $group = '--';
-        $project = '--';
+        $groupId = '--';
+        $projectName = '--';
         $image = NULL;
 
         $sql = "SELECT * FROM student WHERE student.studentId = '$studentId' LIMIT 1";
@@ -115,13 +115,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 $cms = $row['studentCMS'];
                 $email = $row['studentEmail'];
                 $image = $row['student_image'];
-                $batch = $row['batchId'];
+                $batchId = $row['batchId'];
                 $contact = $row['studentPhoneNo'];
-                $group = $row['groupId'];
+                $groupId = $row['groupId'];
 
             }
         } else {
 
+        }
+        
+        //Get project Name
+        if (isset($groupId) AND is_numeric($groupId)){
+            $projectName = $conn->query("SELECT projectName FROM student_group WHERE groupId = '$groupId' ")->fetch_object()->projectName;
+        }
+        
+        //Get batch Name
+        if (isset($batchId) AND is_numeric($batchId)){
+            $batchName = $conn->query("SELECT batchName FROM batch WHERE batchId = '$batchId' ")->fetch_object()->batchName;
         }
 
     }
@@ -132,10 +142,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 //Check if form is submitted by POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['btnEditProf']) AND $_POST['phoneNumber'] != ""){
+        
+        $studentId = $_SERVER['usrId'];
         $phoneNum = filter_input(INPUT_POST,'phoneNumber',FILTER_SANITIZE_NUMBER_INT);
-        echo "SSS";
-        echo $phoneNum;exit;
+        
+        $sql = "UPDATE student SET studentPhoneNo='$phoneNum' WHERE studentId='$studentId' ";
 
+        if ($conn->query($sql) === TRUE) {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');
+        } else {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
+        }
 
     }
 
@@ -215,16 +232,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <b>Email</b> <a class="pull-right"><?php echo $email;?></a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Batch</b> <a class="pull-right"><?php echo $batch;?></a>
+                                        <b>Batch</b> <a class="pull-right"><?php echo $batchName;?></a>
                                     </li>
                                     <li class="list-group-item">
                                         <b>Contact No.</b> <a class="pull-right"><?php echo $contact;?></a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Group</b> <a class="pull-right"><?php echo $group;?></a>
+                                        <b>Group</b> <a class="pull-right"><?php echo $groupId;?></a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Project</b> <a class="pull-right"><?php echo $project;?></a>
+                                        <b>Project</b> <a class="pull-right"><?php echo $projectName;?></a>
                                     </li>
                                 </ul>
 

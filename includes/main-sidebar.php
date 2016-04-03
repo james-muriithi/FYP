@@ -109,7 +109,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="createBatch.php"><i class="fa fa-plus"></i> <span>Create Batch</span></a></li>
-                        <li><a href="deleteBatch.php"><i class="fa fa-minus "></i> <span>Delete Batch</span></a></li>
+                        <li><a href="manageBatch.php"><i class="fa fa-minus "></i> <span>Manage Batch</span></a></li>
                         <li><a href="setDeliverables.php"><i class="fa fa-circle-o"></i> <span>Deliverables</span></a>
                         </li>
                     </ul>

@@ -1,12 +1,6 @@
 <?php 
-//****************************************************************************************************************************************************
-//
-//													Setting up global Variables gor header, title and breadcrmb purpose
-//
-//**************************************************************************************************************************************************** -->
-     
 $GLOBALS['title']="FYPMS";
-$GLOBALS['subtitle']="Create Batch";
+$GLOBALS['subtitle']="Create batch";
 require_once("includes/header.php");
 require_once("includes/config.php");
 session_start();
@@ -14,40 +8,36 @@ if(!isset($_SESSION["isCord"]))
 {
         header('Location: '.'index.php');
 }
-if((isset($_POST['Batch'])) && (isset($_POST['batchYear']))) {
-        if(($_POST['Batch']!="") && ($_POST['batchYear']!=""))
+if((isset($_POST['batch'])) && (isset($_POST['batchYear']))) {
+        if(($_POST['batch']!="") && ($_POST['batchYear']!=""))
         {
                 if ($conn->connect_error) {
                         trigger_error('Database connection failed:'. $conn->connect_error, E_USER_ERROR);	
                         die("Connection failed: " . $conn->connect_error);
                 } 
         //echo $_POST['studentName']." ".$_POST['studentCMS']." ".$_POST['studentEmail']." ".$_POST['phoneNumber']." ".$_POST['batch']." ".$_POST['studentPass'];
-                $Batch = $_POST['Batch'];
-                $BatchYear = $_POST['batchYear'];
-				$config=$_POST['configs'];
-                $BatchName=$Batch ." ". $BatchYear;
-                $sql = "INSERT INTO batch (batchName, configurationType) VALUES ('$BatchName', '$config')";
-
-                $sqlChek = "SELECT * FROM batch WHERE batchName = '$BatchName'";
+                $batch = $_POST['batch'];
+                $batchYear = $_POST['batchYear'];
+                $config=$_POST['configs'];
+                $startingDate = $_POST['startingDate'];
+                echo $startingDate;exit;
+                $batchName=$batch ." ". $batchYear;
+                $sql = "INSERT INTO batch (batchName, startingDate, configurationType, isActive) VALUES ('$batchName', ,'$startingDate' ,'$config', '1')";
+                $sqlChek = "SELECT * FROM batch WHERE batchName = '$batchName'";
 
 
         $results=$conn->query($sqlChek);
 
         if (!$results->num_rows > 0) {
                 if (!$conn->query($sql) === TRUE) {
-                    header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');
-                        echo "<div id=\"alerts\" style=\"text-align:center; margin-bottom:0px;\" class=\"alert alert-danger\" role=\"alert\">Something Went Wrong <br/> Error: " . $sql . "<br/>" . $conn->error . "</div>";
+                    header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
                 }
                 else{
                     header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');
-                        echo "<div style=\"text-align:center; margin-bottom:0px;\" class=\"alert alert-success\" role=\"alert\">Student Successfully Registered</div>";
-                        $error ="<div id=\"alerts\" style=\"text-align:center; margin-bottom:0px;\" class=\"alert alert-success\" role=\"alert\">Student Successfully Registered</div>";
                 }
         }
         else{
-            header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
-                echo "<div id=\"alerts\" style=\"text-align:center; margin-bottom:0px;\" class=\"alert alert-success\" role=\"alert\">Student Already Registered</div>";
-                $error="Already Registered";
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=ae');
         }
 
         $_POST = array();
@@ -58,7 +48,8 @@ if((isset($_POST['Batch'])) && (isset($_POST['batchYear']))) {
 }
 
 ?>
-
+<!--Date Picker-->
+<link rel="stylesheet" href="plugins/datepicker/datepicker3.css"/>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">	
 <div class="wrapper">
@@ -73,53 +64,68 @@ if((isset($_POST['Batch'])) && (isset($_POST['batchYear']))) {
     <div class="col-md-2"></div>    
     <div class="col-md-8"> 
 
-<!-- Code for createBatch starts here-->
+<!-- Code for createbatch starts here-->
 <div class="register-box-body">
-    <?php
-    if (isset($_GET['status'])) {
-        if ($_GET['status'] == 'f') { ?>
+<?php if (isset ($_GET['status'])){
+if ($_GET['status'] == 't'){ ?>
+<div style="text-align:center;" class="alert alert-success" role="alert">
+    <span class="glyphicon glyphicon-exclamation-sign"></span>
+    Batch created successfully!
+    <button type="button" class="close" data-dismiss="alert">x</button>
+</div>
+<?php   }
+else if ($_GET['status'] = 'f'){ ?>
+<div style="text-align:center;" class="alert alert-danger" role="alert">
+    <span class="glyphicon glyphicon-exclamation-sign"></span>
+    Error! Something Went Wrong
+    <button type="button" class="close" data-dismiss="alert">x</button>
+</div>
+<?php }
 
-            <div style="text-align:center;" class="alert alert-danger" role="alert">
-                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                Something Went Wrong
-                <button type="button" class="close" data-dismiss="alert">x</button>
-            </div>
+else if ($_GET['status'] = 'ae'){ ?>
+<div style="text-align:center;" class="alert alert-danger" role="alert">
+    <span class="glyphicon glyphicon-exclamation-sign"></span>
+    Error! batch Already Exist
+    <button type="button" class="close" data-dismiss="alert">x</button>
+</div>
+<?php    }
+}?>
 
-        <?php } else if ($_GET['status'] == 't') { ?>
-            <div style="text-align:center;" class="alert alert-success" role="alert">
-                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                Batch Created
-                <button type="button" class="close" data-dismiss="alert">x</button>
-            </div>
-        <?php }
 
-    }
-
-    ?>
     <div class="box-header">
         <a href="home.php" ><i class="fa fa-arrow-left"></i></a>
-        <h4 class="text-center ">Create Batch</h4>
+        <h4 class="text-center ">Create batch</h4>
     </div>
 
-    <form id="CreateBatch" action="createBatch.php" method="post">
+    <form id="Createbatch" action="createbatch.php" method="post">
 		<div class="form-group has-feedback">
-		<b>Batch</b>
-		<select name="Batch" class="form-control">
+		<b>batch</b>
+		<select name="batch" class="form-control">
 				<option value="Fall">Fall</option>
 				<option value="Spring">Spring</option>
 				<span class="glyphicon glyphicon-education form-control-feedback"></span>
 		</select>
 		</div>
-		<div class="form-group has-feedback">
-			<b>Year</b> 
-			<input type="text" name="batchYear" class="form-control bfh-year" placeholder="<?php echo date("Y"); ?>" required />
+        
+        	<div class="form-group has-feedback">
+		<b>Year</b>
+                <select name="batchYear" class="form-control" required>
+                    <option value="<?php echo date('Y');?>" selected><?php echo date('Y');?></option>
+		</select>
 		</div>
-		
+        
+        
 		<div class="form-group has-feedback">
-		<b>Starting Date Of semester</b>  
-			<input type="date" name="Starting" class="form-control bfh-Date" required/>
-		</div>
-		<b>Configure Batch</b>
+		<b>Starting Date Of semester</b> 
+                <div class="input-group date" data-provide="datepicker">
+                <input type="text" name="startingDate"  id="startingDate"  class="form-control">
+                <div class="input-group-addon">
+                    <span class="glyphicon glyphicon-th"></span>
+                </div>
+                </div>
+
+                
+		<b>Configure batch</b>
 		
 		<div class="form-group has-feedback">
 			<input type="radio" name="configs" value="default" required="required"/> Load Default Configurations
@@ -148,10 +154,7 @@ if((isset($_POST['Batch'])) && (isset($_POST['batchYear']))) {
                 </div>
             </div>
 
-
-
-
-		</div>
+            </div>
 
 
         <div class="form-group has-feedback">
@@ -161,7 +164,7 @@ if((isset($_POST['Batch'])) && (isset($_POST['batchYear']))) {
 
         <div class="box-footer ">
             <div class="form-group pull-right">
-                <button type="submit" name="CreateBatch" class="btn btn-primary">Create</button>
+                <button type="submit" name="Createbatch" class="btn btn-primary">Create</button>
             </div>
         </div>
 
@@ -169,7 +172,7 @@ if((isset($_POST['Batch'])) && (isset($_POST['batchYear']))) {
 
 	
 </div>
-<!-- Code for createBatch ends here-->
+<!-- Code for createbatch ends here-->
     </div>
        <div class="col-md-2"></div>   
     </div>
@@ -184,5 +187,10 @@ require_once("includes/main-footer.php");
 <?php
 require_once("includes/required_js.php");
 ?>
+<!--Datepicker-->
+<script src="plugins/datepicker/bootstrap-datepicker.js"></script>
+<script>
+        $('.datepicker').datepicker();
+</script>
 </body>
 </html>
