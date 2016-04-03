@@ -5,6 +5,7 @@
 -echo htmlentities($str, ENT_QUOTES);
 -$message = filter_input(INPUT_POST | INPUT_GET, 'message',FILTER_SANITIZE_SPECIAL_CHARS);
 -Date Time Picker
+- $conn->close();
 
 Near future:
 CMS/Designation

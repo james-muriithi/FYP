@@ -5,6 +5,10 @@
 <?php
 require_once ("includes/functions.php");
 require_once("includes/config.php");
+
+function show_timeline($batchId,$publicity){
+
+}
 //Get Values from Database
 $sql = "SELECT * FROM timeline ORDER BY created_dtm DESC ";//Chronoligical Order
 $result = $conn->query($sql);

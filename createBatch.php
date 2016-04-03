@@ -11,39 +11,43 @@ if(!isset($_SESSION["isCord"]))
 if((isset($_POST['batch'])) && (isset($_POST['batchYear']))) {
         if(($_POST['batch']!="") && ($_POST['batchYear']!=""))
         {
-                if ($conn->connect_error) {
-                        trigger_error('Database connection failed:'. $conn->connect_error, E_USER_ERROR);	
-                        die("Connection failed: " . $conn->connect_error);
-                } 
-        //echo $_POST['studentName']." ".$_POST['studentCMS']." ".$_POST['studentEmail']." ".$_POST['phoneNumber']." ".$_POST['batch']." ".$_POST['studentPass'];
-                $batch = $_POST['batch'];
-                $batchYear = $_POST['batchYear'];
-                $config=$_POST['configs'];
-                $startingDate = $_POST['startingDate'];
-                echo $startingDate;exit;
+                $batch = filter_input(INPUT_POST,'batch',FILTER_SANITIZE_SPECIAL_CHARS);
+                $batchYear = filter_input(INPUT_POST,'batchYear',FILTER_SANITIZE_SPECIAL_CHARS);
+                $config= filter_input(INPUT_POST,'configs',FILTER_SANITIZE_SPECIAL_CHARS);
                 $batchName=$batch ." ". $batchYear;
-                $sql = "INSERT INTO batch (batchName, startingDate, configurationType, isActive) VALUES ('$batchName', ,'$startingDate' ,'$config', '1')";
-                $sqlChek = "SELECT * FROM batch WHERE batchName = '$batchName'";
+
+                //$startingDate = $_POST['startingDate'];
+                $startingDate = date('Y-m-d', strtotime($_POST['startingDate']));
 
 
-        $results=$conn->query($sqlChek);
+                $sql = "INSERT INTO batch (batchName, startingDate, configurationType, isActive) VALUES ('$batchName', '$startingDate', '$config', '1')";
+                $sqlChek = "SELECT batchId FROM batch WHERE batchName = '$batchName' LIMIT 1";
+                //Check if BATCH Already Exists
+                $results=$conn->query($sqlChek);
+                if (!$results->num_rows > 0) {
 
-        if (!$results->num_rows > 0) {
-                if (!$conn->query($sql) === TRUE) {
-                    header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
+                        //BATCH doesnt exist already
+                        if ($conn->query($sql) === TRUE) {
+                            header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');
+
+                            //MAKE a folder with BATCH name
+                            if (!file_exists('uploads/'.$batchName)) {
+                                mkdir('uploads/'.$batchName, 0777, true);
+                            }
+                        }
+                        else{
+                            //SQL ERROR
+                            header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
+                        }
                 }
                 else{
-                    header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');
+                    //BATCH exists already
+                    header('Location:' . $_SERVER['PHP_SELF'] . '?status=a');
                 }
-        }
-        else{
-            header('Location:' . $_SERVER['PHP_SELF'] . '?status=ae');
-        }
 
         $_POST = array();
         $conn->close();
-        //header('Location: '.'home.php');
-        //die;
+
         }
 }
 
@@ -62,34 +66,35 @@ if((isset($_POST['batch'])) && (isset($_POST['batchYear']))) {
     <section class="content" style="min-height: 700px">
     <div class="row">
     <div class="col-md-2"></div>    
-    <div class="col-md-8"> 
+    <div class="col-md-8">
+
+        <?php if (isset ($_GET['status'])){
+            if ($_GET['status'] == 't'){ ?>
+                <div style="text-align:center;" class="alert alert-success" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Batch created successfully!
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                </div>
+            <?php   }
+            else if ($_GET['status'] = 'f'){ ?>
+                <div style="text-align:center;" class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Error! Something Went Wrong
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                </div>
+            <?php }
+            else if ($_GET['status'] = 'a'){ ?>
+                <div style="text-align:center;" class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Error! Batch Already Exist
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                </div>
+            <?php    }
+        }?>
 
 <!-- Code for createbatch starts here-->
 <div class="register-box-body">
-<?php if (isset ($_GET['status'])){
-if ($_GET['status'] == 't'){ ?>
-<div style="text-align:center;" class="alert alert-success" role="alert">
-    <span class="glyphicon glyphicon-exclamation-sign"></span>
-    Batch created successfully!
-    <button type="button" class="close" data-dismiss="alert">x</button>
-</div>
-<?php   }
-else if ($_GET['status'] = 'f'){ ?>
-<div style="text-align:center;" class="alert alert-danger" role="alert">
-    <span class="glyphicon glyphicon-exclamation-sign"></span>
-    Error! Something Went Wrong
-    <button type="button" class="close" data-dismiss="alert">x</button>
-</div>
-<?php }
 
-else if ($_GET['status'] = 'ae'){ ?>
-<div style="text-align:center;" class="alert alert-danger" role="alert">
-    <span class="glyphicon glyphicon-exclamation-sign"></span>
-    Error! batch Already Exist
-    <button type="button" class="close" data-dismiss="alert">x</button>
-</div>
-<?php    }
-}?>
 
 
     <div class="box-header">
@@ -99,7 +104,7 @@ else if ($_GET['status'] = 'ae'){ ?>
 
     <form id="Createbatch" action="createbatch.php" method="post">
 		<div class="form-group has-feedback">
-		<b>batch</b>
+		<b>Batch</b>
 		<select name="batch" class="form-control">
 				<option value="Fall">Fall</option>
 				<option value="Spring">Spring</option>
@@ -190,7 +195,9 @@ require_once("includes/required_js.php");
 <!--Datepicker-->
 <script src="plugins/datepicker/bootstrap-datepicker.js"></script>
 <script>
-        $('.datepicker').datepicker();
+    $('.datepicker').datepicker({
+        format: 'dd/mm/yyyy',
+    });
 </script>
 </body>
 </html>
