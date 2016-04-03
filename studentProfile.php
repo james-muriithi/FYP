@@ -199,7 +199,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                                 <!-- Profile Image -->
                                     <div class="box-body box-profile">
-                                        <img class="profile-user-img img-responsive img-circle" src="<?php if (isset($image)){
+                                        <img class="profile-user-img img-responsive img-rounded" src="<?php if (isset($image)){
                                             echo 'public/profile_images/'.$image;
                                         }else {echo 'public/profile_images/dummy.png';}?>" alt="User profile picture">
                                         <h3 class="profile-username text-center"><?php echo $name;?></h3>
