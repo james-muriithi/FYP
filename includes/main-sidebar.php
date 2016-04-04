@@ -114,16 +114,7 @@
                         </li>
                     </ul>
                 </li>
-                <?php
-            } ?>
 
-
-            <?php
-
-            if ($_SESSION["type"] === "Faculty" && $_SESSION["isAdmin"] === "1")//if Administrator
-            {
-                ?>
-                <li class="header">ADMIN MENU</li>
                 <li class="treeview">
                     <a href="#">
                         <i class="fa fa-user-plus "></i> <span>Register Users</span> <i
@@ -134,7 +125,7 @@
                         </li>
                         <li><a href="registerFaculty.php"><i class="fa fa-plus"></i>
                                 <span>Register Faculty Member</span></a></li>
-						<li><a href="registerExternal.php"><i class="fa fa-plus "></i> <span>Register External Examiner</span></a> </li>
+                        <li><a href="registerExternal.php"><i class="fa fa-plus "></i> <span>Register External Examiner</span></a> </li>
                     </ul>
                 </li>
 
@@ -160,6 +151,18 @@
                         <i class="fa fa-envelope-o"></i> <span>Send Email</span>
                     </a>
                 </li>
+
+                <?php
+            } ?>
+
+
+            <?php
+
+            if ($_SESSION["type"] === "Faculty" && $_SESSION["isAdmin"] === "1")//if Administrator
+            {
+                ?>
+<!--                <li class="header">ADMIN MENU</li>-->
+
 
                 <?php
             } ?>
