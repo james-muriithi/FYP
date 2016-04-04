@@ -28,10 +28,9 @@ $sql = "SELECT * FROM timeline ".$whereSQL." ORDER BY created_dtm DESC  ";//Chro
 $result = $conn->query($sql);
 while ($row = $result->fetch_assoc()) { ?>
 
-
     <!-- timeline time label -->
     <li class="time-label">
-                  <span class="bg-red">
+                  <span class="bg-gray">
                       <?php echo date('F d, Y ',strtotime($row["created_dtm"])); ?>
                   </span>
     </li>

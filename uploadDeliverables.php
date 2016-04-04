@@ -53,7 +53,7 @@ if(isset($_POST[""]))
                                         <th>Week</th>
                                         <th>Task</th>
                                         <th>Deadline</th>
-                                        <th>Action</th>
+                                        <th>Actions</th>
                                         
                                     </tr>
 <?php
@@ -61,7 +61,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } else {
 
-    $sql = "SELECT * FROM configurations WHERE configurationType='default' AND projectPart='1' ORDER BY week";
+    $sql = "SELECT * FROM configurations WHERE configurationType='default' AND projectPart='1' AND status='open' ORDER BY week";
     $result = $conn->query($sql);
     //$result2 = $conn->query($sql2);
     $check = 0;
@@ -73,16 +73,12 @@ if ($conn->connect_error) {
                                                     <td><?php echo $row["week"]; ?></td>
                                                     <td><?php echo $row["taskName"]; ?></td>
                                                     <td><?php echo $row["deadline"]; ?></td>
-													
-													<form id="UpdateConfig1" action="viewDefaultConfig.php" method="post">
-														
-														<td>
-															<input type= "hidden" name="configId" value="<?php echo $row["configurationId"]; ?>"/>
-															<input name="UpdateConfig1" class="btn btn-sm"type="submit" value="Open"/>
-														</td>
-													
-													</form>
-                                               
+                                                    <form id="UpdateConfig1" action="viewDefaultConfig.php" method="post">
+                                                            <td>
+                                                                    <input type= "hidden" name="configId" value="<?php echo $row["configurationId"]; ?>"/>
+                                                                    <input name="UpdateConfig1" class="btn btn-sm"type="submit" value="open"/>
+                                                            </td>
+                                                    </form>
                                                 </td>
                                                
 
@@ -118,7 +114,7 @@ if ($conn->connect_error) {
                                         die("Connection failed: " . $conn->connect_error);
                                     } else {
 
-                                        $sql = "SELECT * FROM configurations WHERE configurationType='default' AND projectPart='2' ORDER BY week";
+                                        $sql = "SELECT * FROM configurations WHERE configurationType='default' AND projectPart='2' AND status='open' ORDER BY week";
                                         $result = $conn->query($sql);
                                         //$result2 = $conn->query($sql2);
                                         $check = 0;
@@ -130,15 +126,13 @@ if ($conn->connect_error) {
                                                     <td><?php echo $row["week"]; ?></td>
                                                     <td><?php echo $row["taskName"]; ?></td>
                                                     <td><?php echo $row["deadline"]; ?></td>
-                                               
-													<form id="UpdateConfig1" action="viewDefaultConfig.php" method="post">
-														
-														<td>
-															<input type= "hidden" name="configId" value="<?php echo $row["configurationId"]; ?>"/>
-															<input name="UpdateConfig1" class="btn btn-sm"type="submit" value="Open"/>
-														</td>
-													
-													</form>
+                                                    <form id="UpdateConfig1" action="viewDefaultConfig.php" method="post">
+                                                        <td>
+                                                                <input type= "hidden" name="configId" value="<?php echo $row["configurationId"]; ?>"/>
+                                                                <input type="file" />
+                                                                <input name="UpdateConfig1" class="btn btn-default" type="submit" value="open"/>
+                                                        </td>
+                                                    </form>
                                                 </tr>
                                                 <?php
                                             }
@@ -153,25 +147,8 @@ if ($conn->connect_error) {
                         <!-- /.box -->
                     </div>
                 </div>
-				<form id="Save" action="CreateBatch.php" method="post">
-				<br/>
-					<div class="row">
-						<div class="col-lg-12">
-						  <button type="submit" name="save" class="btn btn-primary btn-block btn-flat">Save</button>
-						</div>
-						<!-- /.col -->
-					</div>
-				</form>
-				<form id="Cancel" action="home.php" method="post">
-				<br/>
-					<div class="row">
-						<div class="col-lg-12">
-						  <button type="submit" name="Cancel" class="btn btn-primary btn-block btn-flat">Cancel</button>
-						</div>
-						<!-- /.col -->
-					</div>
-				</form>
-            </section>
+				
+         </section>
         </div>
     </div>
 	
@@ -179,7 +156,6 @@ if ($conn->connect_error) {
 	
 	
 	
-	</div>
 	
 	
 	
@@ -187,7 +163,10 @@ if ($conn->connect_error) {
 	
 	    <?php
 
-    require_once("includes/main-footer.php");
+    require_once("includes/main-footer.php");?>
+    	</div>
+
+    <?php
     require_once("includes/required_js.php");
     ?>
     
