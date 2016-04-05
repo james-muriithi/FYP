@@ -70,13 +70,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         if(in_array($file_ext,$allowed)){
             if($file_error === 0){
                 if($file_size <= 52428800){ //50Mib
-                    $file_name_new  = 'group'.$groupId.'-deliverable-'.$configId.'.'.$file_ext;
+                    $file_name_new  = 'group_'.$groupId.'_deliverable_'.$configId.'.'.$file_ext;
 
                     //Make a directory with group name
                     if (!file_exists('uploads/'.$batchName.'/'.$groupName.'/')) {
                         mkdir('uploads/'.$batchName.'/'.$groupName.'/', 0777, true);
                     }
                     $file_destination   ='uploads/'.$batchName.'/'.$groupName.'/'.$file_name_new;
+                    /* Example tree Structure
+                     * └───Spring 2016
+                     *       └───Group 9
+                     *          └───group_9_deliverable_2
+                     */
+                    
+                    
                 }else {
                     //ERROR! filesize greater
                     header('Location:' . $_SERVER['PHP_SELF'] . '?status=s');
@@ -258,9 +265,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <tr>
                                         <td><?php echo $row['week'] ;?></td>
                                         <td><?php echo $row['taskName'];?></td>
-                                        <td><?php echo $row['deadline'] ;?></td>
-
-
+                                        <td><?php if(!is_null($row['deadline'])){echo time2str($row['deadline']);}else{echo '---';} ;?></td>
                                         <td> <?php if ($row['deliverable'] == 1){ ?>
                                                     <a href="<?php echo $_SERVER['PHP_SELF'] . '?upload=' . $row['configurationId']; ?>"  class="btn  btn-default btn-sm">Upload</a>
                                                 <?php

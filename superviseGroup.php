@@ -125,14 +125,18 @@ if(!isset($_SESSION["design"]))
 	
 	<div class="col-md-2"></div>
 
-    </div>
+    <!--</div>-->
     </section>
-    </div>
-
+</div>
     <?php
-    require_once("includes/main-footer.php");
+    require_once("includes/main-footer.php");?>
+            </div>
+
+        
+        <?php
+        
+        
     require_once("includes/required_js.php");
-    require_once("includes/swal_js.php");
     ?> 
     
  

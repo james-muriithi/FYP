@@ -41,20 +41,8 @@
 
 
                 <?php
-
                 if ($_SESSION["type"] === "Examiner"){ ?>
-
-            <li class="treeview">
-                <a href="#">
-                    <i class="fa fa-graduation-cap "></i> <span>Grade Students</span> <i
-                        class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu">
-                    <li><a href="gradeGroups.php"><i class="fa fa-plus"></i> <span>Grade Groups</span></a></li>
-                    <li><a href="gradeIndividual.php"><i class="fa fa-plus"></i> <span>Grade Students Individually</span></a></li>
-                </ul>
-            </li>
-
+            <li><a href="gradeStudents.php"><i class="fa fa-graduation-cap"></i> <span>Grade Students</span></a></li>
 
             <?php }
 
@@ -110,7 +98,7 @@
             <?php } ?>
 
             <!-- check if coordinator logged in-->
-            <?php if ($_SESSION["type"] === "Faculty" || isset($_SESSION["isCord"]))//if coordinator
+            <?php if ($_SESSION["type"] === "Faculty" && $_SESSION["isCord"]==="1")//if coordinator
             {
                 ?>
                 <li class="header">COORDINATOR MENU</li>
@@ -121,7 +109,7 @@
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="createBatch.php"><i class="fa fa-plus"></i> <span>Create Batch</span></a></li>
-                        <li><a href="deleteBatch.php"><i class="fa fa-minus "></i> <span>Delete Batch</span></a></li>
+                        <li><a href="manageBatch.php"><i class="fa fa-minus "></i> <span>Manage Batch</span></a></li>
                         <li><a href="setDeliverables.php"><i class="fa fa-circle-o"></i> <span>Deliverables</span></a>
                         </li>
                     </ul>
@@ -185,6 +173,11 @@
                         <i class="fa fa-user-plus"></i> <span>Supervise Group</span>
                     </a>
                 </li>
+				<li>
+					<a href="meetinglog.php">
+                        <i class="fa fa-pencil-square-o"></i> <span>Student Meeting Log</span>
+                    </a>
+				</li>
                 <?php
             } ?>
 

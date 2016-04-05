@@ -29,14 +29,14 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
             <li class="header">MAIN NAVIGATION</li>
-            <li class="treeview">
+            <li class= treeview">
                 <a href="#">
                     <i class="fa fa-dashboard"></i> <span>Dashboard</span> <i class="fa fa-angle-left pull-right"></i>
                 </a>
-                <ul class="treeview-menu">
-                    <li id="timeline"><a href="home.php"><i class="fa fa-circle-o"></i>
+                <ul class="treeview-menu ">
+                    <li  id="timeline "><a href="home.php"><i class="fa fa-circle-o"></i>
                             Timeline
-                        </a></li>
+                    </a></li>
                 </ul>
 
 
@@ -46,7 +46,11 @@
 
             <?php }
 
-
+            /****************************************
+             *                                      *
+             * STUDENT*******************************
+             *                                      *
+             ***************************************/
             if ($_SESSION["type"] === "Student") {
                 $studId = $_SESSION["usrId"];
 
@@ -59,6 +63,7 @@
                         <li><a id="group_members" href="groupDetails.php"><i class="fa fa-circle-o"></i>Group
                                 Members</a></li>
                         <?php
+                            
 
                         if ($_SESSION["isLead"] != "1" && $_SESSION["GroupID"]== 0 ) {
                             ?>
@@ -70,7 +75,13 @@
 
                         <?php
                         if ($_SESSION["isLead"] == "1") {
+                            /****************************************
+                             *                                      *
+                             * STUDENT-> Group Leader
+                             *                                      *
+                             ***************************************/
                             ?>
+                            
                             <li><a id="chooseSupervisor" href="chooseSupervisor.php"><i class="fa fa-circle-o"></i>Choose
                                     Supervisor</a></li>
                             <?php
@@ -98,8 +109,13 @@
             <?php } ?>
 
             <!-- check if coordinator logged in-->
-            <?php if ($_SESSION["type"] === "Faculty" || isset($_SESSION["isCord"]))//if coordinator
+            <?php if ($_SESSION["type"] === "Faculty" AND $_SESSION["isCord"]==1)//if coordinator
             {
+                            /****************************************
+                             *                                      *
+                             * COORDINATOR
+                             *                                      *
+                             ***************************************/
                 ?>
                 <li class="header">COORDINATOR MENU</li>
                 <li class="treeview">
@@ -169,6 +185,11 @@
 
             <?php if ($_SESSION["type"] === "Faculty")//if faculty member
             {
+                            /****************************************
+                             *                                      *
+                             * SUPERVISOR
+                             *                                      *
+                             ***************************************/
                 ?>
                 <li class="header">SUPERVISOR MENU</li>
                 <li>
