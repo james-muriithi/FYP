@@ -196,6 +196,9 @@
                     <a href="superviseGroup.php">
                         <i class="fa fa-user-plus"></i> <span>Supervise Group</span>
                     </a>
+                    <a href="meetingLogs.php">
+                        <i class="fa fa-list-ul"></i> <span>Meeting Logs</span>
+                    </a>
                 </li>
                 <?php
             } ?>
