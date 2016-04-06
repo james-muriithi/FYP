@@ -40,9 +40,30 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 //Check if form is submitted by POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-    if (isset($_POST['groupSelect'])){
-        echo "SELECTED GROUP: ".$_POST['groupSelect'];
+
+    if (isset($_POST['btnEditLog'])){
+        //EDIT log
+        $logId = filter_input(INPUT_POST,'editId',FILTER_SANITIZE_NUMBER_INT);
+        //Validations
+        if ($_POST['status'] != ""  OR $_POST['comments'] !=""  ){
+
+            $status = filter_input(INPUT_POST,'status',FILTER_SANITIZE_SPECIAL_CHARS);
+            $comments = $_POST['addComments'];
+
+
+
+            $sql = "UPDATE meeting_logs SET meeting_status='$status' AND comments='$comments' WHERE id='$logId' ";
+
+            if ($conn->query($sql) === TRUE) {
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');
+            } else {
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
+            }
+        }
     }
+
+
+
 
     if (isset($_POST['addNewLogBtn'])){
         //Validations
@@ -75,7 +96,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <link rel="stylesheet" href="plugins/datepicker/datepicker3.css"/>
 <!-- DataTables -->
 <link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
-<script src="http://malsup.github.com/jquery.form.js"></script>
+<!-- bootstrap wysihtml5 - text editor -->
+<link rel="stylesheet" href="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
 
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -196,123 +218,196 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <?php
                 }?>
 
-                <?php if (isset($_GET['edit']) && is_numeric($_GET['edit']) && strlen($_GET['edit']) > 0 ){ ?>
+                <?php if (isset($_GET['edit']) && is_numeric($_GET['edit']) && strlen($_GET['edit']) > 0 ){
+                    $id = filter_input(INPUT_GET,'edit',FILTER_SANITIZE_NUMBER_INT);
+
+                    $sql = "SELECT id from meeting_logs WHERE supervisor_id='$supervisorId' AND id='$id' LIMIT 1";
+                    $result = $conn->query($sql);
+                    if ($result->num_rows > 0) {
+                        $meetingTitle= $conn->query("SELECT meeting_title FROM meeting_logs WHERE id = '$id' LIMIT 1 ")->fetch_object()->meeting_title;
+                        $meetingStstus = $conn->query("SELECT meeting_status FROM meeting_logs WHERE id = '$id' LIMIT 1 ")->fetch_object()->meeting_status;
+                        ?>
+                    <div class="box no-border">
+                        <div class="box-header">
+                            <h3 class="box-title">Edit Meeting Log: <?php echo $meetingTitle?></h3>
+                        </div>
+
+                        <div class="box-body">
+                            <!-- form start -->
+                            <form id="editLogs" name="editLogs" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+                                <input type="hidden" name="editId" id="editId" value="<?php echo $id;?>">
+                                <div class="box-body">
+                                    <div class="form-group">
+                                        <label>Change Status</label>
+                                        <select class="form-control" id="status" name="status" required>
+                                            <option value="">SELECT STATUS</option>
+                                            <option value="Pending">Pending</option>
+                                            <option value="Postponed">Postponed</option>
+                                            <option value="Done">Done</option>
+                                            <option value="Cancelled">Cancelled</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Add Comments</label>
+                                        <div class="box-body pad">
+                                            <form>
+                                                <textarea class="textarea" name="addComments"  placeholder="Add Comments..."  style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.box-body -->
+
+                            </form>
+                                <div class="box-footer">
+                                    <a href="<?php echo $_SERVER['PHP_SELF'];?>" class="btn btn-default">Back</a>
+                                    <button type="submit" form="editLogs" name="btnEditLog"  class="btn btn-primary pull-right">Submit</button>
+                                </div>
+
+                        </div>
+
+
+                        </div>
+
+
+
+                    <?php
+                    }
+
+
+                ?>
+
+
+
+
 
                 <?php
                 }else{ ?>
+                    <div class="box no-border">
+                        <div class="box-header">
+                            <h3 class="box-title">Meeting Logs</h3>
+
+                            <div class="box-tools">
+                                <form id="selectGroup"  method="get" name="selectGroup">
+                                    <div class="input-group input-group-sm" style="width: 250px;">
+
+                                        <select name="id" class="form-control" required>
+                                            <?php
+                                            $sql = "SELECT * FROM faculty_student_group JOIN student_group WHERE facultyId = '$supervisorId' AND student_group.groupId = faculty_student_group.groupId ";
+                                            $result = $conn->query($sql);
+                                            if ($result->num_rows > 0) {
+                                                while($row = $result->fetch_assoc()) { ?>
+                                                    <option value="<?php echo $row['groupId']; ?>"><?php if (isset($row['projectName'])){echo 'Group:'.$row['groupId']. '[ '.$row['projectName'].' ] ';}else{ echo '--';}?>
+                                                    </option>
+                                                    <?php
+                                                }
+                                            }
+                                            ?>
+                                        </select>
+
+                                        <div class="input-group-btn">
+                                            <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+
+
+                        </div>
+
+
+                        <!-- /.box-header -->
+                        <div class="box-body  no-padding">
+                            <table id="meetingLogs" class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <th>Group</th>
+                                    <th>Title</th>
+                                    <th>Meeting Time</th>
+                                    <th>Comments</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                                </thead>
+
+                                <?php
+                                if (isset($_GET['id'])){
+                                    $groupId = filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
+
+                                    //Check if this supervisor has this group
+                                    $sql = "SELECT id from meeting_logs WHERE supervisor_id='$supervisorId' AND group_id='$groupId' LIMIT 1";
+                                    $result = $conn->query($sql);
+                                    if ($result->num_rows > 0) {
+
+                                        $sql = "SELECT * from meeting_logs WHERE supervisor_id = '$supervisorId' AND group_id = '$groupId' ORDER BY created_dtm DESC";
+                                        $result = $conn->query($sql);
+                                        while($row = $result->fetch_assoc()) { ?>
+
+                                            <tr>
+                                                <td><?php echo $row['group_id'] ;?></td>
+                                                <td><?php echo $row['meeting_title'];?></td>
+                                                <td><?php echo $row['meeting_dtm'] ;?></td>
+                                                <td><?php echo $row['comments'];?></td>
+
+                                                <form id="logActions" name="logActions" method="post">
+                                                    <th><?php
+                                                        $status =$row['meeting_status'];
+                                                        if ($status == 'Pending'){ ?>
+                                                            <span class="label label-warning"><?php echo $status?></span>
+
+                                                            <?php
+                                                        }
+                                                        else if ($status == 'Done'){ ?>
+                                                            <span class="label label-success"><?php echo $status?></span>
+                                                            <?php
+                                                        }
+                                                        else if ($status == 'Cancelled'){ ?>
+                                                            <span class="label label-danger"><?php echo $status?></span>
+
+                                                            <?php
+                                                        }
+                                                        else if ($status == 'Postponed'){ ?>
+                                                            <span class="label label-primary"><?php echo $status?></span>
+
+                                                            <?php
+                                                        }else{ ?>
+                                                            <span class="label label-default"><?php echo $status?></span>
+
+                                                            <?php
+                                                        }
+                                                        ;?></th>
+                                                </form>
+                                                <td>
+                                                    <input type="hidden" name="logId" value="<?php echo $row['id'];?>">
+                                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['id']; ?>"  class="btn  btn-primary btn-xs">Edit</a>
+                                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?delete=' . $row['id']; ?>" onclick="return confirm('Are you sure?')" class="btn  btn-danger btn-xs">Delete</a>
+                                                </td>
+                                            </tr>
+
+                                        <?php }
+
+                                    }
+
+
+
+
+                                }
+
+
+                                ?>
+                            </table>
+                            <div class="box-footer  pull-right">
+                                <a href="<?php echo $_SERVER['PHP_SELF'] . '?add'; ?>" class="btn  btn-primary  ">Add New Log</a>
+                            </div>
+                        </div>
+                        <!-- /.box-body -->
+                    </div>
+                    <!-- /.box -->
 
                 <?php
                 }?>
 
-                <div class="box no-border">
-                    <div class="box-header">
-                        <h3 class="box-title">Meeting Logs</h3>
 
-                        <div class="box-tools">
-                            <form id="selectGroup"  method="post" name="selectGroup">
-                            <div class="input-group input-group-sm" style="width: 250px;">
-
-                                    <select name="id" class="form-control" required>
-                                        <?php
-                                        $sql = "SELECT * FROM faculty_student_group JOIN student_group WHERE facultyId = '$supervisorId' AND student_group.groupId = faculty_student_group.groupId ";
-                                        $result = $conn->query($sql);
-                                        if ($result->num_rows > 0) {
-                                            while($row = $result->fetch_assoc()) { ?>
-                                                <option value="<?php echo $row['groupId']; ?>"><?php if (isset($row['projectName'])){echo 'Group:'.$row['groupId']. '[ '.$row['projectName'].' ] ';}else{ echo '--';}?>
-                                                </option>
-                                                <?php
-                                            }
-                                        }
-                                        ?>
-                                    </select>
-
-                                <div class="input-group-btn">
-                                    <button type="submit" class="btn btn-default"><i class="fa fa-search"></i></button>
-                                </div>
-                            </div>
-                            </form>
-                        </div>
-
-
-                    </div>
-
-
-                    <!-- /.box-header -->
-                    <div class="box-body  no-padding">
-                        <table id="meetingLogs" class="table table-hover">
-                            <thead>
-                            <tr>
-                                <th>Group</th>
-                                <th>Title</th>
-                                <th>Meeting Time</th>
-                                <th>Comments</th>
-                                <th>Status</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            
-                            <?php
-                            if (isset($_POST['id'])){
-                                $groupId = filter_input(INPUT_POST,'id',FILTER_SANITIZE_NUMBER_INT);
-
-
-
-                                $sql = "SELECT * from meeting_logs WHERE supervisor_id = '$supervisorId' AND group_id = '$groupId' ORDER BY created_dtm DESC";
-                                $result = $conn->query($sql);
-                                while($row = $result->fetch_assoc()) { ?>
-                                    <tr>
-                                        <td><?php echo $row['group_id'] ;?></td>
-                                        <td><?php echo $row['meeting_title'];?></td>
-                                        <td><?php echo $row['meeting_dtm'] ;?></td>
-                                        <td><?php echo $row['comments'];?></td>
-
-
-                                        <th><?php
-                                            $status =$row['meeting_status'];
-                                            if ($status == 'Pending'){ ?>
-                                                <span class="label label-warning"><?php echo $status?></span>
-
-                                                <?php
-                                            }
-                                            else if ($status == 'Done'){ ?>
-                                                <span class="label label-success"><?php echo $status?></span>
-                                                <?php
-                                            }
-                                            else if ($status == 'Cancelled'){ ?>
-                                                <span class="label label-danger"><?php echo $status?></span>
-
-                                                <?php
-                                            }
-                                            else if ($status == 'Postponed'){ ?>
-                                                <span class="label label-primary"><?php echo $status?></span>
-
-                                                <?php
-                                            }else{ ?>
-                                                <span class="label label-default"><?php echo $status?></span>
-
-                                                <?php
-                                            }
-                                            ;?></th>
-                                        <td>
-                                            <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['id']; ?>"  class="btn  btn-primary btn-xs">Edit</a>
-                                            <a href="<?php echo $_SERVER['PHP_SELF'] . '?delete=' . $row['id']; ?>" onclick="return confirm('Are you sure?')" class="btn  btn-danger btn-xs">Delete</a>
-                                        </td>
-                                    </tr>
-                                <?php }
-
-
-                            }
-
-
-                            ?>
-                        </table>
-                        <div class="box-footer  pull-right">
-                            <a href="<?php echo $_SERVER['PHP_SELF'] . '?add'; ?>" class="btn  btn-primary  ">Add New Log</a>
-                        </div>
-                    </div>
-                    <!-- /.box-body -->
-                </div>
-                <!-- /.box -->
 
 
                 <?php
@@ -364,13 +459,16 @@ require_once("includes/required_js.php");
         });
     });
 </script>
-
-
+<!-- Bootstrap WYSIHTML5 -->
+<script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
 <!-- DataTables -->
 <script src="plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script>
     $(document).ready(function() {
+
+        $('.textarea').wysihtml5();
+
         $('#meetingLogs').DataTable({
             "paging": false,
             "lengthChange": false,

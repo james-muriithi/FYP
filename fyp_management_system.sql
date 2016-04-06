@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 06, 2016 at 04:50 PM
+-- Generation Time: Apr 06, 2016 at 08:37 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -251,8 +251,8 @@ CREATE TABLE `meeting_logs` (
 INSERT INTO `meeting_logs` (`id`, `supervisor_id`, `group_id`, `meeting_title`, `meeting_dtm`, `comments`, `meeting_status`, `created_dtm`) VALUES
 (1, 13, 9, 'YO YO MEETING YO!', '2016-04-05 20:23:56', NULL, 'Pending', '2016-04-05 20:24:01'),
 (2, 13, 9, 'Meeting', '2016-04-05 00:00:00', NULL, 'Postponed', '2016-04-05 22:25:03'),
-(3, 13, 14, 'Meeting 3', '2016-04-05 00:00:00', NULL, 'Cancelled', '2016-04-05 22:25:16'),
-(4, 13, 9, 'aa', '1970-01-01 00:00:00', NULL, 'Done', '2016-04-05 22:32:33');
+(3, 13, 14, 'Meeting 3', '2016-04-05 00:00:00', NULL, '', '2016-04-05 22:25:16'),
+(4, 13, 9, 'aa', '1970-01-01 00:00:00', NULL, '', '2016-04-05 22:32:33');
 
 -- --------------------------------------------------------
 
