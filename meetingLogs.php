@@ -40,19 +40,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 //Check if form is submitted by POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    /*
+     * EDIT MEETING LOG
+     */
 
     if (isset($_POST['btnEditLog'])){
         //EDIT log
         $logId = filter_input(INPUT_POST,'editId',FILTER_SANITIZE_NUMBER_INT);
+
         //Validations
-        if ($_POST['status'] != ""  OR $_POST['comments'] !=""  ){
+        if ($_POST['status'] != "" && $_POST['meetingTitle'] != ""){
 
             $status = filter_input(INPUT_POST,'status',FILTER_SANITIZE_SPECIAL_CHARS);
+            $title = filter_input(INPUT_POST,'meetingTitle',FILTER_SANITIZE_SPECIAL_CHARS);
             $comments = $_POST['addComments'];
 
-
-
-            $sql = "UPDATE meeting_logs SET meeting_status='$status' AND comments='$comments' WHERE id='$logId' ";
+            $sql = "UPDATE meeting_logs SET meeting_title = '$title' , meeting_status='$status' , comments='$comments' WHERE id='$logId' ";
 
             if ($conn->query($sql) === TRUE) {
                 header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');
@@ -64,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 
-
+    //ADD NEW LOG
     if (isset($_POST['addNewLogBtn'])){
         //Validations
         if (isset($_POST['meetingTitle']) && isset($_POST['groupId']) ){
@@ -87,11 +90,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     }
 
+    //ADD COMMENTS
+    if(isset($_POST['btnAddComments'])){
+        //echo 'HERE';exit
+        //Validations
+        if (isset($_POST['comments']) && $_POST['comments'] != ""){
+
+            $logId = filter_input(INPUT_POST,'editId',FILTER_SANITIZE_NUMBER_INT);
+            $comments = $_POST['comments'];
+
+            $sql = "UPDATE meeting_logs SET comments = '$comments' WHERE id='$logId' ";
+
+            if ($conn->query($sql) === TRUE) {
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');
+            } else {
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
+            }
+        }
+    }
+
 }
 
 
 
 ?>
+
 <!--Date Picker-->
 <link rel="stylesheet" href="plugins/datepicker/datepicker3.css"/>
 <!-- DataTables -->
@@ -218,14 +241,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <?php
                 }?>
 
+
+
                 <?php if (isset($_GET['edit']) && is_numeric($_GET['edit']) && strlen($_GET['edit']) > 0 ){
+                    /*******************
+                     * EDIT MEETING LOGS
+                     * ******************/
+
                     $id = filter_input(INPUT_GET,'edit',FILTER_SANITIZE_NUMBER_INT);
 
-                    $sql = "SELECT id from meeting_logs WHERE supervisor_id='$supervisorId' AND id='$id' LIMIT 1";
+                    $sql = "SELECT * from meeting_logs WHERE supervisor_id='$supervisorId' AND id='$id' LIMIT 1";
                     $result = $conn->query($sql);
                     if ($result->num_rows > 0) {
-                        $meetingTitle= $conn->query("SELECT meeting_title FROM meeting_logs WHERE id = '$id' LIMIT 1 ")->fetch_object()->meeting_title;
-                        $meetingStstus = $conn->query("SELECT meeting_status FROM meeting_logs WHERE id = '$id' LIMIT 1 ")->fetch_object()->meeting_status;
+                        while($row = $result->fetch_assoc()) {
+                            $meetingTitle = $row['meeting_title'];
+                            $meetingStatus = $row['meeting_status'];
+                            $meetingComments = $row['comments'];
+                            $meetingDtm = $row['meeting_dtm'];
+                        }
                         ?>
                     <div class="box no-border">
                         <div class="box-header">
@@ -235,8 +268,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="box-body">
                             <!-- form start -->
                             <form id="editLogs" name="editLogs" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+
                                 <input type="hidden" name="editId" id="editId" value="<?php echo $id;?>">
+
                                 <div class="box-body">
+
+                                    <div class="form-group">
+                                        <label>Meeting Title</label>
+                                        <input type="text" name="meetingTitle" id="meetingTitle" class="form-control" value="<?php echo $meetingTitle; ?>">
+                                    </div>
+
                                     <div class="form-group">
                                         <label>Change Status</label>
                                         <select class="form-control" id="status" name="status" required>
@@ -247,6 +288,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <option value="Cancelled">Cancelled</option>
                                         </select>
                                     </div>
+
                                     <div class="form-group">
                                         <label>Add Comments</label>
                                         <div class="box-body pad">
@@ -255,6 +297,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             </form>
                                         </div>
                                     </div>
+
                                 </div>
                                 <!-- /.box-body -->
 
@@ -282,7 +325,69 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
                 <?php
-                }else{ ?>
+                }else if(isset($_GET['comment']) && is_numeric($_GET['comment']) && strlen($_GET['comment']) > 0){
+                    /*******************
+                     * EDIT MEETING LOGS
+                     * ******************/
+
+                    $id = filter_input(INPUT_GET,'comment',FILTER_SANITIZE_NUMBER_INT);
+
+
+                    $sql = "SELECT * from meeting_logs WHERE supervisor_id='$supervisorId' AND id='$id' LIMIT 1";
+                    $result = $conn->query($sql);
+                    if ($result->num_rows > 0) {
+                        while($row = $result->fetch_assoc()) {
+                            $meetingTitle = $row['meeting_title'];
+                        }
+                        ?>
+                        <div class="box no-border">
+                            <div class="box-header">
+                                <h3 class="box-title">Edit Meeting Log: <?php echo $meetingTitle?></h3>
+                            </div>
+
+                            <div class="box-body">
+                                <!-- form start -->
+                                <form id="addComments" name="addComments" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+
+                                    <input type="hidden" name="editId" id="editId" value="<?php echo $id;?>">
+
+                                    <div class="box-body">
+
+
+
+                                        <div class="form-group">
+                                            <label>Add Comments</label>
+                                            <div class="box-body pad">
+                                                <form>
+                                                    <textarea class="textarea" name="comments"  placeholder="Add Comments..."  style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                                                </form>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <!-- /.box-body -->
+
+                                </form>
+                                <div class="box-footer">
+                                    <a href="<?php echo $_SERVER['PHP_SELF'];?>" class="btn btn-default">Back</a>
+                                    <button type="submit" form="addComments" name="btnAddComments"  class="btn btn-primary pull-right">Submit</button>
+                                </div>
+
+                            </div>
+
+
+                        </div>
+
+
+
+                        <?php
+                    }
+
+
+                }
+
+
+                else{ ?>
                     <div class="box no-border">
                         <div class="box-header">
                             <h3 class="box-title">Meeting Logs</h3>
@@ -311,8 +416,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </div>
                                 </form>
                             </div>
-
-
                         </div>
 
 
@@ -333,21 +436,25 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <?php
                                 if (isset($_GET['id'])){
                                     $groupId = filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
-
                                     //Check if this supervisor has this group
                                     $sql = "SELECT id from meeting_logs WHERE supervisor_id='$supervisorId' AND group_id='$groupId' LIMIT 1";
                                     $result = $conn->query($sql);
                                     if ($result->num_rows > 0) {
-
                                         $sql = "SELECT * from meeting_logs WHERE supervisor_id = '$supervisorId' AND group_id = '$groupId' ORDER BY created_dtm DESC";
                                         $result = $conn->query($sql);
                                         while($row = $result->fetch_assoc()) { ?>
-
                                             <tr>
                                                 <td><?php echo $row['group_id'] ;?></td>
                                                 <td><?php echo $row['meeting_title'];?></td>
                                                 <td><?php echo $row['meeting_dtm'] ;?></td>
-                                                <td><?php echo $row['comments'];?></td>
+                                                <td><?php
+                                                    if (is_null($row['comments'])){ ?>
+                                                        <a href="<?php echo $_SERVER['PHP_SELF'] . '?comment=' . $row['id']; ?>"  class="btn  btn-default btn-flat btn-xs">Add Comments</a>
+                                                    <?php
+                                                    }else{
+                                                        echo $row['comments'];
+                                                    }
+                                                        ;?></td>
 
                                                 <form id="logActions" name="logActions" method="post">
                                                     <th><?php
@@ -383,17 +490,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     <a href="<?php echo $_SERVER['PHP_SELF'] . '?delete=' . $row['id']; ?>" onclick="return confirm('Are you sure?')" class="btn  btn-danger btn-xs">Delete</a>
                                                 </td>
                                             </tr>
-
                                         <?php }
-
                                     }
-
-
-
-
                                 }
-
-
                                 ?>
                             </table>
                             <div class="box-footer  pull-right">
@@ -406,9 +505,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 <?php
                 }?>
-
-
-
 
                 <?php
             }else if ($groupCheck == false){ ?>
@@ -425,14 +521,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <!-- /.box-body -->
                 </div>
                 <!-- /.box -->
-
             <?php
             } ?>
-
-
-
-
-
                 </div>
 
             </div>

@@ -60,8 +60,8 @@
                     <a href="#"><i class="fa fa-users"></i> <span>Group</span> <i
                             class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
-                        <li><a id="group_members" href="groupDetails.php"><i class="fa fa-circle-o"></i>Group
-                                Members</a></li>
+                        <li ><a id="groupMembers" href="groupDetails.php"><i class="fa fa-circle-o"></i>GroupMembers</a></li>
+
                         <?php
                             
 
@@ -196,6 +196,9 @@
                     <a href="superviseGroup.php">
                         <i class="fa fa-user-plus"></i> <span>Supervise Group</span>
                     </a>
+
+                </li>
+                <li>
                     <a href="meetingLogs.php">
                         <i class="fa fa-list-ul"></i> <span>Meeting Logs</span>
                     </a>
