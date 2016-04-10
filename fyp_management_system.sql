@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 09, 2016 at 03:27 PM
+-- Generation Time: Apr 10, 2016 at 12:39 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -270,6 +270,18 @@ CREATE TABLE `messages` (
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `project_repository`
+--
+
+CREATE TABLE `project_repository` (
+  `id` int(11) NOT NULL,
+  `batch_id` int(11) NOT NULL DEFAULT '0',
+  `batch_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0=inactive ;1=active'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `student`
 --
 
@@ -277,16 +289,16 @@ CREATE TABLE `student` (
   `studentId` int(255) NOT NULL,
   `studentName` varchar(255) CHARACTER SET utf8 NOT NULL,
   `studentCMS` varchar(50) CHARACTER SET utf8 NOT NULL,
-  `studentPhoneNo` varchar(50) CHARACTER SET utf8 NOT NULL,
   `studentEmail` varchar(255) CHARACTER SET utf8 NOT NULL,
+  `studentPhoneNo` varchar(50) CHARACTER SET utf8 NOT NULL,
   `studentGender` varchar(10) CHARACTER SET utf8 NOT NULL,
   `studentPassword` varchar(255) CHARACTER SET utf8 NOT NULL,
   `student_image` varchar(45) CHARACTER SET utf8 DEFAULT NULL,
   `groupId` int(255) DEFAULT '0',
-  `isLeader` int(1) NOT NULL,
-  `batchId` int(255) NOT NULL,
+  `isLeader` int(1) DEFAULT NULL,
+  `batchId` int(255) DEFAULT NULL,
   `isCompleted` int(11) NOT NULL DEFAULT '0',
-  `isActive` tinyint(4) NOT NULL,
+  `isActive` tinyint(1) NOT NULL DEFAULT '1',
   `createdDtm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='FYP Student Records';
 
@@ -294,10 +306,11 @@ CREATE TABLE `student` (
 -- Dumping data for table `student`
 --
 
-INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentPhoneNo`, `studentEmail`, `studentGender`, `studentPassword`, `student_image`, `groupId`, `isLeader`, `batchId`, `isCompleted`, `isActive`, `createdDtm`) VALUES
-(14, 'Muneeb Khan', '7757', '01234565', 'muneeb_420@gmail.com', 'male', '123', '56fff928b82971.36534035.jpg', 9, 1, 12, 0, 0, '2016-04-03 13:30:06'),
-(15, 'Umair Qamar', '10776', '03458541454', 'umairqamar@live.com', 'male', '123', '56fff632e226e7.95020533.jpg', 9, 0, 12, 0, 0, '2016-04-03 13:30:06'),
-(21, 'Bilal Hassan', '7471', '+923458541454', 'bilalhassan@live.com', 'male', '123', '56fff9374231d1.64504225.jpg', 14, 1, 12, 0, 0, '2016-04-03 13:30:06');
+INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentEmail`, `studentPhoneNo`, `studentGender`, `studentPassword`, `student_image`, `groupId`, `isLeader`, `batchId`, `isCompleted`, `isActive`, `createdDtm`) VALUES
+(14, 'Muneeb Khan', '7757', 'muneeb_420@gmail.com', '01234565', 'male', '123', '56fff928b82971.36534035.jpg', 9, 1, 12, 0, 0, '2016-04-03 13:30:06'),
+(15, 'Umair Qamar', '10776', 'umairqamar@live.com', '03458541454', 'male', '123', '56fff632e226e7.95020533.jpg', 9, 0, 12, 0, 0, '2016-04-03 13:30:06'),
+(21, 'Bilal Hassan', '7471', 'bilalhassan@live.com', '+923458541454', 'male', '123', '56fff9374231d1.64504225.jpg', 14, 1, 12, 0, 0, '2016-04-03 13:30:06'),
+(43, 'Aizaz Ahmed Abbasi', '7736', 'aizaz@gmail.com', '923211234567', 'male', '123', NULL, 15, 1, 12, 0, 1, '2016-04-10 14:28:47');
 
 -- --------------------------------------------------------
 
@@ -308,6 +321,7 @@ INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentPhoneNo
 CREATE TABLE `student_group` (
   `groupId` int(255) NOT NULL,
   `projectName` varchar(255) DEFAULT NULL,
+  `batch_id` int(11) DEFAULT NULL,
   `projectPart` int(1) NOT NULL,
   `groupLimit` int(1) NOT NULL DEFAULT '3',
   `inGroup` int(255) NOT NULL DEFAULT '1',
@@ -318,23 +332,10 @@ CREATE TABLE `student_group` (
 -- Dumping data for table `student_group`
 --
 
-INSERT INTO `student_group` (`groupId`, `projectName`, `projectPart`, `groupLimit`, `inGroup`, `leaderId`) VALUES
-(9, 'Fyp Management System', 1, 3, 1, 14),
-(14, 'Bilal Hassan', 1, 3, 1, 21);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tasks`
---
-
-CREATE TABLE `tasks` (
-  `TaskId` int(255) NOT NULL,
-  `taskName` varchar(255) NOT NULL,
-  `deadline` date NOT NULL,
-  `projectPart` int(11) NOT NULL,
-  `week` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='deadlineInfo';
+INSERT INTO `student_group` (`groupId`, `projectName`, `batch_id`, `projectPart`, `groupLimit`, `inGroup`, `leaderId`) VALUES
+(9, 'Fyp Management System', 12, 1, 3, 1, 14),
+(14, 'Bilal Hassan', 12, 1, 3, 1, 21),
+(15, 'Group - A', 12, 0, 3, 1, 43);
 
 -- --------------------------------------------------------
 
@@ -368,19 +369,6 @@ INSERT INTO `timeline` (`item_id`, `title`, `details`, `type`, `sdp_part`, `batc
 (6, 'Final Project Proposal', '', 'task', 1, 1, '2016-04-04 19:28:44', '', '', 0),
 (7, 'Open House (Fall 2015)', '<ul>\r\n	<li>Date for Open House (Fall 2015) has been finalized. All Part-01 project groups are required to participate in Open House on <strong>--</strong>.\r\n<ul">\r\n	<li">All project groups (including every member of the team) are required to arrive as early as possible and setup their stalls by 9:00AM.</li>\r\n	<li>SDP (Part 01) groups are expected to present their report (first 5 chapters), project idea &amp; prototype at Open House.</li>\r\n	<li>Each group will be provided a table, an LCD monitor, extension board and couple of chairs. You can run a slide show, presentation or prototype on the LCD monitor.</li>\r\n	<li>You will also need to design posters, brochures (handouts), 1 banner (3x6 foot), and 1 standee (standard size) for your stall.</li>\r\n</ul>\r\n<strong>IMPORTANT:</strong> This is mandatory activity - Failure to participate will earn you "F" grade.</li>\r\n</ul>', 'task', 1, 1, '2016-04-04 19:28:45', '', '', 0),
 (8, 'Progress Presentations', '<ul>\r\n	<li>SDP (Part 1) project progress presentations have been scheduled on <b>--</b>.\r\n\r\nYou will need to make a presentation (<b>use PPT template</b>) about your project progress and show your project report (5 chapters) &amp; prototype to project review committee.  There are no specific presentation slots - you need to be available whenever review committee calls you for presentation.\r\n\r\nIn regards to presentation, you need to use the attached PPT template and following guidelines:\r\n<ul>\r\n	<li><b>SLIDE #05: </b>Problem: Clearly state the problem that motivated you to work on your project</li>\r\n	<li><b>SLIDE #06:</b> Solution: What are you building to solve the problem?</li>\r\n	<li><b>SLIDE #08:</b> Requirements:\r\n<ul>\r\n	<li>List down various techniques &amp; tools you used to develop/elicit requirements</li>\r\n	<li>Point out how did you document these requirements – did you create SRS?</li>\r\n</ul>\r\n</li>\r\n	<li><b>SLIDE #09:</b> Requirements:\r\n<ul>\r\n	<li>List down all the users (roles / actors) of your system</li>\r\n	<li>Point out if you have identified all the use cases? How many?</li>\r\n	<li>Point out if you have documented functional &amp; non-functional requirements?</li>\r\n</ul>\r\n</li>\r\n	<li><b>SLIDE #10:</b> Design:\r\n<ul>\r\n	<li>Include a deployment diagram that provides overview of the entire system (hardware / software components)</li>\r\n</ul>\r\n</li>\r\n	<li><b>SLIDE #11: </b>Design:\r\n<ul>\r\n	<li>Point out which UML diagrams you have used in your design</li>\r\n	<li>Point out if you have prepared an ERD</li>\r\n	<li>Point out if you have used any design patterns</li>\r\n</ul>\r\n</li>\r\n	<li><b>SLIDE #12:</b> Implementation:\r\n<ul>\r\n	<li>List down various development tools &amp; technologies you are using in your project</li>\r\n	<li>Point out if you are using any coding standards / best practices</li>\r\n	<li>List down various libraries / components / web services that you have identified / decided to use in your project</li>\r\n</ul>\r\n</li>\r\n	<li><b>SLIDE #14:</b> Work Breakdown Structure (WBS):\r\n<ul>\r\n	<li>Show latest version of your work breakdown structure (WBS) and highlight the items that you have completed so far.</li>\r\n</ul>\r\n</li>\r\n	<li><b>SLIDE #15:</b> Challenges:\r\n<ul>\r\n	<li>List any challenges that you are currently facing.  e.g., identification of requirements,  design, technical issues, etc.</li>\r\n</ul>\r\n</li>\r\n	<li><b>SLIDE #17:</b> Prototype:\r\n<ul>\r\n	<li>Insert 1 screen shot of your prototype that showcases most features.</li>\r\n</ul>\r\n</li>\r\n	<li><b>SLIDE #18:</b> Report:\r\n<ul>\r\n	<li>Point out the amount of progress made in each of the five chapters.</li>\r\n</ul>\r\n</li>\r\n</ul>\r\nFinally, note that this is a mandatory activity and failure to participate will earn you an “F” grade, unless you have prior permission from you supervisor &amp; project coordinator.</li>\r\n</ul>', 'task', 1, 1, '2016-04-04 19:28:45', '', '', 0);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `wbs_status`
---
-
-CREATE TABLE `wbs_status` (
-  `groupId` int(255) NOT NULL,
-  `wbsTask` text NOT NULL,
-  `wbsTaskDeadline` varchar(255) NOT NULL,
-  `wbsTaskStatus` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='groupIdInfo';
 
 -- --------------------------------------------------------
 
@@ -475,6 +463,12 @@ ALTER TABLE `meeting_logs`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `project_repository`
+--
+ALTER TABLE `project_repository`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `student`
 --
 ALTER TABLE `student`
@@ -485,12 +479,6 @@ ALTER TABLE `student`
 --
 ALTER TABLE `student_group`
   ADD PRIMARY KEY (`groupId`);
-
---
--- Indexes for table `tasks`
---
-ALTER TABLE `tasks`
-  ADD PRIMARY KEY (`TaskId`);
 
 --
 -- Indexes for table `timeline`
@@ -564,20 +552,20 @@ ALTER TABLE `group_requests`
 ALTER TABLE `meeting_logs`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
+-- AUTO_INCREMENT for table `project_repository`
+--
+ALTER TABLE `project_repository`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `studentId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `studentId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 --
 -- AUTO_INCREMENT for table `student_group`
 --
 ALTER TABLE `student_group`
-  MODIFY `groupId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
---
--- AUTO_INCREMENT for table `tasks`
---
-ALTER TABLE `tasks`
-  MODIFY `TaskId` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `groupId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 --
 -- AUTO_INCREMENT for table `timeline`
 --
