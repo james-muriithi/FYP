@@ -17,7 +17,7 @@
                     if ($_SESSION["type"] == "Student") {
                         echo $_SESSION["usrCMS"];
                     } else if ($_SESSION["type"] == "Faculty" && $_SESSION["isCord"] == "1") {
-                        echo $_SESSION["design"] . "(Cordinator)";
+                        echo $_SESSION["design"] ;
                     } else if ($_SESSION["type"] == "Faculty") {
                         echo $_SESSION["design"];
                     }
@@ -67,7 +67,7 @@
 
                         if ($_SESSION["isLead"] != "1" && $_SESSION["GroupID"]== 0 ) {
                             ?>
-                            <li><a id="InitiateGroup" href="initGroupForm.php"><i class="fa fa-circle-o"></i>Initiate
+                            <li><a id="InitiateGroup" href="initiateGroup.php"><i class="fa fa-circle-o"></i>Initiate
                                     Group</a></li>
                             <li><a id="JoinGroup" href="joinGroup.php"><i class="fa fa-circle-o"></i>Join Group</a></li>
                             <?php
@@ -167,6 +167,14 @@
                         <i class="fa fa-envelope-o"></i> <span>Send Email</span>
                     </a>
                 </li>
+
+                <li>
+                    <a href="projectRepository.php">
+                        <i class="fa fa-database"></i><span>Project Repository</span>
+                    </a>
+                </li>
+
+
 
                 <?php
             } ?>
