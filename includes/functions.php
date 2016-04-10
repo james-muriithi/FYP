@@ -120,6 +120,41 @@ function random_password( $length = 8 ) {
     return $password;
 }
 
+
+
+/**
+ * Get Filename and return it's icon from Fonts awesome
+ *
+ * @param String $str String to get an excerpt from
+ * @param Integer $startPos Position int string to start excerpt from
+ * @param Integer $maxLength Maximum length the excerpt may be
+ * @return String excerpt
+ */
+function getIcon($filename){
+
+
+    $ext   =   explode('.',$filename);
+    $ext   = strtolower(end($filename));
+    echo $ext;
+
+/*
+
+    switch ($ext) {
+
+        case 'pdf':
+            return " <i class=\"fa fa-file-pdf-o\"></i> ";
+
+        case label2:
+
+        case label3:
+            break;
+        default:
+    }
+*/
+}
+
+
+
 /**
  * Set page class to active of selected page
  *
