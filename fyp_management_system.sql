@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 10, 2016 at 08:06 PM
+-- Generation Time: Apr 11, 2016 at 07:22 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -213,7 +213,8 @@ CREATE TABLE `group_deliverables` (
 --
 
 INSERT INTO `group_deliverables` (`id`, `group_id`, `config_id`, `uploaded_by`, `deliverable`, `upload_dtm`) VALUES
-(5, 9, 2, 14, 'group9-deliverable-2.pdf', '2016-04-04 23:45:59');
+(5, 9, 2, 14, 'group9-deliverable-2.pdf', '2016-04-04 23:45:59'),
+(6, 9, 2, 14, 'group9-deliverable-2.pdf', '2016-04-04 23:45:59');
 
 -- --------------------------------------------------------
 
@@ -546,7 +547,7 @@ ALTER TABLE `grades`
 -- AUTO_INCREMENT for table `group_deliverables`
 --
 ALTER TABLE `group_deliverables`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `group_requests`
 --

@@ -4,10 +4,13 @@ $GLOBALS['subtitle']="Profile";
 require_once("includes/config.php");
 require_once("includes/header.php");
 session_start();
+
 //Check if user is logged in Else log out
-if(!isset($_SESSION["usrId"]) )
+if(isset($_SESSION["usrId"]) OR isset($_SESSION['facultyId']) OR isset($_SESSION['examinerId']))
 {
-        header('Location: '.'index.php');
+
+}else{
+    header('Location: '.'index.php');
 }
 
 //Code implementation for remove photo
