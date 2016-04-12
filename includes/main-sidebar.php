@@ -169,6 +169,12 @@
                 </li>
 
                 <li>
+                    <a href="generateReports.php">
+                        <i class="fa fa fa-file-pdf-o"></i><span>Generate Reports</span>
+                    </a>
+                </li>
+
+                <li>
                     <a href="projectRepository.php">
                         <i class="fa fa-database"></i><span>Project Repository</span>
                     </a>

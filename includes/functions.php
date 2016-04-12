@@ -155,26 +155,3 @@ function getIcon($filename){
 
 
 
-/**
- * Set page class to active of selected page
- *
- * @param String $str String to get an excerpt from
- * @param Integer $startPos Position int string to start excerpt from
- * @param Integer $maxLength Maximum length the excerpt may be
- * @return String excerpt
- */
-function selectActive($pageName)
-{
-   $pageName='timeline';
-   
-   switch ($pageName) {
-    case 'timeline':
-        return 'timeline';
-    case label2:
-        break;
-    case label3:
-        break;
-    default:
-} 
-    
-}

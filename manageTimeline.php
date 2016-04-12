@@ -111,8 +111,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 <!-- bootstrap wysihtml5 - text editor -->
 <link rel="stylesheet" href="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css">
-<!-- Sweet Alert -->
-<link rel="stylesheet" href="plugins/sweet-alert/sweetalert.css">
+
 
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -411,11 +410,6 @@ require_once("includes/required_js.php");
         $("[data-mask]").inputmask();
 
         $('.textarea').wysihtml5();
-
-
-
-
-
 
     });
 </script>

@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 ?>
-
+<link rel="stylesheet" href="plugins/pace/pace.min.css">
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -126,8 +126,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <button type="submit" name="btnSendMail" form="sendEmail" class="btn btn-primary" ><i class="fa fa-envelope-o"></i> Send
                                 </button>
                             </div>
-                            <button type="reset" value="Reset" class="btn btn-default"><i class="fa fa-times"></i>Discard
-                            </button>
+                            <a href="<?php echo siteroot;?>" class="btn btn-default"><i class="fa fa-times"></i> Discard</a>
                         </div>
                         <!-- /.box-footer -->
                     </div>
@@ -145,6 +144,7 @@ require_once("includes/main-footer.php");
 <?php
 require_once("includes/required_js.php");
 ?>
+<script src="plugins/pace/pace.min.js"></script>
 <!-- Page Script -->
 <script>
     $(function () {

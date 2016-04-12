@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 ?>
 <!-- DataTables -->
 <link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
-<script src="http://malsup.github.com/jquery.form.js"></script>
+
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -91,16 +91,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     }?>
 
 
-                    <div class="box">
+                    <div class="box no-border">
                         <div class="box-header">
                             <h3 class="box-title">List of students</h3>
-                            <div class="box-tools ">
-                                <form id="generate_pdf" name="generate_pdf" method="post">
-                                <div class="input-group input-group-sm " style="width: 150px;">
-                                    <button type="submit" class="btn btn-default  btn-flat btn-sm pull-right"> <i class="fa fa-file-pdf-o"></i> Generate PDF</button>
-                                </div>
-                                </form>
-                            </div>
+
 
                         </div>
 
@@ -128,10 +122,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <td><?php echo $row['batchName'];?></td>
                                         <td>
                                             <?php if ($row['isLeader'] == 1 ){ ?>
-                                            <span class="label label-primary">Group Leader</span>
-                                           <?php } else { ?>
+                                            <span class="label label-info">Group Leader</span>
+                                           <?php } else if($row['groupId'] != '0'){ ?>
+                                                <span class="label label-primary">Group Formed</span>
+                                            <?php }else{ ?>
                                                 <span class="label label-warning">Pending</span>
-                                            <?php } ?>
+                                            <?php
+                                            } ?>
                                         </td>
                                         <td>
                                             <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['studentId']; ?>"  class="btn  btn-primary btn-xs">Edit</a>
@@ -177,20 +174,4 @@ require_once("includes/required_js.php");
     } );
 </script>
 
-<script>
-    // prepare the form when the DOM is ready
-    $(document).ready(function() {
-        // bind form using ajaxForm
-        $('#generate_pdf').ajaxForm({
-            // target identifies the element(s) to update with the server response
-
-
-            // success identifies the function to invoke when the server response
-            // has been received; here we apply a fade-in effect to the new content
-            success: function() {
-                alert("SUCCESS");
-            }
-        });
-    });
-</script>
 </body>
