@@ -1,18 +1,21 @@
 <?php
-$title= 'TITLE';
-$titleFontSize = '16';
-$sql = " SELECT studentCMS AS CMS,studentName AS Name,studentEmail AS Email,studentPhoneNo AS Contact FROM student WHERE batchId = 12 ";
+require_once ('includes/config.php');
+session_start();
+$title= $_SESSION['sql_title'] ;
+$titleFontSize = $_SESSION['sql_title_font_size'] ;
+$sql = $_SESSION['sql_statement'] ;
 
 generate_pdf($title,$titleFontSize,$sql);
 
+
 function generate_pdf($title,$titleFontSize,$sql){
 
-    require ('includes/config.php');
+    //require ('includes/config.php');
     define('FPDF_FONTPATH','libs/fpdf/font/');
     require('libs/fpdf/mysql_report.php');
 
     // the PDF is defined as normal, in this case a Portrait, measurements in points, A4 page.
-    $pdf = new PDF('P','mm','A4');
+    $pdf = new PDF('P','pt','A4');
     $pdf->SetFont('Helvetica','',10);
 
 
@@ -26,7 +29,8 @@ function generate_pdf($title,$titleFontSize,$sql){
 
     // Generate report
     $pdf->mysql_report($sql_statement, false, $attr );
-
-
+    
+    unset($_SESSION['sql_title'],$_SESSION['sql_title_font_size'],$_SESSION['sql_statement']);
+    
     $pdf->Output();
 }

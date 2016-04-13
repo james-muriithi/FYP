@@ -3,7 +3,6 @@ $title="FYPMS";
 $subtitle="Generate Reports";
 require_once("includes/header.php");
 require_once("includes/config.php");
-require_once ("pdf_generation.php");
 session_start();
 
 //Check if COORDINATOR is logged in else log out
@@ -27,12 +26,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['btnListOfStudents'])){
         $batch = filter_input(INPUT_POST,'batch',FILTER_SANITIZE_NUMBER_INT);
 
-        $title= 'TITLE';
+        //Unsetting values
+        unset($_SESSION['sql_title'],$_SESSION['sql_title_font_size'],$_SESSION['sql_statement']);
+
+        
+
+        $title= 'Student Details';
         $titleFontSize = '16';
-        $sql = " SELECT studentCMS AS CMS,studentName AS Name,studentEmail AS Email,studentPhoneNo AS Contact FROM student WHERE batchId = 12 ";
+        $sql = " SELECT studentCMS AS CMS,studentName AS Name,studentEmail AS Email,studentPhoneNo AS Contact FROM student WHERE batchId = ".$batch;
 
-        generate_pdf($title,$titleFontSize,$sql);
+        //Saving values in session
+        $_SESSION['sql_title'] = $title;
+        $_SESSION['sql_title_font_size'] = $titleFontSize;
+        $_SESSION['sql_statement'] = $sql;
 
+        //Redirecting to pdf_generation page
+        header('Location: '.'pdf_generation.php');
+
+
+    }
+
+    if (isset($_POST['btnListOfGroups'])){
+        $batch = filter_input(INPUT_POST,'batch',FILTER_SANITIZE_NUMBER_INT);
+
+
+        
+
+        $_SESSION['batch_id'] = $batch;
+
+        //Redirecting to pdf_generation page
+        header('Location: '.'pdf_group_list.php');
 
 
     }
@@ -110,22 +133,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <!-- /.box-header -->
 
                         <div class="box-body">
-                            <div class="form-group">
-                                <label>Select</label>
-                                <select class="form-control">
-                                    <option>option 1</option>
-                                    <option>option 2</option>
-                                    <option>option 3</option>
-                                    <option>option 4</option>
-                                    <option>option 5</option>
-                                </select>
-                            </div>
+                            <form name="listOfStudents" id="listOfStudents" method="post" >
+                                <div class="form-group">
+                                    <label>Select Batch</label>
+                                    <select class="form-control" name="batch" required>
+                                        <?php
+                                        $sql = "SELECT * FROM batch ORDER BY createdDtm DESC";
+                                        $result = $conn->query($sql);
+
+                                        if ($result->num_rows > 0) {
+                                            // output data of each row
+                                            while($row = $result->fetch_assoc()) { ?>
+                                                <option value="<?php echo $row['batchId'];?>"><?php echo $row['batchName']; if($row['isActive'] == 1){echo " [ Active ] ";};?></option>
+                                                <?php
+                                            }
+                                        } else {
+                                            echo "0 results";
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
+                            </form>
 
                         </div>
                         <!-- /.box-body -->
 
                         <div class="box-footer">
-
+                            <button type="submit" name="btnListOfGroups" form="listOfStudents" class="btn btn-danger bg-red  pull-right"><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Generate PDF</button>
                         </div>
 
                     </div>
