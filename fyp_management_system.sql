@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 12, 2016 at 08:17 PM
+-- Generation Time: Apr 13, 2016 at 08:24 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -41,9 +41,7 @@ CREATE TABLE `batch` (
 --
 
 INSERT INTO `batch` (`batchId`, `batchName`, `startingDate`, `configurationType`, `isActive`, `sdpPart`, `createdDtm`) VALUES
-(2, 'Fall 2017', NULL, 'default', NULL, 0, '2016-04-03 13:24:15'),
-(4, 'Fall 2016', NULL, 'default', NULL, 0, '2016-04-03 13:24:15'),
-(5, 'Fall 2015', NULL, 'default', NULL, 0, '2016-04-03 13:24:15'),
+(4, 'Fall 2016', NULL, 'default', 1, 0, '2016-04-03 13:24:15'),
 (12, 'Spring 2016', '2016-04-04', 'default', 1, 1, '2016-04-03 21:22:24');
 
 -- --------------------------------------------------------
@@ -317,7 +315,7 @@ INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentEmail`,
 (14, 'Muneeb Khan', '7757', 'muneeb_420@gmail.com', '01234565', 'male', '123', '56fff928b82971.36534035.jpg', 9, 1, 12, 0, 0, '2016-04-03 13:30:06'),
 (15, 'Umair Qamar', '10776', 'umairqamar@live.com', '03458541454', 'male', '123', '56fff632e226e7.95020533.jpg', 9, 0, 12, 0, 0, '2016-04-03 13:30:06'),
 (21, 'Bilal Hassan', '7471', 'bilalhassan@live.com', '+923458541454', 'male', '123', '56fff9374231d1.64504225.jpg', 14, 1, 12, 0, 0, '2016-04-03 13:30:06'),
-(43, 'Aizaz Ahmed Abbasi', '7736', 'aizaz@gmail.com', '923211234567', 'male', '123', NULL, 15, 1, 12, 0, 1, '2016-04-10 14:28:47');
+(43, 'Aizaz Ahmed Abbasi', '7736', 'aizaz@gmail.com', '923211234567', 'male', '123', NULL, 15, 1, 4, 0, 1, '2016-04-10 14:28:47');
 
 -- --------------------------------------------------------
 
@@ -342,7 +340,7 @@ CREATE TABLE `student_group` (
 INSERT INTO `student_group` (`groupId`, `projectName`, `batch_id`, `projectPart`, `groupLimit`, `inGroup`, `leaderId`) VALUES
 (9, 'Fyp Management System', 12, 1, 3, 1, 14),
 (14, 'Bilal Hassan', 12, 1, 3, 1, 21),
-(15, 'Group - A', 12, 0, 3, 1, 43);
+(15, 'Group - A', 15, 0, 3, 1, 43);
 
 -- --------------------------------------------------------
 
