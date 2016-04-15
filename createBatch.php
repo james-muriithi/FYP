@@ -1,9 +1,11 @@
 <?php 
-$GLOBALS['title']="FYPMS";
-$GLOBALS['subtitle']="Create batch";
+$title="FYPMS";
+$subtitle="Create batch";
 require_once("includes/header.php");
 require_once("includes/config.php");
 session_start();
+
+//Check if coordinator is logged in
 if(!isset($_SESSION["isCord"]))
 {
         header('Location: '.'index.php');

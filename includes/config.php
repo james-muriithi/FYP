@@ -10,8 +10,7 @@ define ('siteroot','http://localhost/fyp/');
 define('sendgridapi', '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');
 
 
-
-//Database
+//Database settings
 define('servername', 'localhost');
 define('username', 'root');
 define('password', '');
@@ -28,4 +27,4 @@ if ($conn->connect_error) {
 else{
     //connection successful
 }
-?> 
+

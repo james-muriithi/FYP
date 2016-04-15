@@ -1,6 +1,6 @@
 <?php 
-$GLOBALS['title']="FYPMS";
-$GLOBALS['subtitle']="Choose Supervisor";
+$title="FYPMS";
+$subtitle="Choose Supervisor";
 require_once("includes/header.php");
 require_once("includes/config.php");
 session_start();

@@ -10,5 +10,7 @@
 <script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
 <!-- SweetAlert -->
 <script src="plugins/sweet-alert/sweetalert.min.js"></script>
+<!-- Pace Page -->
+<script src="plugins/pace/pace.min.js"></script>
 
 

@@ -1,6 +1,6 @@
 <?php 
-$GLOBALS['title']="FYPMS";
-$GLOBALS['subtitle']="Register Faculty Members";
+$title="FYPMS";
+$subtitle="Register Faculty Members";
 require_once("includes/header.php");
 require_once("includes/config.php");
 require("libs/sendgrid-php/sendgrid-php.php");

@@ -1,6 +1,6 @@
 <?php 
-$GLOBALS['title']="FYPMS";
-$GLOBALS['subtitle']="Delete Batch";
+$title="FYPMS";
+$subtitle="Delete Batch";
 require_once("includes/header.php");
 require_once("includes/config.php");
 

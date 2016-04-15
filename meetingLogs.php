@@ -1,6 +1,6 @@
 <?php
-$GLOBALS['title']="FYPMS";
-$GLOBALS['subtitle']="Meeting Logs";
+$title="FYPMS";
+$subtitle="Meeting Logs";
 require_once("includes/header.php");
 require_once("includes/config.php");
 session_start();

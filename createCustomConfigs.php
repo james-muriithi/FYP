@@ -1,6 +1,6 @@
 <?php
-$GLOBALS['title'] = "FYPMS";
-$GLOBALS['subtitle'] = "Custom Configurations";
+$title = "FYPMS";
+$subtitle = "Custom Configurations";
 require_once("includes/header.php");
 require_once("includes/config.php");
 require_once("includes/functions.php");

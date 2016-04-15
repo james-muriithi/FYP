@@ -39,5 +39,41 @@ function mail_user_registration ($emailId,$name,$password){
 }
 
 
+function mail_password_reset ($emailId,$password){
 
+    $sendgrid = new SendGrid(sendgridapi);
+    $email = new SendGrid\Email();
+
+    //Password reset tempelate
+    $templateId = 'c4a91dec-7b06-408d-84b7-08e0efddc94c';
+
+    $email
+        ->addSmtpapiTo($emailId)
+        ->setFrom('admin@fypms.com')
+        ->setFromName('FYPMS Team')
+        ->setSubject('%subject%')
+        ->setHtml(' ')// <-- triggers the html version of the template
+        ->setTemplateId($templateId)
+        ->setSubstitutions(array(
+            '%subject%' => array('Password Reset - FYP Management System'),
+            '%email%' => array($emailId),
+            '%password%' => array($password),
+        ));
+
+    try {
+        $res = $sendgrid->send($email);
+        echo $res->getCode();
+    } catch (\SendGrid\Exception $e) {
+        echo $e->getCode();
+        foreach ($e->getErrors() as $er) {
+            echo $er;
+            exit;
+        }
+    }
+
+    return true;
+
+
+
+}
 

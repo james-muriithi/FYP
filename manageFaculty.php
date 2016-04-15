@@ -1,6 +1,6 @@
 <?php
-$GLOBALS['title']="FYPMS";
-$GLOBALS['subtitle']="Manage Faculty";
+$title="FYPMS";
+$subtitle="Manage Faculty";
 require_once("includes/header.php");
 require_once("includes/config.php");
 session_start();

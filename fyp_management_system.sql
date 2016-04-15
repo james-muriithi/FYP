@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 13, 2016 at 08:24 PM
+-- Generation Time: Apr 15, 2016 at 01:33 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -43,6 +43,62 @@ CREATE TABLE `batch` (
 INSERT INTO `batch` (`batchId`, `batchName`, `startingDate`, `configurationType`, `isActive`, `sdpPart`, `createdDtm`) VALUES
 (4, 'Fall 2016', NULL, 'default', 1, 0, '2016-04-03 13:24:15'),
 (12, 'Spring 2016', '2016-04-04', 'default', 1, 1, '2016-04-03 21:22:24');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `batch_tasks`
+--
+
+CREATE TABLE `batch_tasks` (
+  `taskId` int(11) NOT NULL,
+  `batchId` int(11) DEFAULT NULL,
+  `taskName` tinytext,
+  `taskDetail` text,
+  `taskWeek` int(11) DEFAULT NULL,
+  `taskDeadline` datetime DEFAULT NULL,
+  `templateId` int(11) DEFAULT NULL,
+  `hasDeliverable` tinyint(4) DEFAULT NULL,
+  `createdDtm` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `batch_tasks`
+--
+
+INSERT INTO `batch_tasks` (`taskId`, `batchId`, `taskName`, `taskDetail`, `taskWeek`, `taskDeadline`, `templateId`, `hasDeliverable`, `createdDtm`) VALUES
+(1, 12, 'Task 01', 'Task 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here', 1, '2016-05-14 23:59:35', 6, 1, '2016-04-14 23:59:42'),
+(2, 4, 'Task 01', 'Task 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here', 1, '2016-05-14 23:59:35', 6, 1, '2016-04-14 23:59:42'),
+(3, 12, 'Task 01', 'Task 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here', 1, '2016-05-14 23:59:35', 6, 1, '2016-04-14 23:59:42'),
+(4, 12, 'Task 01', 'Task 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here', 1, '2016-05-14 23:59:35', 6, 1, '2016-04-14 23:59:42'),
+(5, 4, 'Task 01', 'Task 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here', 1, '2016-05-14 23:59:35', 6, 1, '2016-04-14 23:59:42'),
+(6, 12, 'Task 01', 'Task 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here', 1, '2016-05-14 23:59:35', 6, 1, '2016-04-14 23:59:42'),
+(7, 12, 'Task 01', 'Task 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here', 1, '2016-05-14 23:59:35', 6, 1, '2016-04-14 23:59:42'),
+(8, 12, 'Task 01', 'Task 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here\r\nTask 01 Details go here', 1, '2016-05-14 23:59:35', 6, 1, '2016-04-14 23:59:42');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `batch_templates`
+--
+
+CREATE TABLE `batch_templates` (
+  `templateId` int(11) NOT NULL,
+  `batchId` int(11) DEFAULT NULL,
+  `templateName` varchar(100) DEFAULT NULL,
+  `templateLocation` varchar(150) DEFAULT NULL,
+  `uploadedDtm` datetime DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `batch_templates`
+--
+
+INSERT INTO `batch_templates` (`templateId`, `batchId`, `templateName`, `templateLocation`, `uploadedDtm`) VALUES
+(13, 12, 'Template -  01 - Project Team.doc', 'Template -  01 - Project Team.doc', '2016-04-15 16:25:49'),
+(14, 12, 'Template -  02 - Inital Proposal.doc', 'Template -  02 - Inital Proposal.doc', '2016-04-15 16:26:06'),
+(15, 12, 'Template -  04 - Proposal  Plan.doc', 'Template -  04 - Proposal  Plan.doc', '2016-04-15 16:28:39'),
+(16, 12, 'Template -  05 - Project Report.doc', 'Template -  05 - Project Report.doc', '2016-04-15 16:32:07');
 
 -- --------------------------------------------------------
 
@@ -101,22 +157,6 @@ CREATE TABLE `external_examiner` (
 INSERT INTO `external_examiner` (`examinerId`, `examinerName`, `examinerPhone`, `examinerEmail`, `examinerPassword`, `company`, `isActive`) VALUES
 (1, 'haj', '', 'haj@gmail.com', '123', 'Google', 1),
 (2, 'Bill Gates', '', 'bill@gates.com', '123', 'Microsoft', 1);
-
--- --------------------------------------------------------
-
---
--- Table structure for table `external_examiner_old`
---
-
-CREATE TABLE `external_examiner_old` (
-  `examinerId` int(255) NOT NULL,
-  `examinerName` varchar(255) NOT NULL,
-  `examinerPhone` int(255) NOT NULL,
-  `examinerEmail` varchar(255) NOT NULL,
-  `company` varchar(255) NOT NULL,
-  `slotPresentation` varchar(255) NOT NULL,
-  `groupId` int(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='examinerInfo';
 
 -- --------------------------------------------------------
 
@@ -378,6 +418,36 @@ INSERT INTO `timeline` (`item_id`, `title`, `details`, `type`, `sdp_part`, `batc
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `timeline_faculty`
+--
+
+CREATE TABLE `timeline_faculty` (
+  `id` int(11) NOT NULL,
+  `title` text,
+  `details` text,
+  `type` varchar(50) DEFAULT NULL,
+  `batchId` int(11) DEFAULT NULL,
+  `createdDtm` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='timeline for faculty';
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `timeline_student`
+--
+
+CREATE TABLE `timeline_student` (
+  `id` int(11) NOT NULL,
+  `title` text,
+  `details` text,
+  `type` varchar(50) DEFAULT NULL,
+  `batchId` text,
+  `createdDtm` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Timeline for students';
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `work_load`
 --
 
@@ -395,7 +465,8 @@ CREATE TABLE `work_load` (
 
 INSERT INTO `work_load` (`loadId`, `facultyId`, `designation`, `totalLoad`, `currentLoad`) VALUES
 (1, 7, 'Teaching Fellow', 3, 0),
-(5, 13, 'Assocaite Professor', 3, 2);
+(5, 13, 'Assocaite Professor', 3, 2),
+(6, 14, 'Captain America', 3, 0);
 
 --
 -- Indexes for dumped tables
@@ -408,6 +479,18 @@ ALTER TABLE `batch`
   ADD PRIMARY KEY (`batchId`);
 
 --
+-- Indexes for table `batch_tasks`
+--
+ALTER TABLE `batch_tasks`
+  ADD PRIMARY KEY (`taskId`);
+
+--
+-- Indexes for table `batch_templates`
+--
+ALTER TABLE `batch_templates`
+  ADD PRIMARY KEY (`templateId`);
+
+--
 -- Indexes for table `configurations`
 --
 ALTER TABLE `configurations`
@@ -417,12 +500,6 @@ ALTER TABLE `configurations`
 -- Indexes for table `external_examiner`
 --
 ALTER TABLE `external_examiner`
-  ADD PRIMARY KEY (`examinerId`);
-
---
--- Indexes for table `external_examiner_old`
---
-ALTER TABLE `external_examiner_old`
   ADD PRIMARY KEY (`examinerId`);
 
 --
@@ -492,6 +569,18 @@ ALTER TABLE `timeline`
   ADD PRIMARY KEY (`item_id`);
 
 --
+-- Indexes for table `timeline_faculty`
+--
+ALTER TABLE `timeline_faculty`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `timeline_student`
+--
+ALTER TABLE `timeline_student`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `work_load`
 --
 ALTER TABLE `work_load`
@@ -507,6 +596,16 @@ ALTER TABLE `work_load`
 ALTER TABLE `batch`
   MODIFY `batchId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
+-- AUTO_INCREMENT for table `batch_tasks`
+--
+ALTER TABLE `batch_tasks`
+  MODIFY `taskId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+--
+-- AUTO_INCREMENT for table `batch_templates`
+--
+ALTER TABLE `batch_templates`
+  MODIFY `templateId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+--
 -- AUTO_INCREMENT for table `configurations`
 --
 ALTER TABLE `configurations`
@@ -516,11 +615,6 @@ ALTER TABLE `configurations`
 --
 ALTER TABLE `external_examiner`
   MODIFY `examinerId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
--- AUTO_INCREMENT for table `external_examiner_old`
---
-ALTER TABLE `external_examiner_old`
-  MODIFY `examinerId` int(255) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `faculty`
 --
@@ -577,10 +671,20 @@ ALTER TABLE `student_group`
 ALTER TABLE `timeline`
   MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
+-- AUTO_INCREMENT for table `timeline_faculty`
+--
+ALTER TABLE `timeline_faculty`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `timeline_student`
+--
+ALTER TABLE `timeline_student`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `work_load`
 --
 ALTER TABLE `work_load`
-  MODIFY `loadId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `loadId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

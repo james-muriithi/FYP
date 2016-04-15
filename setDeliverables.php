@@ -1,6 +1,6 @@
 <?php
-$GLOBALS['title'] = "FYPMS";
-$GLOBALS['subtitle'] = "Set Deliverables";
+$title = "FYPMS";
+$subtitle = "Set Deliverables";
 require_once("includes/header.php");
 require_once("includes/config.php");
 session_start();

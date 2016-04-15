@@ -1,6 +1,6 @@
 <?php
-$GLOBALS['title']="FYPMS";
-$GLOBALS['subtitle']="Home";
+$title="FYPMS";
+$subtitle="Home";
 require_once("includes/header.php");
 require_once("includes/config.php");
 session_start();
@@ -47,21 +47,32 @@ if(isset($_POST['signout'])) { // logout button
     <!-- row -->
       <div class="row">
         <div class="col-md-12">
-            <div id="ajax-timeline">
-            <script type="text/javascript">
-                $(document).ready(function() {
+            <?php
+            if (isset($_SESSION['userCMS'])){
+                require_once ("studentTimeline.php");
+            }
+            if (isset($_SESSION['facultyId'])){
+                require_once("facultyTimeline.php");
+            }
+           
 
-                    $('#ajax-timeline').load('timeline.php')
+            ?>
 
-                    function getTimelineData(){
-                        setInterval(function () {
-                            $('#ajax-timeline').load('timeline.php')
-                        }, 3000);
-                    }
-                    getTimelineData();
-                });
-            </script>
-            </div>
+<!--            <div id="ajax-timeline">-->
+<!--            <script type="text/javascript">-->
+<!--                $(document).ready(function() {-->
+<!---->
+<!--                    $('#ajax-timeline').load('timeline.php')-->
+<!---->
+<!--                    function getTimelineData(){-->
+<!--                        setInterval(function () {-->
+<!--                            $('#ajax-timeline').load('timeline.php')-->
+<!--                        }, 3000);-->
+<!--                    }-->
+<!--                    getTimelineData();-->
+<!--                });-->
+<!--            </script>-->
+<!--            </div>-->
         </div>
         <!-- /.col -->
       </div>

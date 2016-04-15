@@ -1,6 +1,6 @@
 <?php
-$GLOBALS['title'] = "FYPMS";
-$GLOBALS['subtitle'] = "Group Details";
+$title = "FYPMS";
+$subtitle = "Group Details";
 require_once("includes/header.php");
 require_once("includes/config.php");
 session_start();

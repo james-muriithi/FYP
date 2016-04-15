@@ -1,18 +1,20 @@
 <?php
-$GLOBALS['title']="FYPMS";
-$GLOBALS['subtitle']="Login";
+$title="FYPMS";
+$subtitle="Login";
 require_once("includes/header.php");
 require_once("includes/config.php");
 session_start();
-$error="";
+
 if(isset($_SESSION["usrnm"]))
 {
 	header('Location: '.'home.php');
 }
+
 if(isset($_POST["email"]) && isset($_POST["pasword"]))
 {
 $userEmail =  filter_input(INPUT_POST, "email",FILTER_SANITIZE_SPECIAL_CHARS);
 $userPass = filter_input(INPUT_POST, "pasword",FILTER_SANITIZE_SPECIAL_CHARS);
+
 $sql = "SELECT studentId, studentName, studentCMS, studentPhoneNo, studentEmail, studentGender, studentPassword,student_image, groupId, isLeader, batchId FROM student";
 $sql2 = "SELECT facultyId, designation, facultyName, facultyPhoneNo, facultyEmail, facultyPassword, isAdmin, isCoordinator FROM faculty";
 $sql3 ="SELECT * FROM external_examiner";
@@ -26,12 +28,7 @@ $check=0;
         while($row = $result->fetch_assoc()) {
             if($row["studentEmail"]==$userEmail && $row["studentPassword"]==$userPass)
             {
-//****************************************************************************************************************************************************
-//
-//													Setting up seeion variables
-//
-//**************************************************************************************************************************************************** -->
-     
+                    //SETTING UP SESSION VALUES FOR STUDENT;
                     $_SESSION["usrId"]=$row["studentId"];
                     $_SESSION["usrnm"]=$row["studentName"];
                     $_SESSION["usrCMS"]=$row["studentCMS"];
@@ -42,40 +39,19 @@ $check=0;
                     $_SESSION["isLead"]=$row["isLeader"];
                     $_SESSION["GroupID"]=$row["groupId"];
 					$_SESSION["BatchID"]=$row["batchId"];
-//					echo $row["batchId"];
-//                    $_SESSION["image"]=$row["profileImage"];
                     $_SESSION["usrEmail"]=$row["studentEmail"];
                     $_SESSION["image"]=$row["student_image"];
                     $_SESSION["contact"]=$row["studentPhoneNo"];
-//                    $variabl = $row["studentName"];
-                    //echo $variabl;
                     $check=1;
-//                    $_POST[$variabl];
-                    //echo "id: " . $row["studentId"]. " - Name: " . $row["studentName"]. " " . $row["studentPassword"]. "<br>";
-                    
-					
-					
-					
 					header('Location: '.'home.php');
             }
         }
-//****************************************************************************************************************************************************
-//
-//													Verifying user credentials as faculty member or admin and coordinator
-//
-//**************************************************************************************************************************************************** -->
-     
     }
     if ($result2->num_rows > 0) {
         while($row2 = $result2->fetch_assoc()) {
             if($row2["facultyEmail"]==$userEmail && $row2["facultyPassword"]==$userPass)
             {
-//****************************************************************************************************************************************************
-//
-//													setting up session variables
-//
-//**************************************************************************************************************************************************** -->
-     
+                //SETTING UP SESSION VALUES FOR FACULTY
                 session_start();
                 $_SESSION["facultyId"]=$row2["facultyId"];
                 $_SESSION["usrnm"]=$row2["facultyName"];
@@ -84,12 +60,7 @@ $check=0;
                 $_SESSION["isAdmin"]=$row2["isAdmin"];
                 $_SESSION["type"]="Faculty";
                 $_SESSION["image"]=$row2["profileImage"];
-                    
-                //$variabl = $row["studentName"];
-                //echo $variabl;
                 $check=1;
-                //$_POST[$variabl];
-                echo "id: " . $row["studentId"]. " - Name: " . $row["studentName"]. " " . $row["studentPassword"]. "<br>";
                 header('Location: '.'home.php');
             }
         }
@@ -98,12 +69,7 @@ $check=0;
         while($row3 = $result3->fetch_assoc()) {
             if($row3["examinerEmail"]==$userEmail && $row3["examinerPassword"]==$userPass)
             {
-//****************************************************************************************************************************************************
-//
-//													setting up session variables
-//
-//**************************************************************************************************************************************************** -->
-     
+                //SETTING UP SESSION VALUES FOR EXTERNAL EXAMINER
                 session_start();
                 $_SESSION["examinerId"]=$row3["examinerId"];
                 $_SESSION["usrnm"]=$row3["examinerName"];
@@ -111,13 +77,7 @@ $check=0;
                 $_SESSION["design"]="External Examiner";
                 $_SESSION["type"]="Examiner";
                 $_SESSION["image"]=$row2["profileImage"];
-                    
-                //$variabl = $row["studentName"];
-                //echo $variabl;
                 $check=1;
-				//echo $row3["examinerName"];
-                //$_POST[$variabl];
-                //echo "id: " . $row["studentId"]. " - Name: " . $row["studentName"]. " " . $row["studentPassword"]. "<br>";
                 header('Location: '.'home.php');
             }
         }
@@ -144,7 +104,7 @@ $check=0;
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="<?php echo $_SERVER['REQUEST_URI']?>"><b>FYP</b> <small>Management System</small></a>
+    <a href="<?php echo siteroot;?>"><img src="./img/fyp_logo_50x50.png" alt="fyp_logo"> <h2>Final Year Project</h2> <p>Management System</p></a>
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">
@@ -171,7 +131,7 @@ $check=0;
       </div>
     </form>
     <br />
-    <a href="password_reset.php">I forgot my password</a><br>
+    <a href="resetPassword.php">I forgot my password</a><br>
 
   </div>
   <!-- /.login-box-body -->

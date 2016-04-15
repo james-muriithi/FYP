@@ -1,6 +1,6 @@
 <?php
-$GLOBALS['title']="FYPMS";
-$GLOBALS['subtitle']="Profile";
+$title="FYPMS";
+$subtitle="Profile";
 require_once("includes/config.php");
 require_once("includes/header.php");
 session_start();

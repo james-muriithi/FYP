@@ -1,6 +1,6 @@
 <?php
-$GLOBALS['title']="FYPMS";
-$GLOBALS['subtitle']="Manage Students";
+$title="FYPMS";
+$subtitle="Upload Deliverables";
 require_once("includes/header.php");
 require_once("includes/config.php");
 require_once("includes/functions.php");
@@ -121,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 ?>
-<link rel="stylesheet" href="plugins/pace/pace.min.css">
+
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -324,7 +324,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <?php
 require_once("includes/required_js.php");
 ?>
-<script src="plugins/pace/pace.min.js"></script>
+
 <script src="plugins/bootstrap-filestyle-1.2.1/bootstrap-filestyle.min.js"></script>
 <script>
     $(":file").filestyle({

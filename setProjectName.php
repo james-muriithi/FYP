@@ -1,6 +1,6 @@
 <?php
-$GLOBALS['title'] = "FYPMS";
-$GLOBALS['subtitle'] = "Set Project Name";
+$title = "FYPMS";
+$subtitle = "Set Project Name";
 require_once("includes/header.php");
 require_once("includes/config.php");
 session_start();

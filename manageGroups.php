@@ -1,6 +1,6 @@
 <?php
-$GLOBALS['title']="FYPMS";
-$GLOBALS['subtitle']="Manage Groups";
+$title="FYPMS";
+$subtitle="Manage Groups";
 require_once("includes/header.php");
 require_once("includes/config.php");
 session_start();

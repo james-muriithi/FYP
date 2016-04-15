@@ -113,45 +113,53 @@ function getStudentData($id) {
 }
 
 
-
+//Function to generate random password
 function random_password( $length = 8 ) {
-    $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()_-=+;:,.?";
+    $chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*";
     $password = substr( str_shuffle( $chars ), 0, $length );
     return $password;
 }
 
+function get_icon($filename){
+    //Work out file extension
+    $file_ext   =   explode('.',$filename);
+    $file_ext   = strtolower(end($file_ext));
 
+    switch($file_ext){
+        //Documents
+        case 'docx':{echo 'fa fa-file-word-o' ; break;}
+        case 'doc':{echo 'fa fa-file-word-o' ; break;}
+        case 'txt':{echo 'fa fa-file-text-o' ; break;}
+        case 'pdf':{echo 'fa fa-file-pdf-o'; break;}
 
-/**
- * Get Filename and return it's icon from Fonts awesome
- *
- * @param String $str String to get an excerpt from
- * @param Integer $startPos Position int string to start excerpt from
- * @param Integer $maxLength Maximum length the excerpt may be
- * @return String excerpt
- */
-function getIcon($filename){
+        //Compressed Files
+        case 'rar':{echo 'fa fa-file-archive-o' ; break;}
+        case 'zip':{echo 'fa fa-file-archive-o' ; break;}
+        case '7zip':{echo 'fa fa-file-archive-o' ; break;}
+        case 'iso':{echo 'fa fa-file-archive-o' ; break;}
 
+        //Image
+        case 'jpg':{echo 'fa fa-file-image-o'; break;}
+        case 'jpeg':{echo 'fa fa-file-image-o'; break;}
+        case 'png':{echo 'fa fa-file-image-o'; break;}
+        case 'gif':{echo 'fa fa-file-image-o'; break;}
 
-    $ext   =   explode('.',$filename);
-    $ext   = strtolower(end($filename));
-    echo $ext;
+        //Powerpoint
+        case 'ppt':{echo 'fa fa-file-powerpoint-o'; break;}
+        case 'pptx':{echo 'fa fa-file-powerpoint-o'; break;}
 
-/*
+        //Excel
+        case 'xlsx':{echo 'fa fa-file-excel-o'; break;}
 
-    switch ($ext) {
-
-        case 'pdf':
-            return " <i class=\"fa fa-file-pdf-o\"></i> ";
-
-        case label2:
-
-        case label3:
-            break;
-        default:
+        //Default
+        default:{echo 'fa fa-file-o'; break;}
     }
-*/
+
+
+
+
 }
+
 
 
 

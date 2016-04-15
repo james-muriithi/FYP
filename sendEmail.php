@@ -1,6 +1,6 @@
 <?php
-$GLOBALS['title'] = "FYPMS";
-$GLOBALS['subtitle'] = "Send Email";
+$title = "FYPMS";
+$subtitle = "Send Email";
 require_once("includes/header.php");
 require_once("includes/config.php");
 session_start();
@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 ?>
-<link rel="stylesheet" href="plugins/pace/pace.min.css">
+
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -144,7 +144,7 @@ require_once("includes/main-footer.php");
 <?php
 require_once("includes/required_js.php");
 ?>
-<script src="plugins/pace/pace.min.js"></script>
+
 <!-- Page Script -->
 <script>
     $(function () {

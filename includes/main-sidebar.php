@@ -97,6 +97,7 @@
                                 class="fa fa-angle-left pull-right"></i></a>
                         <ul class="treeview-menu">
                             <li><a id="setProjectName" href="setProjectName.php"><i class="fa fa-pencil-square-o"></i>Set Project Name</a>
+                            <li><a id="templates" href="projectTemplates.php"><i class="fa fa fa-file"></i>Project Templates</a>
                             <li><a id="uploadDeliverables" href="uploadDeliverables.php"><i class="fa fa-upload"></i>Deliverables</a>
                             </li>
                         </ul>
@@ -125,6 +126,8 @@
                     </a>
                     <ul class="treeview-menu">
                         <li><a href="createBatch.php"><i class="fa fa-plus"></i> <span>Create Batch</span></a></li>
+                        <li><a href="batchTemplates.php"><i class="fa fa-file"></i> <span>Batch Templates</span></a></li>
+                        <li><a href="batchTasks.php"><i class="fa fa-tasks"></i> <span>Batch Tasks</span></a></li>
                         <li><a href="manageBatch.php"><i class="fa fa-minus "></i> <span>Manage Batch</span></a></li>
                         <li><a href="setDeliverables.php"><i class="fa fa-circle-o"></i> <span>Deliverables</span></a>
                         </li>

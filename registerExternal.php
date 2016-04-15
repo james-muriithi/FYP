@@ -5,8 +5,8 @@
 //
 //**************************************************************************************************************************************************** -->
      
-$GLOBALS['title']="FYPMS";
-$GLOBALS['subtitle']="Register External Examiners";
+$title="FYPMS";
+$subtitle="Register External Examiners";
 require_once("includes/header.php");
 require_once("includes/config.php");
 $error="";

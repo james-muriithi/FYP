@@ -1,6 +1,6 @@
 <?php
-$GLOBALS['title']="FYPMS";
-$GLOBALS['subtitle']="Manage Students";
+$title="FYPMS";
+$subtitle="Manage Students";
 require_once("includes/header.php");
 require_once("includes/config.php");
 require('mysql_table.php');
