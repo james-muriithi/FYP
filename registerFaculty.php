@@ -180,7 +180,7 @@ if((isset($_POST['facultyName'])) && (isset($_POST['facultyDesign'])) && (isset(
         <span class="glyphicon glyphicon-phone form-control-feedback"></span>
       </div>
 	  <div class="form-group has-feedback">
-		<input type="number" name="Quota" class="form-control bfh-phone" placeholder="Supervising Quota" required/>
+		<input type="number" name="Quota" class="form-control bfh-phone" placeholder="Supervising Quota" required/> <!-- TODO facultyQuota Limit-->
         <span class="glyphicon glyphicon-shopping-cart form-control-feedback"></span>
 	  </div>
       <div class="form-group has-feedback">

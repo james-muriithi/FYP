@@ -21,6 +21,52 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 //Check if form is submitted by POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+
+
+    if (isset($_POST['btnAddNewTask'])){
+
+        //Getting values from POST
+        $batchId = filter_input(INPUT_POST,'batchId',FILTER_SANITIZE_NUMBER_INT);
+        $taskWeek = filter_input(INPUT_POST,'week',FILTER_SANITIZE_NUMBER_INT);
+        $taskName = filter_input(INPUT_POST,'taskName',FILTER_SANITIZE_SPECIAL_CHARS);
+        $templateId = filter_input(INPUT_POST,'templateId',FILTER_SANITIZE_NUMBER_INT);
+        $hasDeliverable = filter_input(INPUT_POST,'hasDeliverable',FILTER_SANITIZE_NUMBER_INT);
+        $sendToTimeline = filter_input(INPUT_POST,'sendToTimeline',FILTER_SANITIZE_NUMBER_INT);
+        $taskDetail = $_POST['taskDetail'];
+
+
+        $deadlineDate = $_POST['deadlineDate'];
+        $deadlineTime = $_POST['deadlineTime'];
+
+        //Converting deadline to MySql format
+        $deadline = $deadlineDate ." ". $deadlineTime;
+        $deadline = date('Y-m-d H:i:s', strtotime($deadline));
+
+        //Adding record to database
+        $sql = "INSERT INTO batch_tasks (batchId, taskName, taskDetail, taskWeek, taskDeadline, templateId, hasDeliverable) VALUES ('$batchId', '$taskName', '$taskDetail', '$taskWeek', '$deadline', '$templateId', '$hasDeliverable') ";
+
+        if ($conn->query($sql) === TRUE) {
+            if ($sendToTimeline == '1'){
+                $sql = "INSERT INTO timeline_student (title, details, type, batchId) VALUES ('$taskName', '$taskDetail', 'task', '$batchId' )";
+                if ($conn->query($sql) === TRUE) {
+                    header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&status=t');
+                    die;
+                }
+            }
+            header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&status=t');
+            die;
+        } else {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&status=f');
+            die;
+        }
+
+
+
+
+
+
+    }
+
     if (isset($_POST['btnEdit'])){
 
     }
@@ -31,8 +77,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 ?>
 
-<!--Date Picker-->
-<link rel="stylesheet" href="plugins/datepicker/datepicker3.css"/>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
 <div class="wrapper">
@@ -84,10 +128,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     ?>
 
-
-
-
+                        <!--Edit Task-->
                         <?php
+
                         if (isset($_GET['edit'])){
                             $taskId = filter_input(INPUT_GET,'edit',FILTER_SANITIZE_NUMBER_INT);
 
@@ -108,35 +151,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 echo "0 results";
                             }
                             ?>
-
                             <!-- general form elements -->
                             <div class="box no-border">
                                 <div class="box-header with-border">
-                                    <h3 class="box-title">Edit: <?php echo $taskName;?></h3>
+                                    <h3 class="box-title">Title</h3>
                                 </div>
                                 <!-- /.box-header -->
 
                                 <div class="box-body">
-                                    <div class="box-body">
-                                        <div class="form-group">
-                                            <label for="exampleInputEmail1">Email address</label>
-                                            <input type="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputPassword1">Password</label>
-                                            <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
-                                        </div>
-                                        <div class="form-group">
-                                            <label for="exampleInputFile">File input</label>
-                                            <input type="file" id="exampleInputFile">
-
-                                            <p class="help-block">Example block-level help text here.</p>
-                                        </div>
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox"> Check me out
-                                            </label>
-                                        </div>
 
                                 </div>
                                 <!-- /.box-body -->
@@ -152,12 +174,135 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <?php
                         }
 
-                        else{ ?>
+                        else if (isset($_GET['add']) && is_numeric($_GET['add']) && strlen($_GET['add'])>0){ ?>
+                            <!--Add new task-->
+                            <div class="box no-border">
+                                <div class="box-header">
+                                    <h3 class="box-title">
+                                        Add new task --
+                                        <?php
+                                        $batchId = filter_input(INPUT_GET,'add',FILTER_SANITIZE_NUMBER_INT);
+                                        if ($batchId){
+                                            //Get batch Name
+                                            $batchName = $conn->query("SELECT batchName FROM batch WHERE batchId = '$batchId' ")->fetch_object()->batchName;
+                                            $batchStartDate = $conn->query("SELECT startingDate FROM batch WHERE batchId = '$batchId' ")->fetch_object()->startingDate;
+                                            echo "Batch ".$batchName;
+
+                                        }else{
+                                            echo "--";
+                                        }
+                                        ?>
+                                    </h3>
+                                </div>
+                                <!-- /.box-header -->
+                                <form name="addNewTask" id="addNewTask" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="form-horizontal" method="post">
+                                    <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
+                                    <div class="box-body  no-padding">
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label">Select Week:</label>
+
+                                            <div class="col-sm-10">
+                                                <select style="width:200px;"  name="week" id="week" required>
+                                                    <option value=""> -Select Week-</option>
+                                                    <?php
+                                                    for ($i=1 ;$i<=20; $i++){ ?>
+                                                        <option value="<?php echo $i;?>">Week <?php echo $i;?></option>
+                                                        <?php
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label">Task Name:</label>
+
+                                            <div class="col-sm-10">
+                                                <input type="text" style="width:500px;" name="taskName" id="taskName" placeholder="Enter Task Name" required>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label">Task Details:</label>
+
+                                            <div class="col-sm-10">
+                                                <textarea class="textarea" name="taskDetail" id="taskDetail" placeholder="Enter task details" style="width: 90%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label">Set Deadline:</label>
+                                            <div class="col-sm-10">
+                                                <input name="deadlineDate" id="deadlineDate" type=date  >
+                                                <input name="deadlineTime" id="deadlineTime" type=time min=9:00 max=17:00 step=900>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label">Select Template:</label>
+
+                                            <div class="col-sm-10">
+                                                <select style="width:400px;"  name="templateId" id="templateId">
+                                                    <option value=""> -Select Template-</option>
+                                                    <?php
+                                                    $sql = "SELECT * FROM batch_templates WHERE batchId='$batchId' ";
+                                                    $result = $conn->query($sql);
+
+                                                    if ($result->num_rows > 0) {
+                                                        // output data of each row
+                                                        while($row = $result->fetch_assoc()) { ?>
+                                                            <option value="<?php echo $row['templateId']?>"><?php echo $row['templateName']?></option>
+                                                            <?php
+                                                        }
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" name="hasDeliverable" value="1"> This task has deliverable
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <div class="col-sm-offset-2 col-sm-10">
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox" name="sendToTimeline" id="sendToTimeline" value="1" checked> Send Notification to timeline
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+                                    </div>
+                                </form>
+                                <!-- /.box-body -->
+                                <div class="box-footer">
+                                    <button type="submit" name="btnAddNewTask" id="btnAddNewTask" form="addNewTask" class="btn btn-primary btn-sm pull-right">Submit</button>
+                                    <a href="<?php echo $_SERVER['PHP_SELF'];?>" class="btn btn-default btn-sm"">Back</a>
+                                </div>
+                            </div>
+                            <!-- /.box -->
 
 
                         <?php
                         }
                         ?>
+
+
+
+
+
                         <div class="box no-border">
                             <div class="box-header">
                                 <h3 class="box-title">
@@ -203,7 +348,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body  no-padding">
-                                <table id="meetingLogs" class="table table-hover">
+                                <table id="batchTasks" class="table table-hover">
                                     <thead>
                                     <tr>
                                         <th style="width:10px;">Week</th>
@@ -234,7 +379,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 }
                                                 ?>
                                             </td>
-                                            <td><?php echo time2str($row['taskDeadline']);?></td>
+                                            <td><?php echo $row['taskDeadline'];?></td>
                                             <td><?php echo $row['templateId'];?></td>
                                             <td>
                                                 <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['taskId']; ?>"  class="btn  btn-primary btn-xs">Edit</a>
@@ -247,7 +392,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     ?>
                                 </table>
                                 <div class="box-footer  pull-right">
-                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?add'; ?>" class="btn  btn-primary  ">Add New Log</a>
+                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?add='.$batchId; ?>" class="btn  btn-primary  ">Add New Task</a>
                                 </div>
                             </div>
                             <!-- /.box-body -->
@@ -256,6 +401,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
                 </div>
+
             </div>
         </section>
     </div>
@@ -269,17 +415,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 require_once("includes/required_js.php");
 ?>
 
-<!--Datepicker-->
-<script src="plugins/datepicker/bootstrap-datepicker.js"></script>
-<script>
+<script type="text/javascript">
+
+    // A $( document ).ready() block.
+    $( document ).ready(function() {
 
 
 
-
-    $('.datepicker').datepicker({
-        format: 'dd/mm/yyyy',
     });
-
 
 </script>
 </body>
