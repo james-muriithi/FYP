@@ -15,6 +15,52 @@ if(!isset($_SESSION["isCord"]))
 //Check if form is submitted by GET
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
+    //Function for delete task
+    if (isset($_GET['delete']) && isset($_GET['batchId'])){
+
+        //Validations
+        if (is_numeric($_GET['delete']) && strlen($_GET['delete'])>0 && is_numeric($_GET['batchId']) && strlen($_GET['batchId'])>0){
+            $deleteId = filter_input(INPUT_GET,'delete',FILTER_SANITIZE_NUMBER_INT);
+            $batchId =  filter_input(INPUT_GET,'batchId',FILTER_SANITIZE_NUMBER_INT);
+
+            $taskId = '';
+
+            //Check if this record belongs to batch
+            $sql = "SELECT taskId FROM batch_tasks WHERE taskId='$deleteId' AND batchId = '$batchId' LIMIT 1";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+
+                while($row = $result->fetch_assoc()) {
+                    $taskId = $row['taskId'];
+                }
+
+                // Set autocommit to off
+                mysqli_autocommit($conn, FALSE);
+                // sql to delete a record
+                $sql = "DELETE FROM batch_tasks WHERE taskId='$deleteId' AND batchId= '$batchId' ";
+
+                if ($conn->query($sql) === TRUE) {
+                   //Also delete from timeline
+                    // sql to delete a record
+                    $sql = "DELETE FROM timeline_student WHERE taskId='$taskId' AND batchId='$batchId' ";
+
+                    if ($conn->query($sql) === TRUE) {
+                        mysqli_commit($conn);
+                        header('Location:' . $_SERVER['PHP_SELF'] . '?batchId='.$batchId.'&status=t');
+                        die;
+                    } else {
+                        header('Location:' . $_SERVER['PHP_SELF'] . '?batchId='.$batchId.'&status=f');
+                        die;
+                    }
+                }
+
+            }
+        }
+
+
+    }
+
 
 }
 
@@ -46,17 +92,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sql = "INSERT INTO batch_tasks (batchId, taskName, taskDetail, taskWeek, taskDeadline, templateId, hasDeliverable) VALUES ('$batchId', '$taskName', '$taskDetail', '$taskWeek', '$deadline', '$templateId', '$hasDeliverable') ";
 
         if ($conn->query($sql) === TRUE) {
+
             if ($sendToTimeline == '1'){
-                $sql = "INSERT INTO timeline_student (title, details, type, batchId) VALUES ('$taskName', '$taskDetail', 'task', '$batchId' )";
+                $last_id = $conn->insert_id;
+                $sql = "INSERT INTO timeline_student (title, details, type, taskId, batchId) VALUES ('$taskName', '$taskDetail', 'task', '$last_id', '$batchId' )";
                 if ($conn->query($sql) === TRUE) {
-                    header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&status=t');
+                    header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId.'&status=t');
                     die;
                 }
             }
-            header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&status=t');
+            header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId.'&status=f');
             die;
         } else {
-            header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&status=f');
+            header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId.'&status=f');
             die;
         }
 
@@ -128,53 +176,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     ?>
 
-                        <!--Edit Task-->
-                        <?php
 
-                        if (isset($_GET['edit'])){
-                            $taskId = filter_input(INPUT_GET,'edit',FILTER_SANITIZE_NUMBER_INT);
-
-                            $sql = "SELECT * FROM batch_tasks WHERE taskId='$taskId' LIMIT 1";
-                            $result = $conn->query($sql);
-
-                            if ($result->num_rows > 0) {
-                                // output data of each row
-                                while($row = $result->fetch_assoc()) {
-                                    $taskWeek = $row['taskWeek'];
-                                    $taskName = $row['taskName'];
-                                    $taskDetail = $row['taskDetail'];
-                                    $taskDeadline = $row['$taskDeadline'];
-                                    $template = $row['templateId'];
-                                    $hasDeliverable= $row['hasDeliverable'];
-                                }
-                            } else {
-                                echo "0 results";
-                            }
-                            ?>
-                            <!-- general form elements -->
-                            <div class="box no-border">
-                                <div class="box-header with-border">
-                                    <h3 class="box-title">Title</h3>
-                                </div>
-                                <!-- /.box-header -->
-
-                                <div class="box-body">
-
-                                </div>
-                                <!-- /.box-body -->
-
-                                <div class="box-footer">
-
-                                </div>
-
-                            </div>
-                            <!-- /.box -->
 
 
                         <?php
-                        }
 
-                        else if (isset($_GET['add']) && is_numeric($_GET['add']) && strlen($_GET['add'])>0){ ?>
+
+                         if (isset($_GET['add']) && is_numeric($_GET['add']) && strlen($_GET['add'])>0){ ?>
                             <!--Add new task-->
                             <div class="box no-border">
                                 <div class="box-header">
@@ -383,8 +391,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <td><?php echo $row['taskDeadline'];?></td>
                                             <td><?php echo $row['templateId'];?></td>
                                             <td>
-                                                <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['taskId']; ?>"  class="btn  btn-primary btn-xs">Edit</a>
-                                                <a href="<?php echo $_SERVER['PHP_SELF'] . '?delete=' . $row['taskId']; ?>" onclick="return confirm('Are you sure?')" class="btn  btn-danger btn-xs">Delete</a>
+
+                                                <a href="<?php echo $_SERVER['PHP_SELF'] . '?delete=' . $row['taskId'].'&batchId='.$batchId; ?>" onclick="return confirm('This will also delete record from timeline,Are you sure you want to continue?')" class="btn  btn-danger btn-xs">Delete</a>
 
                                             </td>
                                         </tr>

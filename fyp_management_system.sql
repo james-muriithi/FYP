@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 16, 2016 at 09:04 AM
+-- Generation Time: Apr 16, 2016 at 06:49 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -61,13 +61,6 @@ CREATE TABLE `batch_tasks` (
   `hasDeliverable` tinyint(4) DEFAULT '0' COMMENT '1=has deliverable',
   `createdDtm` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `batch_tasks`
---
-
-INSERT INTO `batch_tasks` (`taskId`, `batchId`, `taskName`, `taskDetail`, `taskWeek`, `taskDeadline`, `templateId`, `hasDeliverable`, `createdDtm`) VALUES
-(14, 12, 'Deliverable 01: Project Team List', '<p>\r\n\r\n</p><ul><li>Use â€œTemplate-01â€ to fill in the details of project team members and submit hard copy to Project Coordinator .</li><li>Due Date: Monday, 7th September 2051 (Before 3:30pm)</li></ul>\r\n\r\n<br><p></p>', 1, '2016-04-17 01:00:00', 13, 1, '2016-04-16 12:02:06');
 
 -- --------------------------------------------------------
 
@@ -434,16 +427,10 @@ CREATE TABLE `timeline_student` (
   `title` text,
   `details` text,
   `type` varchar(50) DEFAULT NULL,
+  `taskId` int(11) DEFAULT NULL,
   `batchId` text,
   `createdDtm` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Timeline for students';
-
---
--- Dumping data for table `timeline_student`
---
-
-INSERT INTO `timeline_student` (`id`, `title`, `details`, `type`, `batchId`, `createdDtm`) VALUES
-(3, 'Deliverable 01: Project Team List', '<p>\r\n\r\n</p><ul><li>Use â€œTemplate-01â€ to fill in the details of project team members and submit hard copy to Project Coordinator .</li><li>Due Date: Monday, 7th September 2051 (Before 3:30pm)</li></ul>\r\n\r\n<br><p></p>', 'task', '12', '2016-04-16 12:02:07');
 
 -- --------------------------------------------------------
 
@@ -599,7 +586,7 @@ ALTER TABLE `batch`
 -- AUTO_INCREMENT for table `batch_tasks`
 --
 ALTER TABLE `batch_tasks`
-  MODIFY `taskId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `taskId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 --
 -- AUTO_INCREMENT for table `batch_templates`
 --
@@ -679,7 +666,7 @@ ALTER TABLE `timeline_faculty`
 -- AUTO_INCREMENT for table `timeline_student`
 --
 ALTER TABLE `timeline_student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `work_load`
 --
