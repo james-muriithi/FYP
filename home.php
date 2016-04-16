@@ -48,7 +48,7 @@ if(isset($_POST['signout'])) { // logout button
       <div class="row">
         <div class="col-md-12">
             <?php
-            if (isset($_SESSION['userCMS'])){
+            if (isset($_SESSION['usrCMS'])){
                 require_once ("studentTimeline.php");
             }
             if (isset($_SESSION['facultyId'])){

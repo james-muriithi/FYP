@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 15, 2016 at 10:05 PM
+-- Generation Time: Apr 16, 2016 at 09:04 AM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -67,7 +67,7 @@ CREATE TABLE `batch_tasks` (
 --
 
 INSERT INTO `batch_tasks` (`taskId`, `batchId`, `taskName`, `taskDetail`, `taskWeek`, `taskDeadline`, `templateId`, `hasDeliverable`, `createdDtm`) VALUES
-(13, 0, 'Task 1', 'Task 1', 1, '2016-04-11 01:00:00', 0, 1, '2016-04-16 00:58:04');
+(14, 12, 'Deliverable 01: Project Team List', '<p>\r\n\r\n</p><ul><li>Use â€œTemplate-01â€ to fill in the details of project team members and submit hard copy to Project Coordinator .</li><li>Due Date: Monday, 7th September 2051 (Before 3:30pm)</li></ul>\r\n\r\n<br><p></p>', 1, '2016-04-17 01:00:00', 13, 1, '2016-04-16 12:02:06');
 
 -- --------------------------------------------------------
 
@@ -443,8 +443,7 @@ CREATE TABLE `timeline_student` (
 --
 
 INSERT INTO `timeline_student` (`id`, `title`, `details`, `type`, `batchId`, `createdDtm`) VALUES
-(1, 'Task 1', 'Task 1', 'task', '', '2016-04-16 00:58:04'),
-(2, 'Orientation Presentation', '1', 'task', '4', '2016-04-16 01:05:32');
+(3, 'Deliverable 01: Project Team List', '<p>\r\n\r\n</p><ul><li>Use â€œTemplate-01â€ to fill in the details of project team members and submit hard copy to Project Coordinator .</li><li>Due Date: Monday, 7th September 2051 (Before 3:30pm)</li></ul>\r\n\r\n<br><p></p>', 'task', '12', '2016-04-16 12:02:07');
 
 -- --------------------------------------------------------
 
@@ -680,7 +679,7 @@ ALTER TABLE `timeline_faculty`
 -- AUTO_INCREMENT for table `timeline_student`
 --
 ALTER TABLE `timeline_student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `work_load`
 --

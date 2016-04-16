@@ -322,6 +322,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                                 <div class="box-tools">
                                     <form id="selectBatch"  id="selectBatch" method="get" name="selectGroup">
+
                                         <div class="input-group input-group-sm" style="width: 250px;">
 
                                             <select name="batchId"  id="batchId" class="form-control" required>
@@ -392,7 +393,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     ?>
                                 </table>
                                 <div class="box-footer  pull-right">
-                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?add='.$batchId; ?>" class="btn  btn-primary  ">Add New Task</a>
+                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId; ?>" class="btn  btn-primary  ">Add New Task</a>
                                 </div>
                             </div>
                             <!-- /.box-body -->
@@ -420,7 +421,7 @@ require_once("includes/required_js.php");
     // A $( document ).ready() block.
     $( document ).ready(function() {
 
-
+        $(".textarea").wysihtml5();
 
     });
 
