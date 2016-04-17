@@ -12,11 +12,48 @@ if(!isset($_SESSION["usrCMS"]))
     header('Location: '.'index.php');
 }
 $check = true; //
+
 $groupId = $_SESSION['GroupID'];
 $batchId = $_SESSION['BatchID'];
+$studentId = $_SESSION['usrId'];
 
 //Check if form is submitted by GET
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+    
+    if (isset($_GET['upload']) && is_numeric($_GET['upload']) && strlen($_GET['upload'])){
+        $uploadId = filter_input(INPUT_GET,'upload',FILTER_SANITIZE_NUMBER_INT);
+        $batchId = $_SESSION['BatchID'];
+        //Check if already submitted
+        $sql = "SELECT * FROM group_uploads WHERE  groupId='$groupId' AND taskId='$uploadId' LIMIT 1";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while($row = $result->fetch_assoc()) {
+                $uploadedBy = $row['uploadedBy'];
+                $uploadDtm = $row['uploadedDtm'];
+            }
+
+            $check = false;
+
+            $sql = "SELECT studentCMS,studentName FROM student WHERE  studentId = '$uploadedBy' LIMIT 1";
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+                // output data of each row
+                while($row = $result->fetch_assoc()) {
+                    $cms = $row['studentCMS'];
+                    $name = $row['studentName'];
+
+                }
+            }
+        }
+
+
+    }
+    
+    
+
 
 
 
@@ -27,6 +64,82 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
+    $groupName = 'Group '.$groupId;
+
+    $taskId = filter_input(INPUT_POST,'taskId',FILTER_SANITIZE_NUMBER_INT);
+
+    //Getting Batch Data
+    $batchId = $_SESSION["BatchID"];
+    $batchName = $conn->query("SELECT batchName FROM batch WHERE batch.batchId = '$batchId' ")->fetch_object()->batchName;
+
+    //Function to upload task
+    if (isset($_FILES['uploadTask'])){
+
+        $file=$_FILES['uploadTask'];
+
+        //File properties
+        $file_name  =   $file['name'];
+        $file_tmp   =   $file['tmp_name'];
+        $file_size  =   $file['size'];
+        $file_error =   $file['error'];
+
+        //Work out file extension
+        $file_ext   =   explode('.',$file_name);
+        $file_ext   = strtolower(end($file_ext));
+
+        $allowed    = array('jpg','jpeg','pdf','doc','docx','zip','7zip','rar','ppt','pptx');
+
+        if(in_array($file_ext,$allowed)){
+            if($file_error === 0){
+                if($file_size <= 10485760){ //10Mib
+                    $file_name_new  = 'group_'.$groupId.'_deliverable_'.$taskId.'.'.$file_ext;
+
+                    //Make a directory with group name
+                    if (!file_exists('uploads/'.$batchName.'/'.$groupName.'/')) {
+                        mkdir('uploads/'.$batchName.'/'.$groupName.'/', 0777, true);
+                    }
+                    $file_destination   ='uploads/'.$batchName.'/'.$groupName.'/'.$file_name_new;
+                    /* Example tree Structure
+                     * └───Spring 2016
+                     *       └───Group 9
+                     *          └───group_9_deliverable_2
+                     */
+
+
+                }else {
+                    //ERROR! filesize greater
+                    header('Location:' . $_SERVER['PHP_SELF'] . '?status=s');
+                }
+                if(move_uploaded_file($file_tmp, $file_destination)){
+                    //echo $file_destination;
+
+                    //FILE UPLOADED SUCCESSFULLY
+
+                    $sql = "INSERT INTO group_uploads (groupId, taskId, uploadFile, uploadedBy)VALUES ('$groupId', '$taskId', '$file_name_new', '$studentId')";
+
+                    if ($conn->query($sql) === TRUE) {
+                        header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');
+                    } else {
+                        header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
+                    }
+
+
+                    $stmt->close();
+
+                }
+                else {
+                    header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
+                }
+            }
+        }else {
+            //Not allowed extension
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=e');
+        }
+
+
+
+
+    }
 
 
 
@@ -87,6 +200,85 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     }
 
                     ?>
+
+                    <?php if (isset($_GET['upload']) && is_numeric($_GET['upload']) && strlen($_GET['upload']) && $check == true){
+                        $uploadId = filter_input(INPUT_GET,'upload',FILTER_SANITIZE_NUMBER_INT);
+                        $batchId = $_SESSION['BatchID'];
+
+                        //Verification
+                        $sql = "SELECT * FROM batch_tasks WHERE  batchId='$batchId' AND taskId='$uploadId' LIMIT 1";
+                        $result = $conn->query($sql);
+
+                        if ($result->num_rows > 0) {
+                            // output data of each row
+                            while($row = $result->fetch_assoc()) {
+                                $taskName = $row['taskName'];
+                                $deadline = $row['taskDeadline'];
+                            }
+                        }?>
+                        <!-- general form elements -->
+                        <div class="box no-border">
+                            <div class="box-header with-border">
+                                <h3 class="box-title"><i class="fa fa-upload"></i> Upload <?php echo $taskName;?></h3>
+                            </div>
+                            <!-- /.box-header -->
+
+                            <div class="box-body ">
+                                <div class="form-group">
+                                    <form action="<?php echo $_SERVER['PHP_SELF'] ?>"  method="post" enctype="multipart/form-data">
+                                        <div class="col-sm-10">
+                                            <input type="file" name="uploadTask" class="filestyle " data-size="sm" accept=".doc ,.docx, .pdf, .rar, .zip, .jpg, .jpeg, .ppt, .pptx" required />
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <input type="submit" value="Upload" class="btn btn-primary btn-sm  "/>
+                                        </div>
+                                        <!--HIDDEN INPUT-->
+                                        <input type="hidden" name="taskId" value="<?php echo $_GET['upload']?>">
+                                    </form>
+                                </div>
+                                <br/>
+                                <p class="text-muted text-center">File size limit :10 MiB</p>
+                                <p class="text-muted text-center">Allowed File types : docx | pdf | zip | rar | jpeg | pptx   </p>
+
+
+
+
+                            </div>
+                            <!-- /.box-body -->
+                            <div class="box-footer">
+                                <a href="<?php echo $_SERVER['PHP_SELF'];?>" class="btn btn-default btn-sm">Cancel</a>
+
+                            </div>
+
+                        </div>
+
+                       
+
+
+                        <?php
+                        }else if ($check == false){ ?>
+                        <!-- general form elements -->
+                        <div class="box no-border">
+
+
+                            <div class="box-body">
+                                <br/>
+                                <p class="">Deliverable is already uploaded by  <a href="studentProfile.php?id=<?php echo $studentId;?>"><?php echo $name.' ['.$cms.'] ';?></a> </p>
+                                <p class="text-muted"><i class="fa fa-clock-o"></i><?php echo " ".time2str($uploadDtm);?></p>
+
+                            </div>
+                            <!-- /.box-body -->
+
+
+
+                        </div>
+                        <!-- /.box -->
+                    <?php
+                    }?>
+
+
+
+
 
                     <?php if (isset($_GET['details']) && is_numeric($_GET['details']) && strlen($_GET['details'])>0){
                         $detailsId = filter_input(INPUT_GET,'details',FILTER_SANITIZE_NUMBER_INT);
@@ -292,17 +484,9 @@ require_once("includes/required_js.php");
 ?>
 
 <script src="plugins/bootstrap-filestyle-1.2.1/bootstrap-filestyle.min.js"></script>
-
 <script type="text/javascript">
     $('#myModal').modal('show');
-
-
-
-</script>
-
-
-
-<script>
+    
     $(":file").filestyle({
 
         size:   sm

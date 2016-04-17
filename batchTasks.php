@@ -85,9 +85,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $deadlineDate = $_POST['deadlineDate'];
         $deadlineTime = $_POST['deadlineTime'];
 
-        //Converting deadline to MySql format
-        $deadline = $deadlineDate ." ". $deadlineTime;
-        $deadline = date('Y-m-d H:i:s', strtotime($deadline));
+        if ($deadlineDate!="" OR $deadlineTime!=""){
+            //Converting deadline to MySql format
+            $deadline = $deadlineDate ." ". $deadlineTime;
+            $deadline = date('Y-m-d H:i:s', strtotime($deadline));
+        }
+        else{
+            $deadline = null;
+        }
+
 
 
         // Set autocommit to off
@@ -112,10 +118,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $stmt->execute();
                 // Commit transaction
                 mysqli_commit($conn);
+                $stmt->close();
+                $conn->close();
                 header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId.'&status=t');die;
             }
             // Commit transaction
             mysqli_commit($conn);
+            $stmt->close();
+            $conn->close();
+            header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId.'&status=t');die;
         }
         else{
             //printf("Error: %s.\n", $stmt->error);exit;
@@ -125,8 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 
-        $stmt->close();
-        $conn->close();
+
 
 
 

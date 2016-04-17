@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 17, 2016 at 09:33 AM
+-- Generation Time: Apr 17, 2016 at 12:53 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -258,6 +258,28 @@ CREATE TABLE `group_requests` (
   `studentId` int(255) NOT NULL,
   `groupId` int(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `group_uploads`
+--
+
+CREATE TABLE `group_uploads` (
+  `id` int(11) NOT NULL,
+  `groupId` int(11) NOT NULL,
+  `taskId` int(11) NOT NULL,
+  `uploadFile` varchar(50) NOT NULL,
+  `uploadedBy` int(11) NOT NULL COMMENT 'userId of uploader',
+  `uploadedDtm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `group_uploads`
+--
+
+INSERT INTO `group_uploads` (`id`, `groupId`, `taskId`, `uploadFile`, `uploadedBy`, `uploadedDtm`) VALUES
+(3, 9, 19, 'group_9_deliverable_19.doc', 15, '2016-04-17 15:49:28');
 
 -- --------------------------------------------------------
 
@@ -549,6 +571,12 @@ ALTER TABLE `group_requests`
   ADD PRIMARY KEY (`requestId`);
 
 --
+-- Indexes for table `group_uploads`
+--
+ALTER TABLE `group_uploads`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `meeting_logs`
 --
 ALTER TABLE `meeting_logs`
@@ -609,7 +637,7 @@ ALTER TABLE `batch`
 -- AUTO_INCREMENT for table `batch_tasks`
 --
 ALTER TABLE `batch_tasks`
-  MODIFY `taskId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `taskId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 --
 -- AUTO_INCREMENT for table `batch_templates`
 --
@@ -656,6 +684,11 @@ ALTER TABLE `group_deliverables`
 ALTER TABLE `group_requests`
   MODIFY `requestId` int(255) NOT NULL AUTO_INCREMENT;
 --
+-- AUTO_INCREMENT for table `group_uploads`
+--
+ALTER TABLE `group_uploads`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+--
 -- AUTO_INCREMENT for table `meeting_logs`
 --
 ALTER TABLE `meeting_logs`
@@ -689,7 +722,7 @@ ALTER TABLE `timeline_faculty`
 -- AUTO_INCREMENT for table `timeline_student`
 --
 ALTER TABLE `timeline_student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT for table `work_load`
 --
