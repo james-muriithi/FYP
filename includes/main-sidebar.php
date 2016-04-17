@@ -103,13 +103,25 @@
                         </ul>
                     </li>
 
+                    <li>
+                        <a href="studentTasks.php">
+                            <i class="fa fa-tasks"></i><span>Tasks</span>
+                        </a>
+                    </li>
+
+                    <li>
+                        <a href="groupDetails.php">
+                            <i class="fa fa-users"></i><span>Group Details</span>
+                        </a>
+                    </li>
+
                     <?php
                 } ?>
 
 
             <?php } ?>
 
-            <!-- check if coordinator logged in-->
+
             <?php if ($_SESSION["type"] === "Faculty" AND $_SESSION["isCord"]==1)//if coordinator
             {
                             /****************************************
@@ -224,20 +236,9 @@
             } ?>
 
 
-            <li>
-                <a href="#">
-                    <i class="fa fa-bell-o"></i> <span>Notifications</span>
-                </a>
-            </li>
-
-            <li>
-                <a href="#">
-                    <i class="fa fa-calendar"></i> <span>Calendar</span>
-                </a>
-            </li>
 
             <li><a href="#"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
-            <li><a href="#"><i class="fa fa-question"></i> <span>Help</span></a></li>
+
         </ul>
     </section>
     <!-- /.sidebar -->

@@ -71,12 +71,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (isset($_POST['btnAddNewTask'])){
 
-        //Getting values from POST
+        //Getting values from POST and Sanitizing
         $batchId = filter_input(INPUT_POST,'batchId',FILTER_SANITIZE_NUMBER_INT);
         $taskWeek = filter_input(INPUT_POST,'week',FILTER_SANITIZE_NUMBER_INT);
+        $sdpPart = filter_input(INPUT_POST,'sdpPart',FILTER_SANITIZE_NUMBER_INT);
         $taskName = filter_input(INPUT_POST,'taskName',FILTER_SANITIZE_SPECIAL_CHARS);
-        $templateId = filter_input(INPUT_POST,'templateId',FILTER_SANITIZE_NUMBER_INT);
-        $hasDeliverable = filter_input(INPUT_POST,'hasDeliverable',FILTER_SANITIZE_NUMBER_INT);
+        $templateId = filter_input(INPUT_POST,'templateId',FILTER_SANITIZE_NUMBER_INT); if($templateId == ""){$templateId=null;};
+        $hasDeliverable = filter_input(INPUT_POST,'hasDeliverable',FILTER_SANITIZE_NUMBER_INT);if($hasDeliverable == ""){$hasDeliverable=0;};
         $sendToTimeline = filter_input(INPUT_POST,'sendToTimeline',FILTER_SANITIZE_NUMBER_INT);
         $taskDetail = $_POST['taskDetail'];
 
@@ -88,29 +89,70 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $deadline = $deadlineDate ." ". $deadlineTime;
         $deadline = date('Y-m-d H:i:s', strtotime($deadline));
 
-        //Adding record to database
-        $sql = "INSERT INTO batch_tasks (batchId, taskName, taskDetail, taskWeek, taskDeadline, templateId, hasDeliverable) VALUES ('$batchId', '$taskName', '$taskDetail', '$taskWeek', '$deadline', '$templateId', '$hasDeliverable') ";
 
-        if ($conn->query($sql) === TRUE) {
+        // Set autocommit to off
+        mysqli_autocommit($conn, FALSE);
+
+        // prepare and bind
+        $stmt = $conn->prepare("INSERT INTO batch_tasks (batchId, taskName, taskDetail, taskWeek, taskDeadline, templateId, hasDeliverable, sdpPart) VALUES (?,?,?,?,?,?,?,?)");
+        $stmt->bind_param("issisiii", $batchId, $taskName, $taskDetail, $taskWeek,$deadline,$templateId,$hasDeliverable,$sdpPart);
+
+        $stmt->execute();
+        if ($stmt->affected_rows > 0) {
 
             if ($sendToTimeline == '1'){
-                $last_id = $conn->insert_id;
-                $sql = "INSERT INTO timeline_student (title, details, type, taskId, batchId) VALUES ('$taskName', '$taskDetail', 'task', '$last_id', '$batchId' )";
-                if ($conn->query($sql) === TRUE) {
-                    header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId.'&status=t');
-                    die;
-                }
+                //Get Las insert id
+                $last_id = $stmt->insert_id;
+
+
+                //Also send to timeline
+                $type = 'task';
+                $stmt = $conn->prepare("INSERT INTO timeline_student (title, details, type, taskId, batchId, sdpPart) VALUES (?,?,?,?,?,?) ");
+                $stmt->bind_param("sssiii", $taskName,$taskDetail,$type,$last_id,$batchId,$sdpPart);
+                $stmt->execute();
+                // Commit transaction
+                mysqli_commit($conn);
+                header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId.'&status=t');die;
             }
-            header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId.'&status=f');
-            die;
-        } else {
-            header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId.'&status=f');
-            die;
+            // Commit transaction
+            mysqli_commit($conn);
+        }
+        else{
+            //printf("Error: %s.\n", $stmt->error);exit;
+            header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId.'&status=f');die;
         }
 
 
 
 
+        $stmt->close();
+        $conn->close();
+
+
+
+
+
+/*
+        //Adding record to database
+        $sql = "INSERT INTO batch_tasks (batchId, taskName, taskDetail, taskWeek, taskDeadline, templateId, hasDeliverable, sdpPart) VALUES ('$batchId', '$taskName', '$taskDetail', '$taskWeek', '$deadline', '$templateId', '$hasDeliverable', '$sdpPart') ";
+
+        if ($conn->query($sql) === TRUE) {
+
+            if ($sendToTimeline == '1'){
+                $last_id = $conn->insert_id;
+                $sql = "INSERT INTO timeline_student (title, details, type, taskId, batchId, sdpPart) VALUES ('$taskName', '$taskDetail', 'task', '$last_id', '$batchId', '$sdpPart' )";
+                if ($conn->query($sql) === TRUE) {
+                    header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId.'&status=t');
+                    die;
+                }else{echo "Error: " . $sql . "<br>" . $conn->error;}
+            }
+            header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId.'&status=f');
+            die;
+        } else {
+            echo "Error: " . $sql . "<br>" . $conn->error;exit;
+            header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId.'&status=f');
+            die;
+        }*/
 
 
     }
@@ -224,6 +266,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         </div>
 
                                         <div class="form-group">
+                                            <label  class="col-sm-2 control-label">Select SDP Part:</label>
+
+                                            <div class="col-sm-10">
+                                                <select style="width:200px;"  name="sdpPart" id="sdpPart" required>
+                                                    <option value=""> -Select SDP Part-</option>
+                                                    <option value="1"> SDP Part - 1</option>
+                                                    <option value="2"> SDP Part - 2</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
                                             <label  class="col-sm-2 control-label">Task Name:</label>
 
                                             <div class="col-sm-10">
@@ -243,7 +297,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <label  class="col-sm-2 control-label">Set Deadline:</label>
                                             <div class="col-sm-10">
                                                 <input name="deadlineDate" id="deadlineDate" type=date  >
-                                                <input name="deadlineTime" id="deadlineTime" type=time min=9:00 max=17:00 step=900>
+                                                <input name="deadlineTime" id="deadlineTime" type=time >
                                             </div>
                                         </div>
 
@@ -329,7 +383,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </h3>
 
                                 <div class="box-tools">
-                                    <form id="selectBatch"  id="selectBatch" method="get" name="selectGroup">
+                                    <form name="selectBatch"  id="selectBatch" method="get" name="selectGroup">
 
                                         <div class="input-group input-group-sm" style="width: 250px;">
 
@@ -426,10 +480,15 @@ require_once("includes/required_js.php");
 
 <script type="text/javascript">
 
+
+
     // A $( document ).ready() block.
     $( document ).ready(function() {
 
         $(".textarea").wysihtml5();
+
+        //$("#selectBatch").submit()
+
 
     });
 
