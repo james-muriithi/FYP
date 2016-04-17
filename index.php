@@ -55,6 +55,8 @@ $check=0;
                 session_start();
                 $_SESSION["facultyId"]=$row2["facultyId"];
                 $_SESSION["usrnm"]=$row2["facultyName"];
+                $_SESSION["email"]=$row2["facultyEmail"];
+                $_SESSION["contact"]=$row2["facultyPhoneNo"];
                 $_SESSION["design"]=$row2["designation"];
                 $_SESSION["isCord"]=$row2["isCoordinator"];
                 $_SESSION["isAdmin"]=$row2["isAdmin"];

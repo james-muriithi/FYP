@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 17, 2016 at 12:53 PM
+-- Generation Time: Apr 17, 2016 at 04:12 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -167,22 +167,24 @@ INSERT INTO `external_examiner` (`examinerId`, `examinerName`, `examinerPhone`, 
 
 CREATE TABLE `faculty` (
   `facultyId` int(255) NOT NULL,
-  `designation` varchar(255) NOT NULL,
   `facultyName` varchar(255) NOT NULL,
+  `designation` varchar(255) NOT NULL,
   `facultyPhoneNo` varchar(50) NOT NULL,
   `facultyEmail` varchar(255) NOT NULL,
+  `facultyImage` varchar(255) DEFAULT NULL,
   `facultyPassword` varchar(255) NOT NULL,
   `isAdmin` tinyint(1) NOT NULL,
-  `isCoordinator` tinyint(1) NOT NULL
+  `isCoordinator` tinyint(1) NOT NULL,
+  `createdDtm` datetime DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Faculty Details';
 
 --
 -- Dumping data for table `faculty`
 --
 
-INSERT INTO `faculty` (`facultyId`, `designation`, `facultyName`, `facultyPhoneNo`, `facultyEmail`, `facultyPassword`, `isAdmin`, `isCoordinator`) VALUES
-(7, 'Assocaite Professor', 'Saud Khan', '3345123456', 'saudkhan@riu.edu.pk', '123', 1, 1),
-(13, 'Lecturer', 'Osama Raza', '123123', 'osama@riu.edu.pk', '123', 0, 0);
+INSERT INTO `faculty` (`facultyId`, `facultyName`, `designation`, `facultyPhoneNo`, `facultyEmail`, `facultyImage`, `facultyPassword`, `isAdmin`, `isCoordinator`, `createdDtm`) VALUES
+(7, 'Saud Khan', 'Assocaite Professor', '3345123456', 'saudkhan@riu.edu.pk', NULL, '123', 1, 1, NULL),
+(13, 'Osama Raza', 'Lecturer', '111111', 'osama@riu.edu.pk', '57138d311521b4.60190644.jpg', '123', 0, 0, NULL);
 
 -- --------------------------------------------------------
 

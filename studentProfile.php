@@ -146,8 +146,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['btnEditProf']) AND $_POST['phoneNumber'] != ""){
         
-        $studentId = $_SERVER['usrId'];
-        $phoneNum = filter_input(INPUT_POST,'phoneNumber',FILTER_SANITIZE_NUMBER_INT);
+        $studentId = $_SESSION['usrId'];
+        $phoneNum = $_POST['phoneNumber'];
         
         $sql = "UPDATE student SET studentPhoneNo='$phoneNum' WHERE studentId='$studentId' ";
 
