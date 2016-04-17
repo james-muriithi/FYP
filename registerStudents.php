@@ -7,7 +7,7 @@ require("libs/sendgrid-php/sendgrid-php.php");
 require_once("includes/mail-tempelates.php");
 require_once("includes/functions.php");
 session_start();
-if (!isset($_SESSION["isAdmin"])) {
+if($_SESSION['isCord'] != 1){
     header('Location: ' . 'index.php');
 }
 if ((isset($_POST['studentName'])) && (isset($_POST['studentCMS'])) && (isset($_POST['studentEmail']))) {
@@ -159,7 +159,7 @@ if ((isset($_POST['studentName'])) && (isset($_POST['studentCMS'])) && (isset($_
                                 <span class="glyphicon glyphicon-phone form-control-feedback"></span>
                             </div>
                             <div class="form-group has-feedback">
-                                <select name="Batch" class="form-control">
+                               <select name="Batch" class="form-control" required> <!-- TODO : Batch is required-->
                                     <?php
                                     $sqlGet = "SELECT * FROM batch ORDER BY batchId DESC";
                                     $result = $conn->query($sqlGet);

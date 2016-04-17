@@ -276,14 +276,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <input type="text" name="phoneNumber" class="form-control bfh-phone" placeholder="<?php echo $contact;?>" />
                                         <span class="glyphicon glyphicon-phone form-control-feedback"></span>
                                     </div>
-                                    <p class="text-aqua">*You can't change your Name and Designation.If you think there is a mistake kindly contact your Coordinator</p>
+
                                 </div>
 
                             </form>
                             <!-- /.box-body -->
                             <div class="box-footer">
                                 <button type="submit" name="btnEditProf" form="facultyProfile" class="btn btn-primary pull-right">Submit</button>
-                                <a href="<?php echo $_SERVER['PHP_SELF'];?>" class="btn btn-default" >Cancel</a>
+                                <a href="<?php echo siteroot;?>" class="btn btn-default" >Cancel</a>
                                 <!--                        <button type="submit" class="btn btn-primary">Submit</button>-->
                             </div>
 

@@ -135,36 +135,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 
-
-
-
-
-
-
-
-/*
-        //Adding record to database
-        $sql = "INSERT INTO batch_tasks (batchId, taskName, taskDetail, taskWeek, taskDeadline, templateId, hasDeliverable, sdpPart) VALUES ('$batchId', '$taskName', '$taskDetail', '$taskWeek', '$deadline', '$templateId', '$hasDeliverable', '$sdpPart') ";
-
-        if ($conn->query($sql) === TRUE) {
-
-            if ($sendToTimeline == '1'){
-                $last_id = $conn->insert_id;
-                $sql = "INSERT INTO timeline_student (title, details, type, taskId, batchId, sdpPart) VALUES ('$taskName', '$taskDetail', 'task', '$last_id', '$batchId', '$sdpPart' )";
-                if ($conn->query($sql) === TRUE) {
-                    header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId.'&status=t');
-                    die;
-                }else{echo "Error: " . $sql . "<br>" . $conn->error;}
-            }
-            header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId.'&status=f');
-            die;
-        } else {
-            echo "Error: " . $sql . "<br>" . $conn->error;exit;
-            header('Location:' . $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId.'&status=f');
-            die;
-        }*/
-
-
     }
 
     if (isset($_POST['btnEdit'])){
@@ -464,8 +434,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                                     ?>
                                 </table>
-                                <div class="box-footer  pull-right">
-                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId; ?>" class="btn  btn-primary  ">Add New Task</a>
+                                <div class="box-footer">
+                                    <a href="<?php echo siteroot; ?>" class="btn  btn-default btn-sm  "><i class="fa fa-chevron-left" aria-hidden="true"></i> Back</a>
+                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId; ?>" class="btn  btn-primary btn-sm pull-right  ">Add New Task</a>
                                 </div>
                             </div>
                             <!-- /.box-body -->

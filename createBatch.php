@@ -10,48 +10,67 @@ if(!isset($_SESSION["isCord"]))
 {
         header('Location: '.'index.php');
 }
-if((isset($_POST['batch'])) && (isset($_POST['batchYear']))) {
-        if(($_POST['batch']!="") && ($_POST['batchYear']!=""))
+
+//Check if for is submitted by POST
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if (isset($_POST['btnCreateBatch'])){
+        //Validations
+        if(($_POST['batch']!="") && ($_POST['year']!="") && ($_POST['startingDate']!=""))
         {
-                $batch = filter_input(INPUT_POST,'batch',FILTER_SANITIZE_SPECIAL_CHARS);
-                $batchYear = filter_input(INPUT_POST,'batchYear',FILTER_SANITIZE_SPECIAL_CHARS);
-                $config= filter_input(INPUT_POST,'configs',FILTER_SANITIZE_SPECIAL_CHARS);
-                $batchName=$batch ." ". $batchYear;
 
-                //$startingDate = $_POST['startingDate'];
-                $startingDate = date('Y-m-d', strtotime($_POST['startingDate']));
+            //Getting Data from POST and sanitizing
+            $batch = filter_input(INPUT_POST,'batch',FILTER_SANITIZE_SPECIAL_CHARS);
+            $batchYear = filter_input(INPUT_POST,'year',FILTER_SANITIZE_SPECIAL_CHARS);
+
+            $batchName = $batch ." ". $batchYear;
 
 
-                $sql = "INSERT INTO batch (batchName, startingDate, configurationType, isActive) VALUES ('$batchName', '$startingDate', '$config', '1')";
-                $sqlChek = "SELECT batchId FROM batch WHERE batchName = '$batchName' LIMIT 1";
-                //Check if BATCH Already Exists
-                $results=$conn->query($sqlChek);
-                if (!$results->num_rows > 0) {
+            //$startingDate = $_POST['startingDate'];
+            $startingDate = date('Y-m-d', strtotime($_POST['startingDate']));
 
-                        //BATCH doesnt exist already
-                        if ($conn->query($sql) === TRUE) {
-                            header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');
+            //Other values
+            $isActive = 1;
+            $sdpPart = 1;
 
-                            //MAKE a folder with BATCH name
-                            if (!file_exists('uploads/'.$batchName)) {
-                                mkdir('uploads/'.$batchName, 0777, true);
-                            }
-                        }
-                        else{
-                            //SQL ERROR
-                            header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
-                        }
+            //Check if BATCH already exists
+            $sql = "SELECT batchId FROM batch WHERE batchName ='$batchName' LIMIT 1";
+
+            $result = $conn->query($sql);
+
+            if ($result->num_rows > 0) {
+
+                //Batch Already Exist
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=a');
+            }else{
+
+                // prepare and bind
+                $stmt = $conn->prepare("INSERT INTO batch (batchName, startingDate, isActive, sdpPart) VALUES (?, ?, ?, ?)");
+                $stmt->bind_param("ssii", $batchName, $startingDate, $isActive, $sdpPart);
+                $stmt->execute();
+
+                if ($stmt->affected_rows > 0) {
+
+                    //MAKE a folder with BATCH name
+                    if (!file_exists('uploads/'.$batchName)) {
+                        mkdir('uploads/'.$batchName, 0777, true);
+
+                        // Commit transaction
+                        $stmt->close();
+                        $conn->close();
+                        header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
+                    }
                 }
                 else{
-                    //BATCH exists already
-                    header('Location:' . $_SERVER['PHP_SELF'] . '?status=a');
+                    //SQL Error
+                    header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');die;
+                    printf("Error: %s.\n", $stmt->error);exit;
                 }
-
-        $_POST = array();
-        $conn->close();
-
+            }
         }
+    }
+
 }
+
 
 ?>
 <!--Date Picker-->
@@ -67,121 +86,103 @@ if((isset($_POST['batch'])) && (isset($_POST['batchYear']))) {
         
     <section class="content" style="min-height: 700px">
     <div class="row">
-    <div class="col-md-2"></div>    
+    <div class="col-md-2"></div>
     <div class="col-md-8">
 
-        <?php if (isset ($_GET['status'])){
+        <?php
+        if (isset($_GET['status'])){
             if ($_GET['status'] == 't'){ ?>
                 <div style="text-align:center;" class="alert alert-success" role="alert">
-                    <span class="glyphicon glyphicon-exclamation-sign"></span>
-                    Batch created successfully!
+                    <p><span class="glyphicon glyphicon-exclamation-sign"></span> Batch Created successfully!</p>
+                    <a href="./registerStudents.php">Register Students</a> OR <br/>
+                    <a href="./batchTasks.php">Add Batch Tasks</a>
                     <button type="button" class="close" data-dismiss="alert">x</button>
                 </div>
-            <?php   }
-            else if ($_GET['status'] = 'f'){ ?>
+                <?php
+            }
+            else  if ($_GET['status'] == 'f'){ ?>
                 <div style="text-align:center;" class="alert alert-danger" role="alert">
                     <span class="glyphicon glyphicon-exclamation-sign"></span>
                     Error! Something Went Wrong
                     <button type="button" class="close" data-dismiss="alert">x</button>
                 </div>
-            <?php }
-            else if ($_GET['status'] = 'a'){ ?>
+                <?php
+            }
+            else if ($_GET['status'] == 'a'){ ?>
                 <div style="text-align:center;" class="alert alert-danger" role="alert">
                     <span class="glyphicon glyphicon-exclamation-sign"></span>
                     Error! Batch Already Exist
                     <button type="button" class="close" data-dismiss="alert">x</button>
                 </div>
-            <?php    }
-        }?>
-
-<!-- Code for createbatch starts here-->
-<div class="register-box-body">
-
-
-
-    <div class="box-header">
-        <a href="home.php" ><i class="fa fa-arrow-left"></i></a>
-        <h4 class="text-center ">Create batch</h4>
-    </div>
-
-    <form id="Createbatch" action="createbatch.php" method="post">
-		<div class="form-group has-feedback">
-		<b>Batch</b>
-		<select name="batch" class="form-control">
-				<option value="Fall">Fall</option>
-				<option value="Spring">Spring</option>
-				<span class="glyphicon glyphicon-education form-control-feedback"></span>
-		</select>
-		</div>
-        
-        	<div class="form-group has-feedback">
-		<b>Year</b>
-                <select name="batchYear" class="form-control" required>
-                    <option value="<?php echo date('Y');?>" selected><?php echo date('Y');?></option>
-		</select>
-		</div>
-        
-        
-		<div class="form-group has-feedback">
-		<b>Starting Date Of semester</b> 
-                <div class="input-group date" data-provide="datepicker">
-                <input type="text" name="startingDate"  id="startingDate"  class="form-control">
-                <div class="input-group-addon">
-                    <span class="glyphicon glyphicon-th"></span>
+                <?php
+            }
+            else if ($_GET['add'] == 'e'){ ?>
+                <div style="text-align:center;" class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Error!
+                    <button type="button" class="close" data-dismiss="alert">x</button>
                 </div>
-                </div>
+                <?php
+            }
 
-                
-		<b>Configure batch</b>
-		
-		<div class="form-group has-feedback">
-			<input type="radio" name="configs" value="default" required="required"/> Load Default Configurations
+        }
+        ?>
+        
+        <!-- general form elements -->
+        <div class="box no-border">
+            <div class="box-header with-border">
+                <h3 class="box-title">Create new batch</h3>
+            </div>
+            <!-- /.box-header -->
 
-
-            <!-- Button trigger modal -->
-            <button type="button" class="btn btn-flat btn-xs" data-toggle="modal" data-target="#defaultConfigs">
-                Show Default Configurations
-            </button>
-            <!-- Modal -->
-            <div class="modal fade" id="defaultConfigs" tabindex="-1" role="dialog">
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="myModalLabel">Default Configurations</h4>
-                        </div>
-                        <div class="modal-body">
-                        <?php require_once ('defaultConfigsModal.php') ;?>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-
-                        </div>
+            <div class="box-body">
+                <form id="createBatch" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+                    <div class="form-group has-feedback">
+                        <b>Batch</b>
+                        <select name="batch" class="form-control" required>
+                            <option value="">-Select Batch-</option>
+                            <option value="Spring">Spring</option>
+                            <option value="Fall">Fall</option>
+                            <span class="glyphicon glyphicon-education form-control-feedback"></span>
+                        </select>
                     </div>
-                </div>
+
+                    <div class="form-group has-feedback">
+                        <b>Year</b>
+                        <select name="year" class="form-control" required>
+                            <option value="<?php echo date('Y');?>" selected><?php echo date('Y');?></option>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group has-feedback">
+                        <b>Starting Date Of semester</b>
+                        <div class="input-group date" data-provide="datepicker" >
+                            <input type="text" name="startingDate"  id="startingDate"  class="form-control" required>
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
+
+
+
+
+
+                </form>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer">
+                <a href="<?php echo siteroot; ?>" class="btn  btn-default btn-sm  "><i class="fa fa-chevron-left" aria-hidden="true"></i> Back</a>
+                <button type="submit" form="createBatch" name="btnCreateBatch" name="Createbatch" class="btn btn-primary btn-sm pull-right">Create Batch</button>
             </div>
 
-            </div>
-
-
-        <div class="form-group has-feedback">
-            <input type="radio" name="configs" value="custom" required="required"/> Custom Configurations
-            <a href="createCustomConfigs.php" class="btn btn-default btn-xs">Create Custom Configurations</a>
         </div>
+        <!-- /.box -->
 
-        <div class="box-footer ">
-            <div class="form-group pull-right">
-                <button type="submit" name="Createbatch" class="btn btn-primary">Create</button>
-            </div>
-        </div>
 
-	</form>
 
-	
-</div>
-<!-- Code for createbatch ends here-->
-    </div>
-       <div class="col-md-2"></div>   
+       <div class="col-md-2"></div>
     </div>
     </section>
     </div>
@@ -199,6 +200,7 @@ require_once("includes/required_js.php");
 <script>
     $('.datepicker').datepicker({
         format: 'dd/mm/yyyy',
+
     });
 </script>
 </body>

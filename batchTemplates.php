@@ -411,8 +411,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                                     ?>
                                 </table>
-                                <div class="box-footer  pull-right">
-                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?add='.$batchId; ?>" class="btn  btn-default btn-sm  "><i class="fa fa-upload" ></i> Add New Template</a>
+                                <div class="box-footer">
+                                    <a href="<?php echo siteroot; ?>" class="btn  btn-default btn-sm  "><i class="fa fa-chevron-left" aria-hidden="true"></i> Back</a>
+                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?add='.$batchId; ?>" class="btn  btn-primary btn-sm pull-right "><i class="fa fa-upload" ></i> Add New Template</a>
                                 </div>
                             </div>
                             <!-- /.box-body -->

@@ -180,7 +180,7 @@ if((isset($_POST['facultyName'])) && (isset($_POST['facultyDesign'])) && (isset(
         <span class="glyphicon glyphicon-phone form-control-feedback"></span>
       </div>
 	  <div class="form-group has-feedback">
-		<input type="number" name="Quota" class="form-control bfh-phone" placeholder="Supervising Quota" required/> <!-- TODO facultyQuota Limit-->
+		<input type="number" name="Quota" class="form-control bfh-phone" placeholder="Supervising Quota" min="0" max="5" required/> <!-- TODO facultyQuota Limit: DONE-->
         <span class="glyphicon glyphicon-shopping-cart form-control-feedback"></span>
 	  </div>
       <div class="form-group has-feedback">
@@ -189,10 +189,10 @@ if((isset($_POST['facultyName'])) && (isset($_POST['facultyDesign'])) && (isset(
       </div>
         <p class="help-block">Leave password field empty for random password</p>
 
-
+<!--TODO delete this-->
       <div class="form-group has-feedback">
           <p class="help-block">Set Role (if any)</p>
-         <input type="checkbox" name="isAdmin" value="1"> System Administrator &nbsp;
+
           <input type="checkbox" name="isCord" value="1"> Coordinator<br>
       </div>
 

@@ -29,15 +29,9 @@
         <!-- sidebar menu: : style can be found in sidebar.less -->
         <ul class="sidebar-menu">
             <li class="header">MAIN NAVIGATION</li>
-            <li class= treeview">
-                <a href="#">
-                    <i class="fa fa-dashboard"></i> <span>Dashboard</span> <i class="fa fa-angle-left pull-right"></i>
-                </a>
-                <ul class="treeview-menu ">
-                    <li  id="timeline "><a href="home.php"><i class="fa fa-circle-o"></i>
-                            Timeline
-                    </a></li>
-                </ul>
+                      <li  id="home "><a href="home.php"><i class="fa fa-dashboard"></i>
+                    Dashboard
+                </a></li>
 
 
                 <?php
@@ -206,7 +200,11 @@
             if ($_SESSION["type"] === "Faculty" && $_SESSION["isAdmin"] === "1")//if Administrator
             {
                 ?>
-<!--                <li class="header">ADMIN MENU</li>-->
+                <li>
+                    <a href="registerCoordinator.php">
+                        <i class="fa fa-user-md" aria-hidden="true"></i> <span>Add Coordinator</span>
+                    </a>
+                </li>
 
 
                 <?php
@@ -220,6 +218,7 @@
                              *                                      *
                              ***************************************/
                 ?>
+             <?php if ($_SESSION["type"]== 'Faculty' && $_SESSION['isAdmin']!=1){ ?>
                 <li class="header">SUPERVISOR MENU</li>
                 <li>
                     <a href="superviseGroup.php">
@@ -232,8 +231,10 @@
                         <i class="fa fa-list-ul"></i> <span>Meeting Logs</span>
                     </a>
                 </li>
-                <?php
-            } ?>
+               <?php
+            }
+
+            }?>
 
 
 
