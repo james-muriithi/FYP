@@ -40,7 +40,7 @@ $check=0;
                     $_SESSION["GroupID"]=$row["groupId"];
 					$_SESSION["BatchID"]=$row["batchId"];
                     $_SESSION["usrEmail"]=$row["studentEmail"];
-                    $_SESSION["image"]=$row["student_image"];
+                    $_SESSION["image"]=$row["studentImage"];
                     $_SESSION["contact"]=$row["studentPhoneNo"];
                     $check=1;
 					header('Location: '.'home.php');

@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         if ($result->num_rows > 0) {
             //Faculty is supervising a group
-            header('Location:' . 'manageFaculty.php?status=n');
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=n');die;
         } else {
             //Delete faculty
             // sql to delete a record
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $sql = "DELETE FROM work_load WHERE facultyId='$deleteId' ";
 
                 if ($conn->query($sql) === TRUE) {
-                    header('Location:' . 'manageFaculty.php?status=t');
+                    header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
                 }
             }
         }
@@ -71,12 +71,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($stmt->affected_rows > 0) {
                 $stmt->close();
                 $conn->close();
-                header('Location:' . 'manageFaculty.php?status=t');die;
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
             }
 
         }
         else{
-            header('Location:' . 'manageFaculty.php?status=e');
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=r');die;
         }
 
 
@@ -223,6 +223,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                         <!-- /.box -->
                     <?php
+                    }else{
+                        
                     }?>
 
                     <div class="box">
@@ -269,6 +271,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </table>
                         </div>
                         <!-- /.box-body -->
+                        <div class="box-footer">
+                            <a href="./registerFaculty.php" class="btn btn-primary btn-sm pull-right">Add New Faculty</a>
+                            <a href="<?php echo siteroot; ?>" class="btn  btn-default btn-sm  "> Back</a>
+
+                        </div>
                     </div>
                     <!-- /.box -->
 
@@ -292,11 +299,14 @@ require_once("includes/required_js.php");
 <script>
     $(document).ready(function() {
         $('#manageFaculty').DataTable({
-            "paging": false,
+            "columnDefs": [
+                { "orderable": false, "targets": -1 }
+            ],
+            "paging": true,
             "lengthChange": false,
-            "searching": false,
+            "searching": true,
             "ordering": true,
-            "info": false,
+            "info": true,
             "autoWidth": false
         });
     } );

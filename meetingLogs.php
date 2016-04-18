@@ -327,7 +327,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <?php
                 }else if(isset($_GET['comment']) && is_numeric($_GET['comment']) && strlen($_GET['comment']) > 0){
                     /*******************
-                     * EDIT MEETING LOGS
+                     * EDIT MEETING COMMENT
                      * ******************/
 
                     $id = filter_input(INPUT_GET,'comment',FILTER_SANITIZE_NUMBER_INT);
