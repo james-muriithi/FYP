@@ -94,8 +94,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($_GET['status'] == 't'){ ?>
                 <div style="text-align:center;" class="alert alert-success" role="alert">
                     <p><span class="glyphicon glyphicon-exclamation-sign"></span> Batch Created successfully!</p>
-                    <a href="./registerStudents.php">Register Students</a> OR <br/>
-                    <a href="./batchTasks.php">Add Batch Tasks</a>
+                    <a href="./registerStudents.php"> <i class="fa fa-chevron-right" aria-hidden="true"></i> Register Students</a>
+                    <br/>
+                    <a href="./batchTasks.php"><i class="fa fa-chevron-right" aria-hidden="true"></i> Add Batch Tasks</a>
                     <button type="button" class="close" data-dismiss="alert">x</button>
                 </div>
                 <?php

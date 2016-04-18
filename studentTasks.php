@@ -13,9 +13,22 @@ if(!isset($_SESSION["usrCMS"]))
 }
 $check = true; //
 
-$groupId = $_SESSION['GroupID'];
+//$groupId = $_SESSION['GroupID'];
 $batchId = $_SESSION['BatchID'];
 $studentId = $_SESSION['usrId'];
+//Getting group id and Project Name from DATABASE
+$sql = "SELECT * FROM student_group WHERE student_group.leaderId = '$studentId' LIMIT 1";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+        $groupId = $row['groupId'];
+
+    }
+}else{
+    $groupId = $_SESSION["GroupID"];
+}
 
 //Check if form is submitted by GET
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
@@ -326,144 +339,158 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <?php
                     } ?>
 
-                    <!-- general form elements -->
-                    <div class="box no-border ">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">SDP Part 1</h3>
-                        </div>
-                        <!-- /.box-header -->
+                    <?php if (!is_null($groupId)){ ?>
+                        <!-- general form elements -->
+                        <div class="box no-border ">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">SDP Part 1</h3>
+                            </div>
+                            <!-- /.box-header -->
 
-                        <div class="box-body">
-                            <table class="table table-striped">
-                                <tr>
-                                    <th style="width: 10px">Week</th>
-                                    <th>Task</th>
-                                    <th>Details</th>
-                                    <th>Template</th>
-                                    <th>Deadline</th>
-                                    <th>Action</th>
-                                </tr>
-                                <?php
-                                $sql = "SELECT * FROM batch_tasks WHERE batchId ='$batchId' AND sdpPart = '1' ORDER BY taskWeek ASC ";
-                                $result = $conn->query($sql);
+                            <div class="box-body">
+                                <table class="table table-striped">
+                                    <tr>
+                                        <th style="width: 10px">Week</th>
+                                        <th>Task</th>
+                                        <th>Details</th>
+                                        <th>Template</th>
+                                        <th>Deadline</th>
+                                        <th>Action</th>
+                                    </tr>
+                                    <?php
+                                    $sql = "SELECT * FROM batch_tasks WHERE batchId ='$batchId' AND sdpPart = '1' ORDER BY taskWeek ASC ";
+                                    $result = $conn->query($sql);
 
-                                if ($result->num_rows > 0) {
-                                    // output data of each row
-                                    while($row = $result->fetch_assoc()) { ?>
+                                    if ($result->num_rows > 0) {
+                                        // output data of each row
+                                        while($row = $result->fetch_assoc()) { ?>
 
-                                        <tr>
-                                            <td><?php echo $row['taskWeek']; ?></td>
-                                            <td><?php echo $row['taskName']; ?></td>
-                                            <td>
-                                                <?php
+                                            <tr>
+                                                <td><?php echo $row['taskWeek']; ?></td>
+                                                <td><?php echo $row['taskName']; ?></td>
+                                                <td>
+                                                    <?php
                                                     if (strlen($row['taskDetail']) >= 100){
                                                         echo getExcerpt($row['taskDetail'],0,100);?>
                                                         <a href="<?php echo $_SERVER['PHP_SELF'].'?details='.$row['taskId']?>">Show Details</a>
 
-                                                    <?php
+                                                        <?php
                                                     }
                                                     else{
                                                         echo $row['taskDetail'];
                                                     }
 
-                                                ?>
-                                            </td>
-                                            <td><?php echo $row['templateId']; ?></td>
-                                            <td><?php echo $row['taskDeadline']; ?></td>
+                                                    ?>
+                                                </td>
+                                                <td><?php echo $row['templateId']; ?></td>
+                                                <td><?php echo $row['taskDeadline']; ?></td>
 
-                                            <td>
-                                                <?php  if ($row['hasDeliverable'] == '1'){ ?>
-                                                    <a href="<?php echo $_SERVER['PHP_SELF'].'?upload='.$row['taskId']?>" class="btn btn-default btn-sm"><i class="fa fa-upload"></i> Upload</a>
-                                                <?php
-                                                }else{
-                                                    echo '-- --';
-                                                } ?>
-                                            </td>
+                                                <td>
+                                                    <?php  if ($row['hasDeliverable'] == '1'){ ?>
+                                                        <a href="<?php echo $_SERVER['PHP_SELF'].'?upload='.$row['taskId']?>" class="btn btn-default btn-sm"><i class="fa fa-upload"></i> Upload</a>
+                                                        <?php
+                                                    }else{
+                                                        echo '-- --';
+                                                    } ?>
+                                                </td>
 
-                                        </tr>
+                                            </tr>
+                                            <?php
+                                        }
+                                    }
+                                    ?>
+
+                                </table>
+
+                            </div>
+                            <!-- /.box-body -->
+
+                            <div class="box-header with-border">
+                                <h3 class="box-title">SDP Part 2</h3>
+                            </div>
+                            <!-- /.box-header -->
+
+
+                            <div class="box-body">
+                                <table class="table table-striped">
+                                    <tr>
+                                        <th style="width: 10px">Week</th>
+                                        <th>Task</th>
+                                        <th>Details</th>
+                                        <th>Template</th>
+                                        <th>Deadline</th>
+                                        <th>Action</th>
+                                    </tr>
                                     <?php
-                                    }
-                                }
-                                ?>
+                                    $sql = "SELECT * FROM batch_tasks WHERE batchId ='$batchId' AND sdpPart = '2' ORDER BY taskWeek ASC ";
+                                    $result = $conn->query($sql);
 
-                            </table>
+                                    if ($result->num_rows > 0) {
+                                        // output data of each row
+                                        while($row = $result->fetch_assoc()) { ?>
 
-                        </div>
-                        <!-- /.box-body -->
-
-                        <div class="box-header with-border">
-                            <h3 class="box-title">SDP Part 2</h3>
-                        </div>
-                        <!-- /.box-header -->
-
-
-                        <div class="box-body">
-                            <table class="table table-striped">
-                                <tr>
-                                    <th style="width: 10px">Week</th>
-                                    <th>Task</th>
-                                    <th>Details</th>
-                                    <th>Template</th>
-                                    <th>Deadline</th>
-                                    <th>Action</th>
-                                </tr>
-                                <?php
-                                $sql = "SELECT * FROM batch_tasks WHERE batchId ='$batchId' AND sdpPart = '2' ORDER BY taskWeek ASC ";
-                                $result = $conn->query($sql);
-
-                                if ($result->num_rows > 0) {
-                                    // output data of each row
-                                    while($row = $result->fetch_assoc()) { ?>
-
-                                        <tr>
-                                            <td><?php echo $row['taskWeek']; ?></td>
-                                            <td><?php echo $row['taskName']; ?></td>
-                                            <td>
-                                                <?php
-                                                if (strlen($row['taskDetail']) >= 100){
-                                                    echo getExcerpt($row['taskDetail'],0,100);?>
-
-
-                                                    <a href="<?php echo $_SERVER['PHP_SELF'].'?details='.$row['taskId']?>">Show Details</a>
-
-
+                                            <tr>
+                                                <td><?php echo $row['taskWeek']; ?></td>
+                                                <td><?php echo $row['taskName']; ?></td>
+                                                <td>
                                                     <?php
-                                                }
-                                                else{
-                                                    echo $row['taskDetail'];
-                                                }
+                                                    if (strlen($row['taskDetail']) >= 100){
+                                                        echo getExcerpt($row['taskDetail'],0,100);?>
 
-                                                ?>
-                                            </td>
-                                            <td><?php echo $row['templateId']; ?></td>
-                                            <td><?php echo $row['taskDeadline']; ?></td>
 
-                                            <td>
-                                                <?php  if ($row['hasDeliverable'] == '1'){ ?>
-                                                    <a href="<?php echo $_SERVER['PHP_SELF'].'?upload='.$row['taskId']?>" class="btn btn-default btn-sm"><i class="fa fa-upload"></i> Upload</a>
-                                                    <?php
-                                                }else{
-                                                    echo '-- --';
-                                                } ?>
-                                            </td>
+                                                        <a href="<?php echo $_SERVER['PHP_SELF'].'?details='.$row['taskId']?>">Show Details</a>
 
-                                        </tr>
-                                        <?php
+
+                                                        <?php
+                                                    }
+                                                    else{
+                                                        echo $row['taskDetail'];
+                                                    }
+
+                                                    ?>
+                                                </td>
+                                                <td><?php echo $row['templateId']; ?></td>
+                                                <td><?php echo $row['taskDeadline']; ?></td>
+
+                                                <td>
+                                                    <?php  if ($row['hasDeliverable'] == '1'){ ?>
+                                                        <a href="<?php echo $_SERVER['PHP_SELF'].'?upload='.$row['taskId']?>" class="btn btn-default btn-sm"><i class="fa fa-upload"></i> Upload</a>
+                                                        <?php
+                                                    }else{
+                                                        echo '-- --';
+                                                    } ?>
+                                                </td>
+
+                                            </tr>
+                                            <?php
+                                        }
                                     }
-                                }
-                                ?>
+                                    ?>
 
-                            </table>
+                                </table>
+
+                            </div>
+                            <!-- /.box-body -->
+
+                            <div class="box-footer">
+
+                            </div>
 
                         </div>
-                        <!-- /.box-body -->
+                        <!-- /.box -->
 
-                        <div class="box-footer">
+                    <?php
+                    }else{ ?>
+                        <div class="col-md-12">
+                            <div class="callout callout-info">
+                                <h4>Can not show details</h4>
 
+                                <p>You are not part of any group.Please form a group and try again</p>
+                            </div>
                         </div>
+                    <?php
+                    }?>
 
-                    </div>
-                    <!-- /.box -->
 
 
 

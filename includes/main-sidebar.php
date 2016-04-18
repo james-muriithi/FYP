@@ -54,7 +54,7 @@
                     <a href="#"><i class="fa fa-users"></i> <span>Group</span> <i
                             class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
-                        <li ><a id="groupMembers" href="groupDetails.php"><i class="fa fa-circle-o"></i>GroupMembers</a></li>
+<!--                        <li ><a id="groupMembers" href="groupDetails.php"><i class="fa fa-circle-o"></i>GroupMembers</a></li>-->
 
                         <?php
                             
@@ -92,7 +92,7 @@
                         <ul class="treeview-menu">
                             <li><a id="setProjectName" href="setProjectName.php"><i class="fa fa-pencil-square-o"></i>Set Project Name</a>
                             <li><a id="templates" href="projectTemplates.php"><i class="fa fa fa-file"></i>Project Templates</a>
-                            <li><a id="uploadDeliverables" href="uploadDeliverables.php"><i class="fa fa-upload"></i>Deliverables</a>
+<!--                            <li><a id="uploadDeliverables" href="uploadDeliverables.php"><i class="fa fa-upload"></i>Deliverables</a>-->
                             </li>
                         </ul>
                     </li>

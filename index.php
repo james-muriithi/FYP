@@ -15,8 +15,8 @@ if(isset($_POST["email"]) && isset($_POST["pasword"]))
 $userEmail =  filter_input(INPUT_POST, "email",FILTER_SANITIZE_SPECIAL_CHARS);
 $userPass = filter_input(INPUT_POST, "pasword",FILTER_SANITIZE_SPECIAL_CHARS);
 
-$sql = "SELECT studentId, studentName, studentCMS, studentPhoneNo, studentEmail, studentGender, studentPassword,student_image, groupId, isLeader, batchId FROM student";
-$sql2 = "SELECT facultyId, designation, facultyName, facultyPhoneNo, facultyEmail, facultyPassword, isAdmin, isCoordinator FROM faculty";
+$sql = "SELECT * FROM student";
+$sql2 = "SELECT * FROM faculty";
 $sql3 ="SELECT * FROM external_examiner";
 
 $result = $conn->query($sql);

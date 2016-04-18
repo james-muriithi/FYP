@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
         //Getting batchId,batch Name from groupId
-        $batchId = $conn->query("SELECT batch_id FROM student_group WHERE groupId = '$groupId' ")->fetch_object()->batch_id;
+        $batchId = $conn->query("SELECT batchId FROM student_group WHERE groupId = '$groupId' ")->fetch_object()->batchId;
         $batchName = $conn->query("SELECT batchName FROM batch WHERE batchId = '$batchId' ")->fetch_object()->batchName;
 
         $group = 'Group '.$groupId;

@@ -16,6 +16,7 @@ $batchId = $_SESSION['BatchID'];
 $studentId = $_SESSION['usrId'];
 
 
+
     /* Check if:
      * - User already initiated a group
      * - User is already in a group
@@ -26,7 +27,7 @@ $studentId = $_SESSION['usrId'];
 
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
-            if ($row['groupId'] != '0'){
+            if ($row['groupId'] != null){
 
                 //User is already in a group
                 $check = false;
@@ -49,10 +50,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (isset($_POST['initiateGroupBtn'])){
-
+        
         //Validations
         if (isset($_POST['projectName']) && $_POST['projectName'] != ""){
-
+            
             //Getting Values from POST
             $projectName = filter_input(INPUT_POST,'projectName',FILTER_SANITIZE_SPECIAL_CHARS);
 
@@ -60,7 +61,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             mysqli_autocommit($conn, FALSE);
 
             //Inserting Values in student_group table
-            $sql = "INSERT INTO student_group (projectName, batch_id, leaderId) VALUES ('$projectName', '$batchId', '$studentId')";
+            $sql = "INSERT INTO student_group (projectName, batchId, leaderId) VALUES ('$projectName', '$batchId', '$studentId')";
 
             if ($conn->query($sql) === TRUE) {
 
@@ -120,7 +121,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         if ($_GET['status'] == 't'){ ?>
                             <div style="text-align:center;" class="alert alert-success" role="alert">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                Changes saved successfully!
+                                <p>Changes saved successfully!</p>
+                                <a href="./groupDetails.php"><i class="fa fa-chevron-right" aria-hidden="true"></i> Show Group Details</a>
                                 <button type="button" class="close" data-dismiss="alert">x</button>
                             </div>
                             <?php

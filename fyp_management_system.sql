@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 18, 2016 at 08:41 PM
+-- Generation Time: Apr 18, 2016 at 10:10 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -135,7 +135,7 @@ CREATE TABLE `faculty` (
 
 INSERT INTO `faculty` (`facultyId`, `facultyName`, `designation`, `facultyPhoneNo`, `facultyEmail`, `facultyImage`, `facultyPassword`, `isAdmin`, `isCoordinator`, `createdDtm`) VALUES
 (0, 'Super Admin', '--', '', 'superadmin@fypms.com', NULL, '123', 1, 0, '0000-00-00 00:00:00'),
-(18, 'Saud Khan', 'Coordinator', '+923458541454', 'saudkhan@riu.edu.pk', NULL, '123', 0, 1, '2016-04-17 20:45:12');
+(18, 'Saud Khan', 'Coordinator', '+923458541454', 'saudkhan@riu.edu.pk', '5715310b853707.98279886.jpg', '123', 0, 1, '2016-04-17 20:45:12');
 
 -- --------------------------------------------------------
 
@@ -275,7 +275,7 @@ CREATE TABLE `student` (
 
 INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentEmail`, `studentPhoneNo`, `studentGender`, `studentPassword`, `studentImage`, `groupId`, `isLeader`, `batchId`, `isActive`, `createdDtm`) VALUES
 (14, 'Muneeb Khan', '7757', 'muneeb_420@gmail.com', '01234565', 'male', '123', '56fff928b82971.36534035.jpg', NULL, NULL, 18, 1, '2016-04-03 13:30:06'),
-(15, 'Umair Qamar', '10776', 'umairqamar@live.com', '03458541454', 'male', '123', '56fff632e226e7.95020533.jpg', NULL, NULL, 18, 0, '2016-04-03 13:30:06'),
+(15, 'Umair Qamar', '10776', 'umairqamar@live.com', '03458541454', 'male', '123', '56fff632e226e7.95020533.jpg', 1, 1, 18, 0, '2016-04-03 13:30:06'),
 (21, 'Bilal Hassan', '7471', 'bilalhassan@live.com', '+923458541454', 'male', '123', '56fff9374231d1.64504225.jpg', NULL, NULL, 18, 0, '2016-04-03 13:30:06'),
 (43, 'Aizaz Ahmed Abbasi', '7736', 'aizaz@gmail.com', '923211234567', 'male', '123', NULL, NULL, NULL, 18, 1, '2016-04-10 14:28:47'),
 (44, 'Najeeb Qureshi', '8781', 'najeeb@gmail.com', '1234567', 'male', '123', NULL, NULL, NULL, 18, 1, '2016-04-13 14:17:37'),
@@ -289,7 +289,7 @@ INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentEmail`,
 (52, 'Ayesha Hashim', '9214', 'ayesha@yahoo.com', '033658970', 'female', '123', NULL, NULL, NULL, 18, 1, '2016-04-14 22:09:52'),
 (53, 'Mariya Sajjad', '9331', 'mariya@gmail.com', '033658970', 'female', '123', NULL, NULL, NULL, 18, 1, '2016-04-14 22:11:07'),
 (54, 'Hina Arif', '9231', 'hina@gmail.com', '03325689', 'female', '123', NULL, NULL, NULL, 18, 1, '2016-04-14 22:11:45'),
-(55, 'Muhammad Adeen Riaz', '8659', 'adeen@yahoo.com', '033658970', 'male', '123', NULL, NULL, NULL, 18, 1, '2016-04-14 22:12:34'),
+(55, 'Muhammad Adeen Riaz', '8659', 'adeen@yahoo.com', '033658970', 'male', '123', NULL, 2, 1, 18, 1, '2016-04-14 22:12:34'),
 (56, 'Jamal Hussain Siddiqui', '8621', 'jamal@hotmail.com', '033568970', 'male', '123', NULL, NULL, NULL, 18, 1, '2016-04-14 22:13:29'),
 (57, 'Muhammad Shahzad', '8857', 'shahzad@hotmail.com', '033568970', 'male', '123', NULL, NULL, NULL, 18, 1, '2016-04-14 22:14:14'),
 (58, 'Muhammad Farhan Ali', '7735', 'farhan@yahoo.com', '0335698741', 'male', '123', NULL, NULL, NULL, 18, 1, '2016-04-14 22:14:56'),
@@ -334,8 +334,7 @@ INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentEmail`,
 (97, 'Madiha Arooj', '9270', 'madiha@gmail.com', '03358976', 'male', '123', NULL, NULL, NULL, 18, 1, '2016-04-14 23:28:45'),
 (98, 'Maryam Ilyas', '9807', 'maryam@gmail.com', '033569870', 'female', '123', NULL, NULL, NULL, 18, 1, '2016-04-14 23:58:18'),
 (99, 'Sundas Manzoor', '9734', 'sundas@hotmail.com', '033569870', 'female', '123', NULL, NULL, NULL, 18, 1, '2016-04-14 23:59:34'),
-(100, 'Ifrah Komal', '9584', 'irfah@gmail.com', '033569870', 'female', '123', NULL, NULL, NULL, 18, 1, '2016-04-15 00:00:34'),
-(101, 'To Delete', '11111', 'dummy@email.com', '123455', 'male', '123', NULL, NULL, NULL, 18, 1, '2016-04-18 23:38:23');
+(100, 'Ifrah Komal', '9584', 'irfah@gmail.com', '033569870', 'female', '123', NULL, NULL, NULL, 18, 1, '2016-04-15 00:00:34');
 
 -- --------------------------------------------------------
 
@@ -346,12 +345,20 @@ INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentEmail`,
 CREATE TABLE `student_group` (
   `groupId` int(255) NOT NULL,
   `projectName` varchar(255) DEFAULT NULL,
-  `batch_id` int(11) DEFAULT NULL,
+  `batchId` int(11) DEFAULT NULL,
   `projectPart` int(1) NOT NULL,
   `groupLimit` int(1) NOT NULL DEFAULT '3',
   `inGroup` int(255) NOT NULL DEFAULT '1',
   `leaderId` int(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='groupInfo';
+
+--
+-- Dumping data for table `student_group`
+--
+
+INSERT INTO `student_group` (`groupId`, `projectName`, `batchId`, `projectPart`, `groupLimit`, `inGroup`, `leaderId`) VALUES
+(1, 'FYP Management System', 18, 0, 3, 1, 15),
+(2, 'RSATS', 18, 0, 3, 1, 55);
 
 -- --------------------------------------------------------
 
@@ -601,12 +608,12 @@ ALTER TABLE `project_repository`
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `studentId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=102;
+  MODIFY `studentId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=103;
 --
 -- AUTO_INCREMENT for table `student_group`
 --
 ALTER TABLE `student_group`
-  MODIFY `groupId` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `groupId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `timeline_faculty`
 --

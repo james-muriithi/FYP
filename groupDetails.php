@@ -7,7 +7,37 @@ session_start();
 if (!isset($_SESSION["usrCMS"])) {
     header('Location: ' . 'index.php');
 }
-$groupId = $_SESSION["GroupID"];
+$studentId = $_SESSION['usrId'];
+
+//Getting group id
+$sql = "SELECT * FROM student WHERE student.studentId = '$studentId' LIMIT 1";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+        $groupId = $row['groupId'];
+
+    }
+}else{
+    $groupId = $_SESSION["GroupID"];
+}
+
+//Get Project name
+if (!is_null($groupId)){
+    //Getting group id and Project Name from DATABASE
+    $sql = "SELECT * FROM student_group WHERE student_group.leaderId = '$studentId' LIMIT 1";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+            $projectName = $row['projectName'];
+        }
+    }
+
+}
+
 
 //Getting supervisor id and name
 $sql = "SELECT facultyId FROM faculty_student_group WHERE faculty_student_group.groupId = '$groupId' LIMIT 1 ";
@@ -53,19 +83,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <section class="content" style="min-height: 700px">
             <div class="row">
                 <?php
-                if (isset($_SESSION["GroupID"])   ) { ?>
+                if (!is_null($groupId)   ) { ?>
 
                     <div class="col-md-12">
                         <div class="box box-solid">
                             <!-- /.box-header -->
                             <div class="box-body">
-                                <h3>Project Name:<?php
-
-                                    $name = $conn->query("SELECT projectName FROM student_group WHERE groupId = '$groupId' ")->fetch_object()->projectName;
-                                    if ($name){echo $name; }else{echo " --- ";}
-
-
-                                    ?></h3>
+                                <h3>Project Name:<?php echo $projectName?></h3>
                                 <!--Supervisor Name-->
                                 <h4>Supervisor:<?php
                                 if (isset($supervisorName)){
@@ -116,6 +140,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 
                             </div>
                             <!-- /.box-body -->
+                            <div class="box-footer">
+                                <a href="<?php echo siteroot;?>" class="btn btn-default btn-sm">Back</a>
+                            </div>
 
 
                         </div>
@@ -123,7 +150,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
 
 
-                <?php } else if ($_SESSION["GroupID"] == 0) { ?>
+                <?php } else if (is_null($groupId)) { ?>
 
                     <div class="col-md-12">
                         <div class="callout callout-info">

@@ -56,7 +56,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     //Delete Student
     if (isset($_POST['btnDelete'])){
-        echo "HERW ".$_POST['deleteId'];exit;
+
+        //Check is student is in a group
+        $deleteId = filter_input(INPUT_POST,'deleteId',FILTER_SANITIZE_NUMBER_INT);
+        $batchId = filter_input(INPUT_POST,'batchId',FILTER_SANITIZE_NUMBER_INT);
+
+        $sql = "SELECT groupId FROM student WHERE studentId ='$deleteId' LIMIT 1";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while($row = $result->fetch_assoc()) {
+                $groupId = $row['groupId'];
+            }
+            if (is_null($groupId)){
+                //Delete
+                // sql to delete a record
+                $sql = "DELETE FROM student WHERE studentId='$deleteId'";
+
+                if ($conn->query($sql) === TRUE) {
+                    header('Location:' . $_SERVER['PHP_SELF'] . '?batchId='.$batchId.'&status=t');die;
+                } else {
+                    header('Location:' . $_SERVER['PHP_SELF'] . '?batchId='.$batchId.'&status=f');die;
+                }
+            }else{
+                header('Location:' . $_SERVER['PHP_SELF'] . '?batchId='.$batchId.'&status=n');die;
+            }
+        }
     }
 
 
@@ -104,7 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         else if ($_GET['status'] == 'n'){ ?>
                             <div style="text-align:center;" class="alert alert-danger" role="alert">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                Error! This faculty is supervising a group. Can not delete this
+                                Error! This student is in a group.Can not delete this student
                                 <button type="button" class="close" data-dismiss="alert">x</button>
                             </div>
                             <?php
@@ -206,7 +232,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                                 <!-- /.box-body -->
                                 <div class="box-footer">
-                                    <a href="<?php echo $_SERVER['PHP_SELF']; ?>" class="btn  btn-default btn-sm  "> Cancel</a>
+                                    <a href="<?php echo $_SERVER['PHP_SELF'].'?batchId='.$batchId; ?>" class="btn  btn-default btn-sm  "> Cancel</a>
                                     <button type="submit" name="btnEditStudent" class="btn btn-primary pull-right">Submit</button>
                                 </div>
                                 <!-- /.box-footer -->
@@ -265,11 +291,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <th>Name</th>
                                         <th>Email</th>
                                         <th>Group Status</th>
+                                        <th><i class="fa fa-clock-o" aria-hidden="true"></i> Created</th>
                                         <th>Actions</th>
                                     </tr>
                                     </thead>
                                     <?php
-                                    $sql = "SELECT * FROM student WHERE batchId = '$batchId'  ORDER BY student.createdDtm DESC "; //Chronological order
+                                    $sql = "SELECT * FROM student WHERE batchId = '$batchId'  ORDER BY student.createdDtm ASC "; //Chronological order
                                     $result = $conn->query($sql);
                                     while($row = $result->fetch_assoc()) { ?>
                                         <tr>
@@ -286,16 +313,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     <?php
                                                 } ?>
                                             </td>
+                                            <td><?php echo time2str($row['createdDtm']) ;?></td>
                                             <td>
 
 
 
-                                                <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['studentId'].'&batchId='.$batchId; ?>"  class="btn  btn-primary btn-xs">Edit</a>
-<!--                                                <a href="--><?php //echo $_SERVER['PHP_SELF'] . '?delete=' . $row['studentId']; ?><!--" onclick="return confirm('Are you sure?')" class="btn  btn-danger btn-xs">Delete</a>-->
-
+                                                <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['studentId'].'&batchId='.$batchId; ?>"  class="btn  btn-default btn-flat  btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
+                                                <br/>
                                                 <form  action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" onsubmit="return confirm('Are you sure you want to delete this student?');">
                                                     <input type="hidden" name="deleteId" value="<?php echo $row['studentId'];?>">
-                                                    <button type="submit" name="btnDelete" class="btn btn-danger  btn-xs ">Delete</button>
+                                                    <input type="hidden" name="batchId" value="<?php echo $batchId; ?>">
+                                                    <button type="submit" name="btnDelete" class="btn  btn-danger btn-flat  btn-xs"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
                                                 </form>
 
 
