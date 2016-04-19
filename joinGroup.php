@@ -1,4 +1,5 @@
 <?php
+//Query to use SELECT * FROM student JOIN student_group ON student.studentId = student_group.leaderId WHERE inGroup < groupLimit
 $title="FYPMS";
 $subtitle="Join Group";
 require_once("includes/header.php");
