@@ -12,7 +12,7 @@ if(!isset($_SESSION["usrId"]))
 
 //Code implementation for remove photo
 if (isset($_POST['btnDelete'])){
-    $sql_remove='UPDATE student SET student_image=? WHERE studentId=?';
+    $sql_remove='UPDATE student SET studentImage=? WHERE studentId=?';
     $user_id=$_SESSION['usrId'];
     $dummy_image=null;
     $stmt_remove = $conn->prepare($sql_remove);
@@ -60,7 +60,7 @@ if (isset($_FILES['image'])){
             if(move_uploaded_file($file_tmp, $file_destination)){
                 //echo $file_destination;
                 $success_msg='File Uploaded Successfully';
-                $sql = "UPDATE student SET student_image=? WHERE studentId=? ";
+                $sql = "UPDATE student SET studentImage=? WHERE studentId=? ";
                 $stmt = $conn->prepare($sql);
                 if($stmt === false) {
                     trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $conn->error, E_USER_ERROR);

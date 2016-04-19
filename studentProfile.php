@@ -15,7 +15,7 @@ if(isset($_SESSION["usrId"]) OR isset($_SESSION['facultyId']) OR isset($_SESSION
 
 //Code implementation for remove photo
 if (isset($_POST['btnDelete'])){
-    $sql_remove='UPDATE student SET student_image=? WHERE studentId=?';
+    $sql_remove='UPDATE student SET studentImage=? WHERE studentId=?';
     $user_id=$_SESSION['usrId'];
     $dummy_image=null;
     $stmt_remove = $conn->prepare($sql_remove);
@@ -65,7 +65,7 @@ if (isset($_FILES['image'])){
         if(move_uploaded_file($file_tmp, $file_destination)){
             //echo $file_destination;
             $success_msg='File Uploaded Successfully';
-            $sql = "UPDATE student SET student_image=? WHERE studentId=? ";
+            $sql = "UPDATE student SET studentImage=? WHERE studentId=? ";
             $stmt = $conn->prepare($sql);
             if($stmt === false) {
             trigger_error('Wrong SQL: ' . $sql . ' Error: ' . $conn->error, E_USER_ERROR);
@@ -117,7 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 $name = $row['studentName'];
                 $cms = $row['studentCMS'];
                 $email = $row['studentEmail'];
-                $image = $row['student_image'];
+                $image = $row['studentImage'];
                 $batchId = $row['batchId'];
                 $contact = $row['studentPhoneNo'];
                 $groupId = $row['groupId'];
@@ -176,30 +176,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="col-lg-1"></div>
         <div class="col-md-10">
 
-            <?php if (isset ($_GET['status'])){
+            <?php
+            if (isset($_GET['status'])){
                 if ($_GET['status'] == 't'){ ?>
                     <div style="text-align:center;" class="alert alert-success" role="alert">
                         <span class="glyphicon glyphicon-exclamation-sign"></span>
                         Changes saved successfully!
                         <button type="button" class="close" data-dismiss="alert">x</button>
                     </div>
-                <?php   }
-                else if ($_GET['status'] = 'f'){ ?>
+                    <?php
+                }
+                else  if ($_GET['status'] == 'f'){ ?>
                     <div style="text-align:center;" class="alert alert-danger" role="alert">
                         <span class="glyphicon glyphicon-exclamation-sign"></span>
                         Error! Something Went Wrong
                         <button type="button" class="close" data-dismiss="alert">x</button>
                     </div>
-                <?php }
+                    <?php
+                }
+                else if ($_GET['status'] == 'a'){ ?>
+                    <div style="text-align:center;" class="alert alert-danger" role="alert">
+                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                        Error!
+                        <button type="button" class="close" data-dismiss="alert">x</button>
+                    </div>
+                    <?php
+                }
+                else if ($_GET['add'] == 'e'){ ?>
+                    <div style="text-align:center;" class="alert alert-danger" role="alert">
+                        <span class="glyphicon glyphicon-exclamation-sign"></span>
+                        Error!
+                        <button type="button" class="close" data-dismiss="alert">x</button>
+                    </div>
+                    <?php
+                }
 
-                else{ ?>
-                    <div style="text-align:center;" class="alert alert-danger" role="alert">
-                        <span class="glyphicon glyphicon-exclamation-sign"></span>
-                        Error! Something Went Wrong
-                        <button type="button" class="close" data-dismiss="alert">x</button>
-                    </div>
-                <?php    }
-            }?>
+            }
+            ?>
 
 
 
@@ -241,7 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <b>Contact No.</b> <a class="pull-right"><?php echo $contact;?></a>
                                     </li>
                                     <li class="list-group-item">
-                                        <b>Group</b> <a class="pull-right"><?php echo $groupId;?></a>
+                                        <b>Group</b> <a class="pull-right"><?php echo "Group #". $groupId;?></a>
                                     </li>
                                     <li class="list-group-item">
                                         <b>Project</b> <a class="pull-right"><?php echo $projectName;?></a>
@@ -253,7 +266,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         <!-- /.box-body -->
                         <div class="box-footer">
-
+                            <button class="btn btn-default btn-sm" onclick="goBack()">Back</button>
                         </div>
 
                     </div>  <!-- /.box -->
@@ -356,6 +369,10 @@ require_once("includes/main-footer.php");
 require_once("includes/required_js.php");
 ?>
 <script>
+    function goBack() {
+        window.history.back();
+    }
+
 $( "#btnDelete" ).click(function() {
 swal({
   title: "Are you sure?",

@@ -119,8 +119,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </tr>
                                     </thead>
                                     <?php
-                                    $groupID = $_SESSION['GroupID'];
-                                    $sql = "SELECT * from student WHERE student.groupId = '$groupID' ";
+                                    //$groupID = $_SESSION['GroupID'];
+                                    $sql = "SELECT * from student WHERE student.groupId = '$groupId' ";
                                     $result = $conn->query($sql);
                                     while ($row = $result->fetch_assoc()) { ?>
                                         <tr>

@@ -1,39 +1,93 @@
 <?php
-//Query to use SELECT * FROM student JOIN student_group ON student.studentId = student_group.leaderId WHERE inGroup < groupLimit
+
 $title="FYPMS";
 $subtitle="Join Group";
 require_once("includes/header.php");
 require_once("includes/config.php");
 session_start();
+
+//Check if student is logged in and not a group leader
 if(!isset($_SESSION["usrCMS"]))
 {
-        header('Location:' . 'index.php?status=logged_out');
+    header('Location:' . 'index.php?status=logged_out');
 }
 
-if(isset($_POST['JoinGroup'])) {
-        if ($conn->connect_error) {
-                trigger_error('Database connection failed:'. $conn->connect_error, E_USER_ERROR);	
-                die("Connection failed: " . $conn->connect_error);
-        } 
-        $studntId=$_SESSION["usrId"];
-        $grpId = $_POST['JoinGroup'];
-		$sql = "INSERT INTO group_requests (studentId, groupId) VALUES ('$studntId','$grpId')";
+$check = true;
 
-        if (!$conn->query($sql) === TRUE) {
-                echo "Cant Join Group This Time: " . $conn->error;
+//Getting values from SESSION
+$studentId = $_SESSION['usrId'];
+$gender = $_SESSION["usrGender"];
+
+
+/****
+ * Check if user is group leader OR part of group
+ * OR he already sent request to user
+ */
+$sql = "SELECT * FROM student WHERE studentId = '$studentId' LIMIT 1";
+$result = $conn->query($sql);
+if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+        $isLeader = $row['isLeader'];
+        $groupId = $row['groupId'];
+    }
+    if ($isLeader == 1 OR !is_null($groupId)){
+        header('Location:' . 'index.php?status=logged_out'); //TODO : 404 Redirect
+        session_destroy();
+        die;
+    }
+}
+/****
+ * Now check if he already sent a request
+ */
+    $sql = "SELECT * FROM student_group_request WHERE studentId = '$studentId' LIMIT 1";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        $check= false;
+    }
+
+
+
+
+//Check if form is submitted by POST
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    //Send Request
+    if (isset($_POST['btnSendRequest'])){
+        //Validations
+        if ($_POST['requestId'] != ""){
+
+            //Getting value from POST and sanitizing it
+            $requestId = filter_input(INPUT_POST,'requestId',FILTER_SANITIZE_NUMBER_INT);
+
+            $sql = "INSERT INTO student_group_request (studentId, groupId) VALUES ('$studentId', '$requestId')";
+
+            if ($conn->query($sql) === TRUE) {
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
+            } else {
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');die;
+            }
         }
+    }
 
-        unset($_POST);
-        $_POST = array();
-        $conn->close();
-        header('Location: '.'home.php');
+    //Delete Request
+    if (isset($_POST['btnDeleteRequest'])){
+        // sql to delete a record
+        $sql = "DELETE FROM student_group_request WHERE studentId='$studentId' LIMIT 1";
+
+        if ($conn->query($sql) === TRUE) {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
+        } else {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');die;
+        }
+    }
+
 }
+
 
 ?>
 
 </head>
-
-
 
 <body class="hold-transition skin-blue sidebar-mini">	
 <div class="wrapper">
@@ -51,102 +105,139 @@ if(isset($_POST['JoinGroup'])) {
         
     <section class="content" style="min-height: 700px">
     <div class="row">
-    <div class="col-md-2"></div>    
-    <div class="col-md-8">   
+    <div class="col-md-1"></div>
 
-<!--Actual Code for joinGroup starts from here    -->
-<div class="box">
-    <div class="box-header">
-      <h3 class="box-title">Registered Groups</h3>
-    </div>
-    <!-- /.box-header -->
-    <div class="box-body">
-      <table id="example1" class="table table-bordered table-striped">
-        <thead>
-        <tr>
-          <th>Group Id</th>
-          <th>Group Leader</th>
-          <th>CMS</th>
-          <th>SDP Part</th>
-		  <th>Group Members</th>
-        </tr>
-        </thead>
-        <tbody>
+    <div class="col-md-10">
+
         <?php
-        if ($conn->connect_error) {
-                die("Connection failed: " . $conn->connect_error);
+        if (isset($_GET['status'])){
+            if ($_GET['status'] == 't'){ ?>
+                <div style="text-align:center;" class="alert alert-success" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Changes saved successfully!
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                </div>
+                <?php
+            }
+            else  if ($_GET['status'] == 'f'){ ?>
+                <div style="text-align:center;" class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Error! Something Went Wrong
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                </div>
+                <?php
+            }
+            else if ($_GET['status'] == 'a'){ ?>
+                <div style="text-align:center;" class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Error!
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                </div>
+                <?php
+            }
+            else if ($_GET['add'] == 'e'){ ?>
+                <div style="text-align:center;" class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Error!
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                </div>
+                <?php
+            }
+
         }
-        else{
-		$gendr=$_SESSION["usrGender"];
-		$batch=$_SESSION["BatchID"];
-		
-        $sql = "SELECT * FROM student INNER JOIN student_group ON student.groupId=student_group.groupId AND student_group.groupLimit > student_group.inGroup AND student_group.projectPart='1' AND student.isLeader = '1' AND student.studentGender='$gendr' AND student.batchId = '$batch' ORDER BY student.studentName";
-        //"SELECT studentName, studentCMS, groupId FROM student WHERE isLeader = '1'";
-        //$sql2 = "SELECT facultyId, designation, facultyName, facultyPhoneNo, facultyEmail, facultyPassword, currentLoad, isAdmin, isCoordinator FROM faculty";
-        $result = $conn->query($sql);
-        //$result2 = $conn->query($sql2);
-        $check=0;
-        if ($result->num_rows > 0) {
-        // output data of each row
-            while($row = $result->fetch_assoc()) {
-               echo "</th>
-                <thead>
-                <tr>
-                  <td>
-                  <div class=\"tools\">
-                                <form id=\"JoinGroup\" action=\"joinGroup.php\" method=\"post\">
-                                        <button id=\"Formlink\" class=\"glyphicon glyphicon-flag\" href=\"javascript:;\" value=\"".$row["groupId"]."\"> JoinGroup:".$row["groupId"]."</button>
-                                        <input type=\"hidden\" name=\"JoinGroup\" value=\"".$row["groupId"]."\"/>
-                                </form>
-                  </div>
-                  </td>
-                  <td>".$row["studentName"]."</td>
-                  <td>".$row["studentCMS"]."</td>
-                  <td>".$row["projectPart"]."</td>";
-				  
-					$grpId=$row["groupId"];
-				  $sqlMembers="SELECT studentName, studentCMS FROM student WHERE groupId = '$grpId'";
-				  $resultm = $conn->query($sqlMembers);
-				  if ($resultm->num_rows > 0) {
-					  echo  "<td>";
-					   while($rows = $resultm->fetch_assoc()) {
-							echo $rows["studentName"]." ".$rows["studentCMS"]."<br/>";
-					   }
-					   echo "</td>";
-				  }
+        ?>
+
+        <?php if ($check == true){ ?>
+
+            <!-- general form elements -->
+            <div class="box no-border">
+                <div class="box-header with-border">
+                    <h3 class="box-title">List of Available Groups</h3>
+                    <p class="text-muted">Choose from available groups and click on send request</p>
+                </div>
+                <!-- /.box-header -->
+
+                <div class="box-body">
+                    <table id="joinGroup" class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th>Project Name</th>
+                            <th>Created by:</th>
+
+                            <th><i class="fa fa-clock-o" aria-hidden="true"></i> Group Created</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <?php
+                        $sql = " SELECT student_group.createdDtm,projectName,studentCMS,studentName,student_group.groupId FROM student_group INNER JOIN student ON student.studentId = student_group.leaderId WHERE inGroup < groupLimit AND studentGender = '$gender' " ;
+                        $result = $conn->query($sql);
+                        while($row = $result->fetch_assoc()) { ?>
+                            <tr>
+                                <td><?php echo $row['projectName'] ;?></td>
+                                <td><a href="<?php echo siteroot.'studentProfile.php?id='.$row['studentId'];?>" ><?php echo $row['studentName']." [".$row['studentCMS']."]";?></a></td>
+                                <td><?php echo time2str($row['createdDtm']) ;?></td>
+                                <td>
+                                    <form  action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" onsubmit="return confirm('Are you sure you want to send request to this group?');">
+                                        <input type="hidden" name="requestId" value="<?php echo $row['groupId'];?>">
+                                        <button type="submit" name="btnSendRequest" class="btn  btn-primary btn-block  btn-sm"><i class="fa fa-check" aria-hidden="true"></i> Send Request</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php }
+                        ?>
+                    </table>
+
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+
+                </div>
+
+            </div>
+            <!-- /.box -->
+
+
+            <?php
+        }else if ($check == false){ ?>
+            <!-- general form elements -->
+            <div class="box no-border">
+                <div class="box-header with-border">
+                    <h3 class="box-title"><i class="fa fa-info" aria-hidden="true"></i> Can not send request to group</h3>
+                </div>
+                <!-- /.box-header -->
+
+                <div class="box-body">
+                    <p>You have already sent request to a group</p>
+                    <form  action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" onsubmit="return confirm('Are you sure you want to cancel your sent request?');">
+                        <button type="submit" name="btnDeleteRequest" class="btn  btn-default  "><i class="fa fa-times" aria-hidden="true"></i> Cancel Request</button>
+                    </form>
+
+                </div>
+                <!-- /.box-body -->
+
+                <div class="box-footer">
+
+                </div>
+
+            </div>
+            <!-- /.box -->
+        <?php
+        }?>
 
 
 
-                echo "</tr>
-                </thead>";
-                }
-        }
-        $conn->close();
-        }
-		
-?>
 
-        </tbody>
-		
 
- 
-      </table>
-	
+
+
+
+
+
+
     </div>
-    <!-- /.box-body -->
-	<form id="Cancel" action="home.php" method="post">
-	<br/>
-		<div class="row">
-			<div class="col-lg-12">
-			  <button type="submit" name="Cancel" class="btn btn-primary btn-block btn-flat">Cancel</button>
-			</div>
-			<!-- /.col -->
-        </div>
-	</form>
-</div>
-<!--joinGroup ends here -->
-    </div>
-    <div class="col-md-2"></div> 
+    <div class="col-md-1"></div>
+
     </div>
     </section>
     </div>
@@ -154,7 +245,7 @@ if(isset($_POST['JoinGroup'])) {
     <?php
     require_once("includes/main-footer.php");
     ?> 
-
+</div>
     <?php
     require_once("includes/required_js.php");
     ?>    

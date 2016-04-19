@@ -47,19 +47,28 @@
              ***************************************/
             if ($_SESSION["type"] === "Student") {
                 $studId = $_SESSION["usrId"];
+                $sql = "SELECT * FROM student WHERE studentId= '$studId' LIMIT 1";
+                $result = $conn->query($sql);
 
+                if ($result->num_rows > 0) {
+                    // output data of each row
+                    while($row = $result->fetch_assoc()) {
+                        $isLeader = $row['isLeader'];
+                        $groupId  = $row['groupId'];
+                    }
+                }
                 ?>
                 <li class="treeview">
                 <li>
                     <a href="#"><i class="fa fa-users"></i> <span>Group</span> <i
                             class="fa fa-angle-left pull-right"></i></a>
                     <ul class="treeview-menu">
-<!--                        <li ><a id="groupMembers" href="groupDetails.php"><i class="fa fa-circle-o"></i>GroupMembers</a></li>-->
+
 
                         <?php
                             
 
-                        if ($_SESSION["isLead"] != "1" && $_SESSION["GroupID"]== 0 ) {
+                        if ($isLeader != 1 &&  is_null($groupId)) {
                             ?>
                             <li><a id="InitiateGroup" href="initiateGroup.php"><i class="fa fa-circle-o"></i>Initiate
                                     Group</a></li>
@@ -68,7 +77,7 @@
                         } ?>
 
                         <?php
-                        if ($_SESSION["isLead"] == "1") {
+                        if ($isLeader == 1) {
                             /****************************************
                              *                                      *
                              * STUDENT-> Group Leader
@@ -76,14 +85,14 @@
                              ***************************************/
                             ?>
                             
-                            <li><a id="chooseSupervisor" href="chooseSupervisor.php"><i class="fa fa-circle-o"></i>Choose
-                                    Supervisor</a></li>
+                            <li><a id="chooseSupervisor" href="chooseSupervisor.php"><i class="fa fa-circle-o"></i>Choose Supervisor</a></li>
+                            <li><a id="groupSettings" href="./groupSettings.php"><i class="fa ffa fa-cog"></i>Settings</a></li>
                             <?php
                         } ?>
                     </ul>
                 </li>
                 <?php
-                if ($_SESSION["GroupID"] != "0") {
+                if ( !is_null($groupId)) {
                     ?>
 
                     <li>
