@@ -25,7 +25,9 @@ if ($result->num_rows > 0) {
 
 //Get Project name
 if (!is_null($groupId)){
+
     //Getting group id and Project Name from DATABASE
+    //If groupLeader
     $sql = "SELECT * FROM student_group WHERE student_group.leaderId = '$studentId' LIMIT 1";
     $result = $conn->query($sql);
 
@@ -34,6 +36,9 @@ if (!is_null($groupId)){
         while($row = $result->fetch_assoc()) {
             $projectName = $row['projectName'];
         }
+    }
+    else{
+        $projectName = $conn->query("SELECT projectName FROM student JOIN student_group ON student.groupId = student_group.groupId  WHERE student.studentId = '$studentId' LIMIT 1" )->fetch_object()->projectName;
     }
 
 }

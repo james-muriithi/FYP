@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 19, 2016 at 07:55 PM
+-- Generation Time: Apr 19, 2016 at 09:29 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -274,9 +274,9 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentEmail`, `studentPhoneNo`, `studentGender`, `studentPassword`, `studentImage`, `groupId`, `isLeader`, `batchId`, `isActive`, `createdDtm`) VALUES
-(14, 'Muneeb Khan', '7757', 'muneeb_420@gmail.com', '01234565', 'male', '123', '56fff928b82971.36534035.jpg', NULL, NULL, 18, 1, '2016-04-03 13:30:06'),
+(14, 'Muneeb Khan', '7757', 'muneeb_420@gmail.com', '01234565', 'male', '123', '56fff928b82971.36534035.jpg', 1, NULL, 18, 1, '2016-04-03 13:30:06'),
 (15, 'Umair Qamar', '10776', 'umairqamar@live.com', '03458541454', 'male', '123', '56fff632e226e7.95020533.jpg', 1, 1, 18, 1, '2016-04-03 13:30:06'),
-(21, 'Bilal Hassan', '7471', 'bilalhassan@live.com', '+923458541454', 'male', '123', '56fff9374231d1.64504225.jpg', NULL, NULL, 18, 1, '2016-04-03 13:30:06'),
+(21, 'Bilal Hassan', '7471', 'bilalhassan@live.com', '+923458541454', 'male', '123', '56fff9374231d1.64504225.jpg', 1, NULL, 18, 1, '2016-04-03 13:30:06'),
 (43, 'Aizaz Ahmed Abbasi', '7736', 'aizaz@gmail.com', '923211234567', 'male', '123', NULL, NULL, NULL, 18, 1, '2016-04-10 14:28:47'),
 (44, 'Najeeb Qureshi', '8781', 'najeeb@gmail.com', '1234567', 'male', '123', NULL, NULL, NULL, 18, 1, '2016-04-13 14:17:37'),
 (45, 'Muhammad Waqar Khan', '7740', 'waqar@gmail.com', '033569870', 'male', '123', NULL, NULL, NULL, 18, 1, '2016-04-14 22:03:41'),
@@ -330,8 +330,8 @@ INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentEmail`,
 (93, 'Umair Sharif', '9258', 'sharif@yahoo.com', '033569870', 'male', '123', NULL, NULL, NULL, 18, 1, '2016-04-14 23:21:57'),
 (94, 'Shoaib Nawaz', '9155', 'nawaz@yahoo.com', '033569810', 'male', '123', NULL, NULL, NULL, 18, 1, '2016-04-14 23:24:16'),
 (95, 'Sheikh Awais Ali', '7531', 'sheikhawais@gmail.com', '03015631656', 'male', '123', NULL, NULL, NULL, 18, 1, '2016-04-14 23:26:36'),
-(96, 'Hina Zameer', '9271', 'zameer@gmail.com', '0335698721', 'male', '123', NULL, NULL, NULL, 18, 1, '2016-04-14 23:27:33'),
-(97, 'Madiha Arooj', '9270', 'madiha@gmail.com', '03358976', 'male', '123', NULL, NULL, NULL, 18, 1, '2016-04-14 23:28:45'),
+(96, 'Hina Zameer', '9271', 'zameer@gmail.com', '0335698721', 'female', '123', NULL, 5, NULL, 18, 1, '2016-04-14 23:27:33'),
+(97, 'Madiha Arooj', '9270', 'madiha@gmail.com', '03358976', 'female', '123', NULL, 5, 1, 18, 1, '2016-04-14 23:28:45'),
 (98, 'Maryam Ilyas', '9807', 'maryam@gmail.com', '033569870', 'female', '123', NULL, NULL, NULL, 18, 1, '2016-04-14 23:58:18'),
 (99, 'Sundas Manzoor', '9734', 'sundas@hotmail.com', '033569870', 'female', '123', NULL, NULL, NULL, 18, 1, '2016-04-14 23:59:34'),
 (100, 'Ifrah Komal', '9584', 'irfah@gmail.com', '033569870', 'female', '123', NULL, NULL, NULL, 18, 1, '2016-04-15 00:00:34');
@@ -358,8 +358,9 @@ CREATE TABLE `student_group` (
 --
 
 INSERT INTO `student_group` (`groupId`, `projectName`, `batchId`, `sdpPart`, `groupLimit`, `inGroup`, `leaderId`, `createdDtm`) VALUES
-(1, 'FYP Management System', 18, 1, 3, 1, 15, '2016-04-19 21:11:33'),
-(4, 'RSATS', 18, 1, 3, 1, 55, '2016-04-19 22:54:02');
+(1, 'FYP Management System', 18, 1, 3, 3, 15, '2016-04-19 21:11:33'),
+(4, 'RSATS', 18, 1, 3, 1, 55, '2016-04-19 22:54:02'),
+(5, 'Online Menu', 18, 1, 3, 2, 97, '2016-04-20 00:26:22');
 
 -- --------------------------------------------------------
 
@@ -368,7 +369,7 @@ INSERT INTO `student_group` (`groupId`, `projectName`, `batchId`, `sdpPart`, `gr
 --
 
 CREATE TABLE `student_group_request` (
-  `id` int(11) NOT NULL,
+  `requestId` int(11) NOT NULL,
   `studentId` int(11) NOT NULL COMMENT 'Request sent by',
   `groupId` int(11) NOT NULL COMMENT 'Request sent to group',
   `requestDtm` datetime DEFAULT CURRENT_TIMESTAMP
@@ -530,7 +531,7 @@ ALTER TABLE `student_group`
 -- Indexes for table `student_group_request`
 --
 ALTER TABLE `student_group_request`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`requestId`);
 
 --
 -- Indexes for table `timeline_faculty`
@@ -633,7 +634,12 @@ ALTER TABLE `student`
 -- AUTO_INCREMENT for table `student_group`
 --
 ALTER TABLE `student_group`
-  MODIFY `groupId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `groupId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+--
+-- AUTO_INCREMENT for table `student_group_request`
+--
+ALTER TABLE `student_group_request`
+  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `timeline_faculty`
 --

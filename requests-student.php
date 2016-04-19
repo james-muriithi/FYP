@@ -2,22 +2,103 @@
 require_once('includes/config.php');
 require_once('includes/functions.php');
 
-//Check if user is leader of a group
-if (isset($_SESSION["isLead"])) {
-    if ($_SESSION["isLead"] == 1) {
 
-    //Check if he has group requests
-        $leaderId = $_SESSION['usrId'];
-        $sql = "SELECT * from student_group JOIN group_requests WHERE leaderId = '$leaderId'  ";
+if (isset($_SESSION["usrId"])) {
+    $studentId = $_SESSION['usrId'];
+
+    //Check if user is leader of a group
+    $sql = "SELECT * FROM student WHERE studentId = '$studentId' LIMIT 1 ";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+            $isLeader = $row['isLeader'];
+            $groupId = $row['groupId'];
+        }
+
+    }
+
+    if ($isLeader == 1) {
+        //Check if his group limit
+        $sql = "SELECT * from student_group WHERE leaderId = '$studentId' LIMIT 1 ";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
-            $numOfRequests = $result->num_rows;
+            $inGroup = $row['groupId'];
+            $groupLimit = $row['groupLimit'];
         }
+        if ($inGroup <= $groupLimit){
+            //Check if he has group requests
+            $sql = "SELECT * from student_group JOIN student_group_request WHERE leaderId = '$studentId'  ";
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                $numOfRequests = $result->num_rows;
+            }
+        }
+
+
 
     }
 }
 //Check if form is submitted by POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    if (isset($_POST['btnAcceptReq'])){
+        //Getting data from POST and sanitizing
+        $acceptId = filter_input(INPUT_POST,'requestId',FILTER_SANITIZE_NUMBER_INT);
+
+
+        //Get group id
+        $groupId = $conn->query("SELECT groupId FROM student_group_request WHERE requestId = '$acceptId'  LIMIT 1 ")->fetch_object()->groupId;
+
+        //Get student id of person who sent the request
+        $studentId = $conn->query("SELECT studentId FROM student_group_request WHERE requestId = '$acceptId'  LIMIT 1 ")->fetch_object()->studentId;
+
+        // Set autocommit to off
+        mysqli_autocommit($conn, FALSE);
+
+        $sql = "UPDATE student SET groupId = '$groupId' WHERE studentId = '$studentId' LIMIT 1";
+
+        if ($conn->query($sql) == TRUE) {
+
+            //Increment group members
+            $inc_group = $conn ->query("UPDATE student_group SET inGroup = inGroup + 1 WHERE groupId = '$groupId'");
+
+
+            if ($inc_group  ){
+                //Delete from request
+                $delete_row = $conn->query("DELETE FROM student_group_request WHERE requestId=" . $acceptId);
+                if ($delete_row){
+                    // Commit transaction
+                    mysqli_commit($conn);
+                    header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
+                }
+                else{
+                    header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');die;
+                }
+            }
+
+        }
+
+
+
+    }
+    if (isset($_POST['btnDeleteReq'])){
+
+        //Getting data from POST and sanitizing
+        $deleteId = filter_input(INPUT_POST,'requestId',FILTER_SANITIZE_NUMBER_INT);
+
+        //try deleting record using the record ID we received from POST
+        $delete_row = $conn->query("DELETE FROM student_group_request WHERE requestId=" . $deleteId);
+
+        if (!$delete_row) {
+            //If mysql delete query was unsuccessful, output error
+            //header('HTTP/1.1 500 Could not delete request!');
+            exit();
+        }else{
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
+        }
+    }
 
     if (isset($_POST["recordToDelete"]) && strlen($_POST["recordToDelete"]) > 0 && is_numeric($_POST["recordToDelete"])) {
         global $conn;
@@ -73,119 +154,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 <li class="dropdown notifications-menu " id="requests-student">
 
-    <script>
-        $(document).ready(function () {
 
-            //Delete Button Action
-            $("body").on("click", "#requestActions .del_button", function (e) {
-                e.preventDefault();
-
-                var clickedID = this.id.split('-'); //Split ID string (Split works as PHP explode)
-                var DbNumberID = clickedID[1]; //and get number from array
-
-                swal({
-                    title: "Are you sure?",
-
-                    type: "info",
-                    showCancelButton: true,
-                    confirmButtonColor: "#DD6B55",
-                    confirmButtonText: "Yes, Delete Request",
-                    cancelButtonText: "No",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
-                }, function (isConfirm) {
-                    if (isConfirm) {
-
-                        var myData = 'recordToDelete=' + DbNumberID; //build a post data structure
-                        $.ajax({
-                            type: "POST", // HTTP method POST or GET
-                            url: "requests.php", //Where to make Ajax calls
-                            dataType: "text", // Data type, HTML, json etc.
-                            data: myData, //Form variables
-                            success: function (response) {
-                                swal({
-                                    title: "Success!",
-                                    text: "Request deleted",
-                                    type: "success",
-                                    confirmButtonColor: "#8CD4F5",
-                                    confirmButtonText: "Okay",
-                                    closeOnConfirm: false
-                                }, function () {
-                                    location.reload();
-                                });
-
-                            },
-                            error: function (xhr, ajaxOptions, thrownError) {
-                                //On error, we alert user
-                                alert(thrownError);
-                            }
-                        });
-                    } else {
-                        swal("Cancelled", "Operation has been cancelled:)", "error");
-                    }
-                });
-
-
-            });
-
-            //Accept Button Action
-            $("body").on("click", "#requestActions .accept_button", function (e) {
-                e.preventDefault();
-
-                var clickedID = this.id.split('-'); //Split ID string (Split works as PHP explode)
-                var DbNumberID = clickedID[1]; //and get number from array
-                var myData = 'recordToAccept=' + DbNumberID; //build a post data structure
-
-                console.log("Accept Button is pressed");
-                console.log("Clicked id: " + clickedID[1]);
-                swal({
-                    title: "Are you sure?",
-
-                    type: "info",
-                    showCancelButton: true,
-                    confirmButtonColor: "#8CD4F5",
-                    confirmButtonText: "Yes, Accept Request",
-                    cancelButtonText: "No",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
-                }, function (isConfirm) {
-                    if (isConfirm) {
-
-                        var myData = 'recordToAccept=' + DbNumberID; //build a post data structure
-                        $.ajax({
-                            type: "POST", // HTTP method POST or GET
-                            url: "requests.php", //Where to make Ajax calls
-                            dataType: "text", // Data type, HTML, json etc.
-                            data: myData, //Form variables
-                            success: function (response) {
-                                swal({
-                                    title: "Success!",
-                                    text: "Request accepted",
-                                    type: "success",
-                                    confirmButtonColor: "#8CD4F5",
-                                    confirmButtonText: "Okay",
-                                    closeOnConfirm: false
-                                }, function () {
-                                    location.reload();
-                                });
-
-                            },
-                            error: function (xhr, ajaxOptions, thrownError) {
-                                //On error, we alert user
-                                alert(thrownError);
-                            }
-                        });
-                    } else {
-                        swal("Cancelled", "Operation has been cancelled:)", "error");
-                    }
-                });
-
-
-            });
-
-
-        });
-    </script>
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         <i class="fa fa-user"></i>
         <span class="label label-primary"><?php  if (isset($numOfRequests)){echo $numOfRequests;}else{echo "0";};  ?></span>
@@ -198,20 +167,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <?php
             if (isset($numOfRequests)){
 
-                $leaderId = $_SESSION['usrId'];
-                $sql = "SELECT * from student_group JOIN group_requests WHERE leaderId = '$leaderId'  ";
+
+                $sql = "SELECT * from student_group JOIN student_group_request ON student_group.groupId = student_group_request.groupId WHERE student_group_request.groupId = '$groupId' ";
                 $result = $conn->query($sql);
                 if ($result->num_rows > 0) {
                     while ($row = $result->fetch_assoc()) {
                         $requestFrom = getStudentData($row['studentId']); ?>
 
+                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+                            <input type="hidden" name="requestId" value="<?php echo $row['requestId']?>">
                         <li>
-                            <i class="fa fa-user text-aqua"></i><?php echo $requestFrom['name']; ?> sent you group request
+                            <i class="fa fa-user text-aqua"></i><?php echo $requestFrom['name']." [".$requestFrom['cms']."] "; ?> has sent you group request
                             <div id="requestActions" class="text-right">
-                                <button id="accept-<?php echo $row['requestId']; ?>" class="accept_button btn btn-primary btn-xs">Accept</button>
-                                <button id="del-<?php echo $row['requestId']; ?>" class="del_button btn btn-danger btn-xs ">Delete</button>
+                                <button id="btnAcceptReq" name="btnAcceptReq" class="accept_button btn btn-primary btn-xs">Accept</button>
+                                <button id="btnDelReq" name="btnDeleteReq" class="del_button btn btn-danger btn-xs ">Delete</button>
                             </div>
                         </li>
+                        </form>
                    <?php }
                 }
 
