@@ -4,7 +4,7 @@ $subtitle="Choose Supervisor";
 require_once("includes/header.php");
 require_once("includes/config.php");
 session_start();
-
+//Query to use SELECT * FROM faculty JOIN work_load ON faculty.facultyId = work_load.facultyId WHERE totalLoad > 0 AND totalLoad > currentLoad
 if($_SESSION["isLead"]!="1")
 {
     header('Location: '.'index.php');
