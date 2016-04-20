@@ -21,13 +21,12 @@ function generate_pdf($batchId){
 
     // attributes for the page titles
     $attr = array('titleFontSize'=>'16', 'titleText'=>'List of Groups');
-    $sql_statement = 'SELECT groupId AS GroupID, projectName AS projectName  FROM student_group WHERE batch_id = '.$batchId;
+    $sql_statement = "SELECT projectName AS ProjectName, facultyName AS Supervisor FROM student_group JOIN faculty_student_group ON faculty_student_group.groupId = student_group.groupId JOIN faculty ON faculty.facultyId = faculty_student_group.facultyId ";
+
     $pdf->mysql_report($sql_statement, false, $attr );
 
 
-    $attr = array('titleFontSize'=>'16', 'titleText'=>'Detailed List of Groups');
-    $sql_statement = 'SELECT student.groupId AS GroupID ,student_group.projectName AS ProjectName, student.studentCMS as CMS, student.studentName as Member FROM student_group JOIN student ON student.groupId = student_group.groupId WHERE student.batchId ='.$batchId;
-    $pdf->mysql_report($sql_statement, false, $attr );
+
 
 
     unset($_SESSION['batch_id']);
