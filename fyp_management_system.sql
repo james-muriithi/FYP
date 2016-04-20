@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 19, 2016 at 09:29 PM
+-- Generation Time: Apr 20, 2016 at 05:42 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -119,13 +119,13 @@ CREATE TABLE `external_examiner` (
 CREATE TABLE `faculty` (
   `facultyId` int(255) NOT NULL,
   `facultyName` varchar(255) NOT NULL,
-  `designation` varchar(255) NOT NULL,
   `facultyPhoneNo` varchar(50) NOT NULL,
   `facultyEmail` varchar(255) NOT NULL,
+  `designation` varchar(255) NOT NULL,
   `facultyImage` varchar(255) DEFAULT NULL,
   `facultyPassword` varchar(255) NOT NULL,
-  `isAdmin` tinyint(1) NOT NULL,
-  `isCoordinator` tinyint(1) NOT NULL,
+  `isAdmin` tinyint(1) DEFAULT NULL,
+  `isCoordinator` tinyint(1) DEFAULT NULL,
   `createdDtm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Faculty Details';
 
@@ -133,9 +133,13 @@ CREATE TABLE `faculty` (
 -- Dumping data for table `faculty`
 --
 
-INSERT INTO `faculty` (`facultyId`, `facultyName`, `designation`, `facultyPhoneNo`, `facultyEmail`, `facultyImage`, `facultyPassword`, `isAdmin`, `isCoordinator`, `createdDtm`) VALUES
-(0, 'Super Admin', '--', '', 'superadmin@fypms.com', NULL, '123', 1, 0, '0000-00-00 00:00:00'),
-(18, 'Saud Khan', 'Coordinator', '+923458541454', 'saudkhan@riu.edu.pk', '5715310b853707.98279886.jpg', '123', 0, 1, '2016-04-17 20:45:12');
+INSERT INTO `faculty` (`facultyId`, `facultyName`, `facultyPhoneNo`, `facultyEmail`, `designation`, `facultyImage`, `facultyPassword`, `isAdmin`, `isCoordinator`, `createdDtm`) VALUES
+(0, 'Super Admin', '', 'superadmin@fypms.com', '--', NULL, '123', 1, 0, '0000-00-00 00:00:00'),
+(18, 'Saud Khan', '+923458541454', 'saudkhan@riu.edu.pk', 'Coordinator', '5715310b853707.98279886.jpg', '123', 0, 1, '2016-04-17 20:45:12'),
+(19, 'Muhammad Fawad Chaudry', '12345678', 'fawadch@gmail.com', 'Supervisor', NULL, '123', NULL, NULL, '2016-04-20 20:18:57'),
+(20, 'Uzair Muhammad', '12345678', 'muzair@gmail.com', 'Supervisor', NULL, '123', NULL, NULL, '2016-04-20 20:20:44'),
+(21, 'Zeeshan Sabir', '12345678', 'zeeshan@gmail.com', 'Supervisor', NULL, '123', NULL, NULL, '2016-04-20 20:22:22'),
+(22, 'Osama Raza', '12345678', 'osama@riu.edu.pk', 'Supervisor', NULL, '123', NULL, NULL, '2016-04-20 20:41:59');
 
 -- --------------------------------------------------------
 
@@ -275,7 +279,7 @@ CREATE TABLE `student` (
 
 INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentEmail`, `studentPhoneNo`, `studentGender`, `studentPassword`, `studentImage`, `groupId`, `isLeader`, `batchId`, `isActive`, `createdDtm`) VALUES
 (14, 'Muneeb Khan', '7757', 'muneeb_420@gmail.com', '01234565', 'male', '123', '56fff928b82971.36534035.jpg', 1, NULL, 18, 1, '2016-04-03 13:30:06'),
-(15, 'Umair Qamar', '10776', 'umairqamar@live.com', '03458541454', 'male', '123', '56fff632e226e7.95020533.jpg', 1, 1, 18, 1, '2016-04-03 13:30:06'),
+(15, 'Umair Qamar', '10776', 'umairqamar@live.com', '03458541454', 'male', '123', '57178d49d31f15.75642865.jpg', 1, 1, 18, 1, '2016-04-03 13:30:06'),
 (21, 'Bilal Hassan', '7471', 'bilalhassan@live.com', '+923458541454', 'male', '123', '56fff9374231d1.64504225.jpg', 1, NULL, 18, 1, '2016-04-03 13:30:06'),
 (43, 'Aizaz Ahmed Abbasi', '7736', 'aizaz@gmail.com', '923211234567', 'male', '123', NULL, NULL, NULL, 18, 1, '2016-04-10 14:28:47'),
 (44, 'Najeeb Qureshi', '8781', 'najeeb@gmail.com', '1234567', 'male', '123', NULL, NULL, NULL, 18, 1, '2016-04-13 14:17:37'),
@@ -425,7 +429,11 @@ CREATE TABLE `work_load` (
 --
 
 INSERT INTO `work_load` (`loadId`, `facultyId`, `totalLoad`, `currentLoad`) VALUES
-(9, 18, 0, 0);
+(9, 18, 0, 0),
+(10, 19, 1, 0),
+(11, 20, 2, 0),
+(12, 21, 1, 0),
+(13, 22, 1, 0);
 
 --
 -- Indexes for dumped tables
@@ -584,7 +592,7 @@ ALTER TABLE `external_examiner`
 -- AUTO_INCREMENT for table `faculty`
 --
 ALTER TABLE `faculty`
-  MODIFY `facultyId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `facultyId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 --
 -- AUTO_INCREMENT for table `faculty_student_group`
 --
@@ -639,7 +647,7 @@ ALTER TABLE `student_group`
 -- AUTO_INCREMENT for table `student_group_request`
 --
 ALTER TABLE `student_group_request`
-  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `timeline_faculty`
 --
@@ -654,7 +662,7 @@ ALTER TABLE `timeline_student`
 -- AUTO_INCREMENT for table `work_load`
 --
 ALTER TABLE `work_load`
-  MODIFY `loadId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `loadId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

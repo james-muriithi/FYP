@@ -7,116 +7,84 @@ require("libs/sendgrid-php/sendgrid-php.php");
 require_once("includes/mail-tempelates.php");
 require_once("includes/functions.php");
 session_start();
-if(!isset($_SESSION["isAdmin"]))
+
+//Check if Coordinator is logged ins
+if($_SESSION["isCord"] != 1)
 {
     header('Location: '.'index.php');
 }
-if((isset($_POST['facultyName'])) && (isset($_POST['facultyDesign'])) && (isset($_POST['facultyEmail']))) {
-    if(($_POST['facultyName']!="") && ($_POST['facultyDesign']!="") && ($_POST['facultyEmail']!=""))
-    {
+//If form is submitted using POST
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    //Validations
+    if (isset($_POST['facultyName']) && isset($_POST['facultyEmail']) && isset($_POST['facultyDesignation']) && isset($_POST['supervisingQuota']) && isset($_POST['emailSend'])){
 
-    //echo $_POST['facultyName']." ".$_POST['facultyCMS']." ".$_POST['facultyEmail']." ".$_POST['phoneNumber']." ".$_POST['batch']." ".$_POST['facultyPass'];
-    $facultyName = $_POST['facultyName'];
-    $facultyDesign = $_POST['facultyDesign'];
-    $facultyEmail = strtolower($_POST['facultyEmail']);
-    $facultyPhone = $_POST['phoneNumber'];
+        //Getting values from POST and Sanitizing
+        $name = filter_input(INPUT_POST,'facultyName',FILTER_SANITIZE_SPECIAL_CHARS);
+        $email = filter_input(INPUT_POST,'facultyEmail',FILTER_SANITIZE_EMAIL);
+        $design = filter_input(INPUT_POST,'facultyDesignation',FILTER_SANITIZE_SPECIAL_CHARS);
+        $contact = filter_input(INPUT_POST,'facultyContact',FILTER_SANITIZE_NUMBER_INT);
+        $quota = filter_input(INPUT_POST,'supervisingQuota',FILTER_SANITIZE_NUMBER_INT);
+        $password = filter_input(INPUT_POST,'facultyPassword',FILTER_SANITIZE_SPECIAL_CHARS);
+        $emailSend = filter_input(INPUT_POST,'emailSend',FILTER_SANITIZE_SPECIAL_CHARS);
 
-      if (isset($_POST['facultyPass'])){
-          $facultyPass = $_POST['facultyPass'];
-      }
-        else{
-            $facultyPass =  random_password();
+        if ($password == ""){
+            //If password field left blank
+            $password = random_password();
         }
 
+        //Check if faculty already exists with email
+
+        $check = $conn->query("SELECT facultyId FROM faculty WHERE facultyEmail = '$email' LIMIT 1");
+        if ($check->num_rows>0){
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=ae');die;
+        }
+        else{
+            // Set autocommit to off
+            mysqli_autocommit($conn, FALSE);
 
 
-	if(isset($_POST['isAdmin'])){
-		$facultyIsAdmin = $_POST['isAdmin'];
-	}
-	else{
-		$facultyIsAdmin = '0';
-	}
-	if(isset($_POST['isCord']))
-	{
-		$facultyIsCord = $_POST['isCord'];
-	}
-	else
-	{
-		$facultyIsCord = '0';
-	}
-	
-	$facultyQuota = $_POST['Quota'];
+            // prepare and bind
+            $stmt = $conn->prepare("INSERT INTO faculty (facultyName, facultyEmail, designation, facultyPhoneNo, facultyPassword ) VALUES (?, ?, ?, ?, ?)");
+            $stmt->bind_param("sssss", $name, $email, $design, $contact, $password);
 
-	$sql = "INSERT INTO faculty (designation, facultyName, facultyPhoneNo, facultyEmail, facultyPassword, isAdmin, isCoordinator) 
-    VALUES ('$facultyDesign','$facultyName','$facultyPhone','$facultyEmail','$facultyPass','$facultyIsAdmin','$facultyIsCord')";
+            // set parameters and execute
 
-    $sqlCheck = "SELECT facultyName, facultyEmail FROM faculty WHERE facultyName = '$facultyName' OR facultyEmail = '$facultyEmail'";
-	
-	
-    $results=$conn->query($sqlCheck);
+            $stmt->execute();
 
-    if (!$results->num_rows > 0) {
-		
-            if (!$conn->query($sql) === TRUE) {
-              $error="Registration Unsuccessfull";
-              header("Location: registerfaculty.php?status=f");
-            }
-            else{
-              $error="";
-			  //get the id of new faculty member created
-			    
-				$sqlIdGet="SELECT facultyId FROM faculty WHERE facultyName = '$facultyName' AND facultyEmail = '$facultyEmail'";
-				$FacultyId='0';
-				
-				$idGet=$conn->query($sqlIdGet);
-				if ($idGet->num_rows > 0) {
-					
-						while($rowId = $idGet->fetch_assoc())
-						{
-							$FacultyId=$rowId["facultyId"];
-						}
-				}
-				//setting up the work load of added Faculty Member
-				$sqlFacultyLoad="INSERT INTO work_load ( facultyid, designation, totalLoad ) VALUES ('$FacultyId','$facultyDesign','$facultyQuota')";
-				if ($conn->query($sqlFacultyLoad) === TRUE) {
-					//User Registered Successfully
+            $last_id = $stmt->insert_id;
+            $currentLoad = 0;
 
-                    //Check for checkbox
-                    if ($_POST['emailSend'] != 'false'){
-                        mail_user_registration($facultyEmail,$facultyName,$facultyPass);
+            //Also add to work_load
+            $stmt = $conn->prepare("INSERT INTO work_load (facultyId, totalLoad, currentLoad) VALUES (?, ?, ?)");
+            $stmt->bind_param("iii", $last_id, $quota, $currentLoad);
+            $stmt->execute();
+            if ($stmt->affected_rows > 0) {
+                // Commit transaction
+                mysqli_commit($conn);
+
+                if ($emailSend != 'false'){
+                    mail_user_registration($email,$name,$password); // Send email
+                    if (!mail_user_registration()){
+                        header('Location:' . $_SERVER['PHP_SELF'] . '?status=mail_err');die;
                     }
-
-					
-					header('Location: registerFaculty.php?status=t');
-				}
-				else{
-					$error="Registration Unsuccessfull";
-				}
+                }else
+                {
+                    $stmt->close();
+                    $conn->close();
+                    header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
+                }
             }
+
+        }
     }
     else{
-        $error="Already Registered";
-        header('Location: '.'registerfaculty.php?status=f');
-    }
-//    unset($facultyName);
-//    unset($facultyCMS);
-//    unset($facultyEmail);
-//    unset($facultyPhone);
-//    unset($facultyBatch);
-//    unset($facultyPass);
-//    unset($_POST['facultyName']);
-//    unset($_POST['facultyCMS']);
-//    unset($_POST['facultyEmail']);
-//    unset($_POST['phoneNumber']);
-//    unset($_POST['Batch']);
-//    unset($_POST['facultyPass']);
-//    unset($_POST);
-//    $_POST = array();
-//    $conn->close();
-//    header('Location: '.'registerfaculty.php');
-//    die;
+        //Failed validations
+        header('Location:' . $_SERVER['PHP_SELF'] . '?status=validation_err');die;
     }
 }
+
+
+
 ?>
 </head>
 <body class="hold-transition skin-blue sidebar-mini">
@@ -131,77 +99,93 @@ if((isset($_POST['facultyName'])) && (isset($_POST['facultyDesign'])) && (isset(
     <div class="row">
 	
     <div class="col-md-2"></div>        
-    <div class="col-md-8">   
+    <div class="col-md-8">
+        <?php
+        if (isset($_GET['status'])){
+            if ($_GET['status'] == 't'){ ?>
+                <div style="text-align:center;" class="alert alert-success" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Faculty Registered successfully!
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                </div>
+                <?php
+            }
+            else  if ($_GET['status'] == 'f'){ ?>
+                <div style="text-align:center;" class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Error! Something Went Wrong
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                </div>
+                <?php
+            }
+            else if ($_GET['status'] == 'ae'){ ?>
+                <div style="text-align:center;" class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Error! Faculty already exists
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                </div>
+                <?php
+            }
+            else if ($_GET['status'] == 'mail_err'){ ?>
+                <div style="text-align:center;" class="alert alert-info" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    User Registered Successfully but Email was not sent due to unknown error
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                </div>
+                <?php
+            }
+            else if ($_GET['status'] == 'validation_err'){ ?>
+                <div style="text-align:center;" class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Error! Please fill all the required fields
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                </div>
+                <?php
+            }
 
+        }
+        ?>
 <!--Code for register faculty starts here-->
   <div class="register-box-body">
-      <?php
-      if (isset($_GET['status'])){
-          if ($_GET['status']=='f'){ ?>
-              <div style="text-align:center;" class="alert alert-danger" role="alert">
-                  <span class="glyphicon glyphicon-exclamation-sign"></span>
-                  Something Went Wrong
-                  <button type="button" class="close" data-dismiss="alert">x</button>
-              </div>
 
-          <?php  }
-          else if ($_GET['status']=='t'){ ?>
-              <div style="text-align:center;" class="alert alert-success" role="alert">
-                  <span class="glyphicon glyphicon-exclamation-sign"></span>
-                  Faculty Registered
-                  <button type="button" class="close" data-dismiss="alert">x</button>
-              </div>
-          <?php }
-
-      }
-      ?>
 
       <div class="box-header">
-          <a href="home.php" ><i class="fa fa-arrow-left"></i></a>
           <h4 class="text-center ">Register a Faculty</h4>
-
       </div>
 
-    <form id="AddFaculty" action="registerFaculty.php" method="post">
+    <form id="registerFaculty" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+
       <div class="form-group has-feedback">
-        <input type="text" name="facultyDesign" class="form-control" placeholder="Designation" required/>
-        <span class="glyphicon glyphicon-bookmark form-control-feedback"></span>
-      </div>
-      <div class="form-group has-feedback">
-        <input type="text" name="facultyName" class="form-control" placeholder="Full name" required/>
+        <input type="text" name="facultyName" class="form-control" placeholder="Enter Full name" required/>
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
+
+        <div class="form-group has-feedback">
+            <input type="email" name="facultyEmail" class="form-control" placeholder="Enter Email address" required/>
+            <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        </div>
+
+
       <div class="form-group has-feedback">
-        <input type="email" name="facultyEmail" class="form-control" placeholder="Email" required/>
-        <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
+        <input type="text" name="facultyDesignation" class="form-control" placeholder="Enter Designation" required/>
+        <span class="glyphicon glyphicon-bookmark form-control-feedback"></span>
       </div>
+
+
       <div class="form-group has-feedback">
-        <input type="text" name="phoneNumber" class="form-control bfh-phone" placeholder="Phone Number" required/>
+        <input type="text" name="facultyContact" class="form-control bfh-phone" placeholder="Phone Number" />
         <span class="glyphicon glyphicon-phone form-control-feedback"></span>
       </div>
+
 	  <div class="form-group has-feedback">
-		<input type="number" name="Quota" class="form-control bfh-phone" placeholder="Supervising Quota" min="0" max="5" required/> <!-- TODO facultyQuota Limit: DONE-->
-        <span class="glyphicon glyphicon-shopping-cart form-control-feedback"></span>
+		<input type="number" name="supervisingQuota" class="form-control bfh-phone" placeholder="Enter Group supervising Quota" min="0" max="6" required/>
+        <span class="glyphiconglyphicon glyphicon-plus form-control-feedback"></span>
 	  </div>
+
       <div class="form-group has-feedback">
-        <input type="text" name="facultyPass" class="form-control" placeholder="Password" />
+        <input type="text" name="facultyPassword" class="form-control" placeholder="Enter password of leave empty to genereate random password" />
         <span class="glyphicon glyphicon-lock form-control-feedback"></span>
       </div>
-        <p class="help-block">Leave password field empty for random password</p>
-
-<!--TODO delete this-->
-      <div class="form-group has-feedback">
-          <p class="help-block">Set Role (if any)</p>
-
-          <input type="checkbox" name="isCord" value="1"> Coordinator<br>
-      </div>
-
-
-
-
-
-
-
 
 
         <div class="box-footer ">
@@ -212,7 +196,7 @@ if((isset($_POST['facultyName'])) && (isset($_POST['facultyDesign'])) && (isset(
             </div>
 
             <div class="form-group pull-right">
-                <a href="<?php echo siteroot ?>"  class="btn btn-danger">Back </a>
+                <a href="<?php echo siteroot ?>"  class="btn btn-default">Back </a>
                 <button type="submit" name="AddFaculty" class="btn btn-primary">Register</button>
             </div>
         </div>

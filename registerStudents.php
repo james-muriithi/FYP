@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         mail_user_registration($StudentEmail,$StudentName,$StudentPass);
                         if (!mail_user_registration()){
 
-                            header('Location:' . $_SERVER['PHP_SELF'] . '?status=te');die;
+                            header('Location:' . $_SERVER['PHP_SELF'] . '?status=mail_err');die;
                         }
                     }
 
@@ -138,8 +138,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <?php
                         }
-                        else if ($_GET['status'] == 'te'){ ?>
-                            <div style="text-align:center;" class="alert alert-warning" role="alert">
+                        else if ($_GET['status'] == 'mail_err'){ ?>
+                            <div style="text-align:center;" class="alert alert-info" role="alert">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
                                 Student Registered Successfully but email was not sent to user due to some error
                                 <button type="button" class="close" data-dismiss="alert">x</button>

@@ -91,31 +91,46 @@ if (isset($_GET['group_id'])){
     <div class="col-md-10">
 
         <?php
-     if (isset($_GET['status'])){
-                 if ($_GET['status']=='f'){ ?>
-       
-			<div style="text-align:center;" class="alert alert-danger" role="alert">
-			<span class="glyphicon glyphicon-exclamation-sign"></span>
-			Something Went Wrong
-			<button type="button" class="close" data-dismiss="alert">x</button>
-			</div> 
-                    
-       <?php }
-        else if ($_GET['status']=='t'){ ?>
-           	<div style="text-align:center;" class="alert alert-success" role="alert">
-			<span class="glyphicon glyphicon-exclamation-sign"></span>
-			Request Sent to supervisor
-			<button type="button" class="close" data-dismiss="alert">x</button>
-			</div> 
-     <?php   } 
-         
-     }
+        if (isset($_GET['status'])){
+            if ($_GET['status'] == 't'){ ?>
+                <div style="text-align:center;" class="alert alert-success" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Request sent to supervisor successfully!
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                </div>
+                <?php
+            }
+            else  if ($_GET['status'] == 'f'){ ?>
+                <div style="text-align:center;" class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Error! Something Went Wrong
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                </div>
+                <?php
+            }
+            else if ($_GET['status'] == 'a'){ ?>
+                <div style="text-align:center;" class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Error!
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                </div>
+                <?php
+            }
+            else if ($_GET['add'] == 'e'){ ?>
+                <div style="text-align:center;" class="alert alert-danger" role="alert">
+                    <span class="glyphicon glyphicon-exclamation-sign"></span>
+                    Error!
+                    <button type="button" class="close" data-dismiss="alert">x</button>
+                </div>
+                <?php
+            }
 
-      
-     ?>
-          <div class="box">
+        }
+        ?>
+
+        <div class="box no-border">
             <div class="box-header">
-              <h3 class="box-title">Request Supervisor</h3>
+              <h3 class="box-title">List of Available Supervisors</h3>
             </div>
               <?php 
               //If request is sent to supervisor or group already has a supervisor
