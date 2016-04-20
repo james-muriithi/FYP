@@ -4,15 +4,29 @@ require_once('includes/functions.php');
 
 //Check if user is leader of a group
 if (isset($_SESSION["facultyId"])) {
+    $supervisorId = $_SESSION['facultyId'];
 
-
+    //Check if Supervisor can accept request
+    //
+    $sql = "SELECT * FROM faculty JOIN work_load ON faculty.facultyId = work_load.facultyId WHERE faculty.facultyId = '$supervisorId' LIMIT 1 ";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        // output data of each row
+        while($row = $result->fetch_assoc()) {
+            $totalLoad = $row['totalLoad'];
+            $currentLoad = $row['currentLoad'];
+            $facultyName = $row['facultyName'];
+        }
+    }
+    if ($currentLoad < $totalLoad){
         //Check if he has student requests
-        $supervisorId = $_SESSION['facultyId'];
+
         $sql = "SELECT * from faculty_student_request WHERE faculty_student_request.facultyId = '$supervisorId' ";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             $numOfRequests = $result->num_rows;
         }
+    }
 
 
 }
@@ -39,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
     }
     
     //Function for accept Request
-    if (isset($_GET["accept"]) and is_numeric($_GET["accept"]) ){
+    if (isset($_GET["accept"]) AND is_numeric($_GET["accept"]) AND strlen($_GET['accept']) > 0 ){
 
         $id = filter_input(INPUT_GET, 'accept');
          
@@ -58,10 +72,43 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                 if ($conn->query($sql) === TRUE) {
                     //Record also deleted
                     
-                    //Increament value of currentload
+                    //Increment value of currentload
                     $sql = "UPDATE work_load SET currentLoad = currentLoad +1 WHERE facultyId = '$facultyId'";
                     if ($conn->query($sql) === TRUE) {
-                        header('Location:' . $_SERVER['PHP_SELF'] );    
+
+                        /****
+                         * Add this to timeline
+                         *  Zeeshan Sabir is now supervising group (FYP Management System)
+                         *  Faculty Name from facultyId (SESSION)
+                         *  Group Name from groupId
+                         *
+                         */
+                        //Add this info to the students and faculty timeline
+
+
+
+
+                        //Get Batch id,projectName and SDP part from groupId
+                        $sql = "SELECT * FROM student_group WHERE groupId = '$groupId' LIMIT 1";
+                        $result = $conn->query($sql);
+
+                        if ($result->num_rows > 0) {
+                            // output data of each row
+                            while($row = $result->fetch_assoc()) {
+                                $batchId = $row['batchId'];
+                                $projectName = $row['projectName'];
+                                $sdpPart = $row['sdpPart'];
+                            }
+                        }
+
+                        $title = '<i class="fa fa-info-circle" aria-hidden="true"></i> Info';
+                        $details = $facultyName." is now supervising group ".$projectName;
+
+                        $sql = "INSERT INTO timeline_student (title, details, type, batchId, sdpPart) VALUES ('$title', '$details', 'info', '$batchId', '$spdPart')";
+
+                        if ($conn->query($sql) === TRUE) {
+                            header('Location:' . $_SERVER['PHP_SELF'] );
+                        }
                     }
 
                     

@@ -1,3 +1,55 @@
+
+<?php if (isset($_GET['details']) && is_numeric($_GET['details']) && strlen($_GET['details'])>0){
+    $detailsId = filter_input(INPUT_GET,'details',FILTER_SANITIZE_NUMBER_INT);
+    $sql = "SELECT * FROM timeline_student WHERE id='$detailsId' LIMIT 1 ";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+        $title = $row['title'];
+        $details = $row['details'];
+        $type = $row['type'];
+        $createdDtm = $row['createdDtm'];
+
+    }
+
+    }
+?>
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel"><?php echo $title;?></h4>
+            </div>
+            <div class="modal-body">
+
+                <?php echo $details;?>
+                <p class="text-muted"><i class="fa fa-clock-o" aria-hidden="true"></i> <?php echo time2str($createdDtm);?></p>
+
+                <br/>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <script>
+        // A $( document ).ready() block.
+        $( document ).ready(function() {
+            $('#myModal').modal('show');
+        });
+    </script>
+    
+<?php } ?>
+
 <ul class="timeline">
     <?php
     require_once ("includes/functions.php");
@@ -10,9 +62,6 @@
 
         //$whereSQL = "WHERE batch_id = '$batchId' ";
     }
-
-
-
 
     //Get Values from Database
     $sql = "SELECT * FROM timeline_student WHERE batchId ='$batchId' ORDER BY createdDtm DESC  ";//Chronoligical Order
@@ -51,8 +100,8 @@
                 </div>
                 <div class="timeline-footer">
                     <?php if (strlen($row["details"] >= '500')){ ?>
-                        <a href="<?php echo $_SERVER["PHP_SELF"]."?details=".$row["id"];?>" class="btn btn-primary btn-xs">Read more</a>
-
+                        <a href="<?php echo $_SERVER['PHP_SELF'].'?details='.$row['id'];?>"  class="btn btn-primary btn-xs">Show Details</a>
+<!--                        <button  class="btn btn-primary btn-xs">Show Details</button>-->
                     <?php } ?>
 
                 </div>

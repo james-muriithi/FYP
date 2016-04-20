@@ -179,7 +179,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <td>
                                     <form  action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" onsubmit="return confirm('Are you sure you want to send request to this group?');">
                                         <input type="hidden" name="requestId" value="<?php echo $row['groupId'];?>">
-                                        <button type="submit" name="btnSendRequest" class="btn  btn-primary btn-block  btn-sm"><i class="fa fa-check" aria-hidden="true"></i> Send Request</button>
+                                        <button type="submit" name="btnSendRequest" class="btn  btn-primary btn-block  btn-sm"<i class="fa fa-user-plus" aria-hidden="true"></i> Send Request</button>
                                     </form>
                                 </td>
                             </tr>

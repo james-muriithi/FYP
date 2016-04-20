@@ -112,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <td><?php echo $row['groupId'];?></td>
                                             <td><?php echo $row['projectName'];?></td>
 
-                                            <td><?php $batchId= $row['batch_id'];
+                                            <td><?php $batchId= $row['batchId'];
                                                 $batchName = $conn->query("SELECT batchName FROM batch WHERE batchId = '$batchId' ")->fetch_object()->batchName;
                                                 echo $batchName;
                                                 ?>

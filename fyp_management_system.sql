@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 20, 2016 at 05:42 PM
+-- Generation Time: Apr 20, 2016 at 08:10 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -139,7 +139,8 @@ INSERT INTO `faculty` (`facultyId`, `facultyName`, `facultyPhoneNo`, `facultyEma
 (19, 'Muhammad Fawad Chaudry', '12345678', 'fawadch@gmail.com', 'Supervisor', NULL, '123', NULL, NULL, '2016-04-20 20:18:57'),
 (20, 'Uzair Muhammad', '12345678', 'muzair@gmail.com', 'Supervisor', NULL, '123', NULL, NULL, '2016-04-20 20:20:44'),
 (21, 'Zeeshan Sabir', '12345678', 'zeeshan@gmail.com', 'Supervisor', NULL, '123', NULL, NULL, '2016-04-20 20:22:22'),
-(22, 'Osama Raza', '12345678', 'osama@riu.edu.pk', 'Supervisor', NULL, '123', NULL, NULL, '2016-04-20 20:41:59');
+(22, 'Osama Raza', '12345678', 'osama@riu.edu.pk', 'Supervisor', NULL, '123', NULL, NULL, '2016-04-20 20:41:59'),
+(23, 'Hajra Murtaza', '12345678', 'hajra@gmail.com', 'Supervisor', NULL, '123', NULL, NULL, '2016-04-20 23:01:06');
 
 -- --------------------------------------------------------
 
@@ -153,6 +154,14 @@ CREATE TABLE `faculty_student_group` (
   `facultyId` int(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='facultyGroupInfo';
 
+--
+-- Dumping data for table `faculty_student_group`
+--
+
+INSERT INTO `faculty_student_group` (`facultyStudentId`, `groupId`, `facultyId`) VALUES
+(2, 1, 21),
+(3, 4, 23);
+
 -- --------------------------------------------------------
 
 --
@@ -161,9 +170,9 @@ CREATE TABLE `faculty_student_group` (
 
 CREATE TABLE `faculty_student_request` (
   `requestId` int(11) NOT NULL,
-  `request_dtm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `facultyId` int(11) DEFAULT NULL,
-  `groupId` int(11) DEFAULT NULL
+  `groupId` int(11) DEFAULT NULL,
+  `requestDtm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
@@ -411,6 +420,14 @@ CREATE TABLE `timeline_student` (
   `createdDtm` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Timeline for students';
 
+--
+-- Dumping data for table `timeline_student`
+--
+
+INSERT INTO `timeline_student` (`id`, `title`, `details`, `type`, `taskId`, `batchId`, `sdpPart`, `createdDtm`) VALUES
+(1, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Zeeshan Sabir is now supervising group FYP Management System', 'info', NULL, '18', '', '2016-04-20 22:54:48'),
+(2, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Hajra Murtaza is now supervising group RSATS', 'info', NULL, '18', '', '2016-04-20 23:01:34');
+
 -- --------------------------------------------------------
 
 --
@@ -432,8 +449,9 @@ INSERT INTO `work_load` (`loadId`, `facultyId`, `totalLoad`, `currentLoad`) VALU
 (9, 18, 0, 0),
 (10, 19, 1, 0),
 (11, 20, 2, 0),
-(12, 21, 1, 0),
-(13, 22, 1, 0);
+(12, 21, 1, 1),
+(13, 22, 1, 0),
+(14, 23, 1, 1);
 
 --
 -- Indexes for dumped tables
@@ -592,17 +610,17 @@ ALTER TABLE `external_examiner`
 -- AUTO_INCREMENT for table `faculty`
 --
 ALTER TABLE `faculty`
-  MODIFY `facultyId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `facultyId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 --
 -- AUTO_INCREMENT for table `faculty_student_group`
 --
 ALTER TABLE `faculty_student_group`
-  MODIFY `facultyStudentId` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `facultyStudentId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `faculty_student_request`
 --
 ALTER TABLE `faculty_student_request`
-  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `grades`
 --
@@ -657,12 +675,12 @@ ALTER TABLE `timeline_faculty`
 -- AUTO_INCREMENT for table `timeline_student`
 --
 ALTER TABLE `timeline_student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `work_load`
 --
 ALTER TABLE `work_load`
-  MODIFY `loadId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `loadId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
