@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 20, 2016 at 08:10 PM
+-- Generation Time: Apr 21, 2016 at 09:36 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -61,6 +61,13 @@ CREATE TABLE `batch_tasks` (
   `createdDtm` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `batch_tasks`
+--
+
+INSERT INTO `batch_tasks` (`taskId`, `batchId`, `sdpPart`, `taskName`, `taskDetail`, `taskWeek`, `taskDeadline`, `templateId`, `hasDeliverable`, `createdDtm`) VALUES
+(1, 18, '1', 'Deliverable 01: Project Team List', '<p>\r\n\r\n</p><ul><li>Use <b>â€œTemplate-01â€</b> to fill in the details of project team members and submit hard copy to Project Coordinator .</li><li>Due Date: Monday, 25th April 2016 (Before 3:30pm)</li></ul>\r\n\r\n<br><p></p>', 3, '2016-04-25 15:30:00', 4, 1, '2016-04-21 21:48:26');
+
 -- --------------------------------------------------------
 
 --
@@ -74,6 +81,17 @@ CREATE TABLE `batch_templates` (
   `templateLocation` varchar(150) DEFAULT NULL,
   `uploadedDtm` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `batch_templates`
+--
+
+INSERT INTO `batch_templates` (`templateId`, `batchId`, `templateName`, `templateLocation`, `uploadedDtm`) VALUES
+(3, 18, 'Handbook-Version-2-0.pdf', 'Handbook-Version-2-0.pdf', '2016-04-21 20:26:59'),
+(4, 18, 'Template -  01 - Project Team.doc', 'Template -  01 - Project Team.doc', '2016-04-21 20:27:02'),
+(5, 18, 'Template -  02 - Inital Proposal.doc', 'Template -  02 - Inital Proposal.doc', '2016-04-21 20:27:06'),
+(6, 18, 'Template -  04 - Proposal  Plan.doc', 'Template -  04 - Proposal  Plan.doc', '2016-04-21 20:27:56'),
+(7, 18, 'Template -  05 - Project Report.doc', 'Template -  05 - Project Report.doc', '2016-04-21 20:27:59');
 
 -- --------------------------------------------------------
 
@@ -103,12 +121,20 @@ CREATE TABLE `configurations` (
 CREATE TABLE `external_examiner` (
   `examinerId` int(255) NOT NULL,
   `examinerName` varchar(100) NOT NULL,
-  `examinerPhone` varchar(50) NOT NULL,
   `examinerEmail` varchar(255) NOT NULL,
+  `examinerPhone` varchar(50) NOT NULL,
   `examinerPassword` varchar(255) NOT NULL,
   `company` varchar(255) NOT NULL,
-  `isActive` tinyint(4) NOT NULL DEFAULT '1'
+  `designation` varchar(255) NOT NULL,
+  `isActive` tinyint(1) NOT NULL DEFAULT '1'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='examinerGroupInfo';
+
+--
+-- Dumping data for table `external_examiner`
+--
+
+INSERT INTO `external_examiner` (`examinerId`, `examinerName`, `examinerEmail`, `examinerPhone`, `examinerPassword`, `company`, `designation`, `isActive`) VALUES
+(1, 'Bill Gates', 'gates@microsoft.com', '1234567890', '123', 'Microsoft', 'CEO', 1);
 
 -- --------------------------------------------------------
 
@@ -124,7 +150,7 @@ CREATE TABLE `faculty` (
   `designation` varchar(255) NOT NULL,
   `facultyImage` varchar(255) DEFAULT NULL,
   `facultyPassword` varchar(255) NOT NULL,
-  `isAdmin` tinyint(1) DEFAULT NULL,
+  `isAdmin` tinyint(1) DEFAULT '0',
   `isCoordinator` tinyint(1) DEFAULT NULL,
   `createdDtm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Faculty Details';
@@ -136,11 +162,11 @@ CREATE TABLE `faculty` (
 INSERT INTO `faculty` (`facultyId`, `facultyName`, `facultyPhoneNo`, `facultyEmail`, `designation`, `facultyImage`, `facultyPassword`, `isAdmin`, `isCoordinator`, `createdDtm`) VALUES
 (0, 'Super Admin', '', 'superadmin@fypms.com', '--', NULL, '123', 1, 0, '0000-00-00 00:00:00'),
 (18, 'Saud Khan', '+923458541454', 'saudkhan@riu.edu.pk', 'Coordinator', '5715310b853707.98279886.jpg', '123', 0, 1, '2016-04-17 20:45:12'),
-(19, 'Muhammad Fawad Chaudry', '12345678', 'fawadch@gmail.com', 'Supervisor', NULL, '123', NULL, NULL, '2016-04-20 20:18:57'),
-(20, 'Uzair Muhammad', '12345678', 'muzair@gmail.com', 'Supervisor', NULL, '123', NULL, NULL, '2016-04-20 20:20:44'),
-(21, 'Zeeshan Sabir', '12345678', 'zeeshan@gmail.com', 'Supervisor', NULL, '123', NULL, NULL, '2016-04-20 20:22:22'),
-(22, 'Osama Raza', '12345678', 'osama@riu.edu.pk', 'Supervisor', NULL, '123', NULL, NULL, '2016-04-20 20:41:59'),
-(23, 'Hajra Murtaza', '12345678', 'hajra@gmail.com', 'Supervisor', NULL, '123', NULL, NULL, '2016-04-20 23:01:06');
+(19, 'Muhammad Fawad Chaudry', '12345678', 'fawadch@gmail.com', 'Supervisor', NULL, '123', 0, NULL, '2016-04-20 20:18:57'),
+(20, 'Uzair Muhammad', '12345678', 'muzair@gmail.com', 'Supervisor', NULL, '123', 0, NULL, '2016-04-20 20:20:44'),
+(21, 'Zeeshan Sabir', '12345678', 'zeeshan@gmail.com', 'Supervisor', NULL, '123', 0, NULL, '2016-04-20 20:22:22'),
+(22, 'Osama Raza', '12345678', 'osama@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, '2016-04-20 20:41:59'),
+(23, 'Hajra Murtaza', '12345678', 'hajra@gmail.com', 'Supervisor', NULL, '123', 0, NULL, '2016-04-20 23:01:06');
 
 -- --------------------------------------------------------
 
@@ -187,8 +213,22 @@ CREATE TABLE `grades` (
   `groupId` int(11) DEFAULT NULL,
   `sdpPart` int(11) DEFAULT NULL,
   `comments` text,
-  `grade` varchar(50) DEFAULT NULL
+  `grade` varchar(50) DEFAULT NULL,
+  `gradedBy` int(11) DEFAULT NULL COMMENT 'User id of user',
+  `gradeDtm` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf32;
+
+--
+-- Dumping data for table `grades`
+--
+
+INSERT INTO `grades` (`id`, `studentId`, `groupId`, `sdpPart`, `comments`, `grade`, `gradedBy`, `gradeDtm`) VALUES
+(4, 14, 1, 2, '', 'A', 1, '2016-04-22 00:31:52'),
+(5, 15, 1, 2, '', 'A', 1, '2016-04-22 00:31:52'),
+(6, 21, 1, 2, '', 'B', 1, '2016-04-22 00:31:53'),
+(7, 14, 1, 1, '', 'A', 21, '2016-04-22 00:34:28'),
+(8, 15, 1, 1, '', 'A', 21, '2016-04-22 00:34:28'),
+(9, 21, 1, 1, '', 'B+', 21, '2016-04-22 00:34:28');
 
 -- --------------------------------------------------------
 
@@ -232,6 +272,13 @@ CREATE TABLE `group_uploads` (
   `uploadedDtm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `group_uploads`
+--
+
+INSERT INTO `group_uploads` (`id`, `groupId`, `taskId`, `uploadFile`, `uploadedBy`, `uploadedDtm`) VALUES
+(1, 1, 1, 'group_1_deliverable_1.doc', 15, '2016-04-21 21:49:18');
+
 -- --------------------------------------------------------
 
 --
@@ -248,6 +295,13 @@ CREATE TABLE `meeting_logs` (
   `meeting_status` enum('Pending','Done','Cancelled','Postponed') NOT NULL DEFAULT 'Pending',
   `created_dtm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Maintain all meeting logs of supervisors with students';
+
+--
+-- Dumping data for table `meeting_logs`
+--
+
+INSERT INTO `meeting_logs` (`id`, `supervisor_id`, `group_id`, `meeting_title`, `meeting_dtm`, `comments`, `meeting_status`, `created_dtm`) VALUES
+(1, 21, 1, 'Meeting 01 - Group Formation', '2016-04-30 15:30:00', '', 'Done', '2016-04-21 22:16:54');
 
 -- --------------------------------------------------------
 
@@ -400,6 +454,7 @@ CREATE TABLE `timeline_faculty` (
   `details` text,
   `type` varchar(50) DEFAULT NULL,
   `batchId` int(11) DEFAULT NULL,
+  `sdpPart` int(11) DEFAULT NULL,
   `createdDtm` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='timeline for faculty';
 
@@ -415,8 +470,8 @@ CREATE TABLE `timeline_student` (
   `details` text,
   `type` varchar(50) DEFAULT NULL,
   `taskId` int(11) DEFAULT NULL,
-  `batchId` text,
-  `sdpPart` varchar(1) DEFAULT '1',
+  `batchId` int(11) DEFAULT NULL,
+  `sdpPart` int(11) DEFAULT '1',
   `createdDtm` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Timeline for students';
 
@@ -425,8 +480,9 @@ CREATE TABLE `timeline_student` (
 --
 
 INSERT INTO `timeline_student` (`id`, `title`, `details`, `type`, `taskId`, `batchId`, `sdpPart`, `createdDtm`) VALUES
-(1, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Zeeshan Sabir is now supervising group FYP Management System', 'info', NULL, '18', '', '2016-04-20 22:54:48'),
-(2, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Hajra Murtaza is now supervising group RSATS', 'info', NULL, '18', '', '2016-04-20 23:01:34');
+(1, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Zeeshan Sabir is now supervising group FYP Management System', 'info', NULL, 18, 0, '2016-04-20 22:54:48'),
+(2, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Hajra Murtaza is now supervising group RSATS', 'info', NULL, 18, 0, '2016-04-20 23:01:34'),
+(3, 'Deliverable 01: Project Team List', '<p>\r\n\r\n</p><ul><li>Use <b>â€œTemplate-01â€</b> to fill in the details of project team members and submit hard copy to Project Coordinator .</li><li>Due Date: Monday, 25th April 2016 (Before 3:30pm)</li></ul>\r\n\r\n<br><p></p>', 'task', 1, 18, 1, '2016-04-21 21:48:26');
 
 -- --------------------------------------------------------
 
@@ -590,12 +646,12 @@ ALTER TABLE `batch`
 -- AUTO_INCREMENT for table `batch_tasks`
 --
 ALTER TABLE `batch_tasks`
-  MODIFY `taskId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `taskId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `batch_templates`
 --
 ALTER TABLE `batch_templates`
-  MODIFY `templateId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `templateId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `configurations`
 --
@@ -605,7 +661,7 @@ ALTER TABLE `configurations`
 -- AUTO_INCREMENT for table `external_examiner`
 --
 ALTER TABLE `external_examiner`
-  MODIFY `examinerId` int(255) NOT NULL AUTO_INCREMENT;
+  MODIFY `examinerId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `faculty`
 --
@@ -620,12 +676,12 @@ ALTER TABLE `faculty_student_group`
 -- AUTO_INCREMENT for table `faculty_student_request`
 --
 ALTER TABLE `faculty_student_request`
-  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `grades`
 --
 ALTER TABLE `grades`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
 -- AUTO_INCREMENT for table `group_deliverables`
 --
@@ -640,12 +696,12 @@ ALTER TABLE `group_requests`
 -- AUTO_INCREMENT for table `group_uploads`
 --
 ALTER TABLE `group_uploads`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `meeting_logs`
 --
 ALTER TABLE `meeting_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `project_repository`
 --
@@ -675,7 +731,7 @@ ALTER TABLE `timeline_faculty`
 -- AUTO_INCREMENT for table `timeline_student`
 --
 ALTER TABLE `timeline_student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `work_load`
 --
