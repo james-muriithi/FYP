@@ -6,11 +6,11 @@ require_once("includes/config.php");
 session_start();
 
 //Check if External Examiner is logged in
-if(!isset($_SESSION["examinerId"]))
+if(!isset($_SESSION["facultyId"]))
 {
     header('Location: '.'index.php');
 }
-$examinerId = $_SESSION['examinerId'];
+$facultyId = $_SESSION['facultyId'];
 
 
 
@@ -55,14 +55,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $studentId = $_POST['studentId'];
             $count = $_POST['count'];
             $groupId = $_POST['groupId'];
-            $sdpPart = '2';
+            $sdpPart = '1';
 
             //FROM FORM
             $grade = $_POST['grade'];
             $comments = $_POST['comments'];
 
             for ($x = 0; $x < $count; $x++) {
-                $sql = "INSERT INTO grades (studentId, groupId, sdpPart, comments, grade, gradedBy) VALUES ('$studentId[$x]', '$groupId', '$sdpPart' , '$comments[$x]', '$grade[$x]', $examinerId)";
+                $sql = "INSERT INTO grades (studentId, groupId, sdpPart, comments, grade,gradedBy) VALUES ('$studentId[$x]', '$groupId', '$sdpPart' , '$comments[$x]', '$grade[$x]','$facultyId')";
 
                 if ($conn->query($sql) === TRUE) {
                     header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');
@@ -90,7 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 <body class="hold-transition skin-blue sidebar-mini">
-    
+
 <div class="wrapper">
 
     <?php require_once("includes/main-header.php"); ?>
@@ -144,17 +144,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
                                             <?php
-                                            $sql = "SELECT *  FROM student_group WHERE sdpPart=1"; //TODO SDP Part 2
+                                            $sql = "SELECT * FROM faculty_student_group JOIN student_group ON faculty_student_group.groupId = student_group.groupId WHERE facultyId= '$facultyId'";
                                             $result = $conn->query($sql);
 
                                             if ($result->num_rows > 0) {
                                                 // output data of each row
                                                 while($row = $result->fetch_assoc()) { ?>
                                                     <li><a href="<?php echo $_SERVER['PHP_SELF'].'?group='.$row['groupId'];?>"><?php echo $row['projectName'];?></a></li>
-                                            <?php    }
+                                                <?php    }
                                             } else { ?>
                                                 <li><a href="<?php echo $_SERVER['PHP_SELF'];?>">No Groups Available</a></li>
-                                         <?php   }
+                                            <?php   }
                                             ?>
                                         </ul>
                                     </div>
@@ -178,41 +178,41 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <th>Name</th>
                                         <th>Set Grade</th>
                                         <th>Comments/Review</th>
-<!--                                        <th>Action</th>-->
+                                        <!--                                        <th>Action</th>-->
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <form role="form" action="<?php echo $_SERVER['PHP_SELF'];?>" id="gradeStudents" name="gradeStudents" method="POST" >
-                                    <?php
-                                    $sql = "SELECT *  FROM student WHERE student.groupId ='$groupId' ";
-                                    $result = $conn->query($sql);
-                                    if ($result->num_rows > 0) {
-                                    // output data of each row
-                                    while($row = $result->fetch_assoc()) { ?>
+                                        <?php
+                                        $sql = "SELECT *  FROM student WHERE student.groupId ='$groupId' ";
+                                        $result = $conn->query($sql);
+                                        if ($result->num_rows > 0) {
+                                        // output data of each row
+                                        while($row = $result->fetch_assoc()) { ?>
                                         <!--HIDDEN INPUTS-->
                                         <input type="hidden" name="studentId[]" id="studentId[]" value="<?php echo $row['studentId'];?>">
                                         <input type="hidden" name="count" id="count" value="<?php echo $result->num_rows; ?>">
                                         <input type="hidden" name="groupId" id="groupId" value="<?php echo $groupId; ?>">
-                                    <tr>
-                                        <td><?php echo $row['studentCMS'];?></td>
-                                        <td><?php echo $row['studentName'];?></td>
-                                        <td><select class="form-control" name="grade[]" required>
-                                                <option value="">Select Grade</option>
-                                                <option value="A+">A+</option>
-                                                <option value="A">A</option>
-                                                <option value="B+">B+</option>
-                                                <option value="B">B</option>
-                                                <option value="C+">C+</option>
-                                                <option value="C">C</option>
-                                                <option value="D+">D+</option>
-                                                <option value="D">D</option>
-                                                <option value="F">F</option>
-                                            </select>
-                                        </td>
-                                        <td><input type="text" class="form-control" id="comments[]" name="comments[]" placeholder="Comments/Reviews if any"></td>
-<!--                                        <td><button type="submit" name="btnGradeStudents" form="gradeStudents" class="btn btn-default btn-sm ">Grade Student</button></div></td>-->
-                                        <?php } } ?>
-                                    </tr>
+                                        <tr>
+                                            <td><?php echo $row['studentCMS'];?></td>
+                                            <td><?php echo $row['studentName'];?></td>
+                                            <td><select class="form-control" name="grade[]" required>
+                                                    <option value="">Select Grade</option>
+                                                    <option value="A+">A+</option>
+                                                    <option value="A">A</option>
+                                                    <option value="B+">B+</option>
+                                                    <option value="B">B</option>
+                                                    <option value="C+">C+</option>
+                                                    <option value="C">C</option>
+                                                    <option value="D+">D+</option>
+                                                    <option value="D">D</option>
+                                                    <option value="F">F</option>
+                                                </select>
+                                            </td>
+                                            <td><input type="text" class="form-control" id="comments[]" name="comments[]" placeholder="Comments/Reviews if any"></td>
+                                            <!--                                        <td><button type="submit" name="btnGradeStudents" form="gradeStudents" class="btn btn-default btn-sm ">Grade Student</button></div></td>-->
+                                            <?php } } ?>
+                                        </tr>
 
                                     </form>
                                     </tbody>
@@ -223,22 +223,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <button type="submit" name="btnGradeStudents" form="gradeStudents" class="btn btn-primary pull-right">Grade Students</button>
                                 </div>
 
-                            <?php
+                                <?php
                             }else if (isset($grade_check)) {
                                 if ($grade_check == TRUE){
 
 
-                                ?>
-                                <br/><br/>
+                                    ?>
+                                    <br/><br/>
 
-                                <div class="callout callout-info">
-                                    <h4>Already Graded!</h4>
+                                    <div class="callout callout-info">
+                                        <h4>Already Graded!</h4>
 
-                                    <p>This group has already been graded.Select another group from the dropdown list</p>
-                                </div>
+                                        <p>This group has already been graded.Select another group from the dropdown list</p>
+                                    </div>
 
-                            <?php
-                            }   }
+                                    <?php
+                                }   }
 
                             ?>
 
@@ -259,5 +259,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <?php
 require_once("includes/required_js.php");
 ?>
+<!--PAGE SCRIPT-->
 
 </body>

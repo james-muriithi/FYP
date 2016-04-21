@@ -310,7 +310,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 </tr>
                                                 </thead>
                                                 <?php
-                                                $sql = "SELECT * FROM timeline WHERE  sdp_part='1' ORDER BY created_dtm DESC";
+                                                $sql = "SELECT * FROM timeline_student WHERE  sdpPart='1' ORDER BY createdDtm DESC";
                                                 $result = $conn->query($sql);
                                                 if ($result->num_rows > 0) {
                                                     while ($row = $result->fetch_assoc()) {
@@ -346,7 +346,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 </tr>
                                                 </thead>
                                                 <?php
-                                                $sql = "SELECT * FROM timeline WHERE  sdp_part='2' ORDER BY created_dtm DESC";
+                                                $sql = "SELECT * FROM timeline_student WHERE  sdpPart='2' ORDER BY createdDtm DESC";
                                                 $result = $conn->query($sql);
                                                 if ($result->num_rows > 0) {
                                                     while ($row = $result->fetch_assoc()) {

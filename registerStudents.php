@@ -165,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
 
                             <div class="form-group has-feedback">
-                                <input type="text" name="name" class="form-control" placeholder="Enter Full name"  required/>
+                                <input type="text" name="name"  class="form-control" placeholder="Enter Full name"  required/>
                                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
                             </div>
 
@@ -181,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
 
                             <div class="form-group has-feedback">
-                                <input type="text" name="contact" class="form-control bfh-phone"  placeholder="Phone Number" /> <!--TODO : Add pattern for number here-->
+                                <input type="text" name="contact" pattern="[0-9]+" minlength="10" maxlength="11" class="form-control bfh-phone"  placeholder="Phone Number" /> <!--TODO : Add pattern for number here-->
                                 <span class="glyphicon glyphicon-phone form-control-feedback"></span>
                             </div>
                             <div class="form-group has-feedback">

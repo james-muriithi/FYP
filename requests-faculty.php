@@ -3,7 +3,7 @@ require_once('includes/config.php');
 require_once('includes/functions.php');
 
 //Check if user is leader of a group
-if (isset($_SESSION["facultyId"])) {
+if (isset($_SESSION["facultyId"]) && $_SESSION['isAdmin'] != 1) {
     $supervisorId = $_SESSION['facultyId'];
 
     //Check if Supervisor can accept request
@@ -107,7 +107,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
                         $sql = "INSERT INTO timeline_student (title, details, type, batchId, sdpPart) VALUES ('$title', '$details', 'info', '$batchId', '$spdPart')";
 
                         if ($conn->query($sql) === TRUE) {
-                            header('Location:' . $_SERVER['PHP_SELF'] );
+                            $sql = "INSERT INTO timeline_faculty (title, details, type, batchId, sdpPart) VALUES ('$title', '$details', 'info', '$batchId', '$spdPart')";
+
+                            if ($conn->query($sql) === TRUE) {
+                                header('Location:' . $_SERVER['PHP_SELF'] );
+                            }
+
+
                         }
                     }
 

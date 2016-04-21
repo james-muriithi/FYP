@@ -227,7 +227,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         
                     }?>
 
-                    <div class="box">
+                    <div class="box no-border">
                         <div class="box-header">
                             <h3 class="box-title">Faculty List</h3>
 
@@ -240,7 +240,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <th>Name</th>
                                     <th>Designation</th>
                                     <th>Email</th>
-                                    <th>Roles</th>
                                     <th>Actions</th>
                                 </tr>
                                 </thead>
@@ -249,19 +248,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 $result = $conn->query($sql);
                                 while($row = $result->fetch_assoc()) { ?>
                                     <tr>
-                                        <td><?php echo $row['facultyName'] ;?></td>
+                                        <td><?php echo $row['facultyName'] ; if ($row["isCoordinator"] == 1){echo ' <span class="label label-primary">Coordinator</span>';}?></td>
                                         <td><?php echo $row['designation'];?></td>
                                         <td><?php echo $row['facultyEmail'] ;?></td>
                                         <td>
-                                            <?php
-                                                if ($row["isAdmin"] == 1){echo '<p class="text-green">Administrator</p>';}
-                                                if ($row["isCoordinator"] == 1){echo '<p class="text-green">Coordinator</p>';}
-                                            ?></td>
-                                        <td>
-                                            <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['facultyId']; ?>"  class="btn  btn-primary btn-xs">Edit</a>
+                                            <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['facultyId']; ?>"   class="btn  btn-default btn-flat  btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
                                             <form  action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" onsubmit="return confirm('Are you sure you want to delete this faculty?');">
-                                                <input type="hidden" name="deleteId" value="<?php echo $row['facultyId'];?>">
-                                               <button type="submit" name="btnDelete" class="btn btn-danger btn-xs">Delete</button>
+                                                <input type="hidden" name="deleteId" value="<?php echo $row['facultyId'];?> ">
+                                                <button type="submit" name="btnDelete" class="btn  btn-danger btn-flat  btn-xs"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
                                             </form>
 
                                         </td>

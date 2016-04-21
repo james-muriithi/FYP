@@ -390,6 +390,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                             </div>
                             <!-- /.box-header -->
+                            <?php if (isset($_GET['batchId']) && is_numeric($_GET['batchId']) && strlen($_GET['batchId']) >0 ){ ?>
+
                             <div class="box-body  no-padding">
                                 <table id="batchTasks" class="table table-hover">
                                     <thead>
@@ -434,6 +436,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                                     ?>
                                 </table>
+                                <?php } ?>
                                 <div class="box-footer">
                                     <a href="<?php echo siteroot; ?>" class="btn  btn-default btn-sm  "><i class="fa fa-chevron-left" aria-hidden="true"></i> Back</a>
                                     <a href="<?php echo $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId; ?>" class="btn  btn-primary btn-sm pull-right  ">Add New Task</a>
@@ -446,7 +449,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 </div>
 
-            </div>
+<!--            </div>-->
         </section>
     </div>
 

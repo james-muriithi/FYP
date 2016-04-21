@@ -197,7 +197,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <?php
                                     $groupId = filter_input(INPUT_GET,'uploads',FILTER_SANITIZE_NUMBER_INT);
 
-                                    $sql = "SELECT * FROM group_deliverables WHERE group_id = '$groupId'";
+                                    $sql = "SELECT * FROM group_uploads WHERE groupId = '$groupId'";
 
                                     $result = $conn->query($sql);
 
@@ -206,18 +206,18 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         while($row = $result->fetch_assoc()) { ?>
                                             <tr>
                                                 <td><?php
-                                                    $configId = $row['config_id'];
-                                                    $configName = $conn->query("SELECT taskName FROM configurations WHERE configurationId = '$configId' LIMIT 1")->fetch_object()->taskName;
-                                                    echo $configName;
+                                                    $taskId = $row['taskId'];
+                                                    $taskName = $conn->query("SELECT taskName FROM batch_tasks WHERE taskId = '$taskId' LIMIT 1")->fetch_object()->taskName;
+                                                    echo $taskName;
 
                                                     ?>
                                                 </td>
                                                 <td><?php
-                                                    $deliverableName=$row['deliverable'];
-                                                    $groupId = $row['group_id'];
+                                                    $deliverableName=$row['uploadFile'];
+                                                    $groupId = $row['groupId'];
 
                                                     //Getting batchId,batch Name from groupId
-                                                    $batchId = $conn->query("SELECT batch_id FROM student_group WHERE groupId = '$groupId' ")->fetch_object()->batchId;
+                                                    $batchId = $conn->query("SELECT batchId FROM student_group WHERE groupId = '$groupId' ")->fetch_object()->batchId;
                                                     $batchName = $conn->query("SELECT batchName FROM batch WHERE batchId = '$batchId' ")->fetch_object()->batchName;
 
                                                     $group = 'Group '.$groupId;
@@ -226,9 +226,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     echo "<a href=\"$location\">$deliverableName</a>" ;
 
                                                     ?></td>
-                                                <td><?php echo $row['upload_dtm'];?></td>
-                                                <td><?php
-                                                    $studentId =$row['uploaded_by'];
+                                                    <td><?php echo $row['uploadedDtm'];?></td>
+                                                    <td><?php
+                                                    $studentId =$row['uploadedBy'];
                                                     $studentName = $conn->query("SELECT studentName FROM student WHERE studentId = '$studentId' LIMIT 1")->fetch_object()->studentName;
                                                     echo "<a href=\"studentProfile.php?id=$studentId\">$studentName</a>" ;
                                                     ?>

@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
             //Get batch name from batchId
             $batchName = $conn->query("SELECT batchName FROM batch WHERE batchId = '$batchId' ")->fetch_object()->batchName;
 
-            $locationToDelete =
+
 
 
 
@@ -90,14 +90,17 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $file_ext   =   explode('.',$file_name);
             $file_ext   = strtolower(end($file_ext));
 
-            $allowed    = array('doc','docx','pdf','jpg','jpeg','zip','rar', 'txt', 'pptx', 'ppt');
+            //$allowed    = array('doc','docx','pdf','jpg','jpeg','zip','rar','txt','pptx','ppt');
+            $allowed    = array ('doc','docx','pdf','ppt','pptx','rar','zip','txt','jpg','jpeg');
 
 
             if(in_array($file_ext,$allowed)){
 
 
+
                 if($file_error === 0){
-                    if($file_size <= 2097152){ //20Mib
+                    if($file_size <= 10485760){ //10Mib
+
 
                         if (strlen($templateName) > 0){
 
@@ -118,7 +121,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     }
                     else {
-                        header('Location:' . $_SERVER['PHP_SELF'] . '?status=fs');
+                        header('Location:' . $_SERVER['PHP_SELF'] . '?status=err_filesize');
                     }
 
                     if(move_uploaded_file($file_tmp, $file_destination)){
@@ -135,8 +138,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     }
                     else
                     {
-                        'Location:' . $_SERVER['PHP_SELF'] . '?status=f';
+                        'Location:' . $_SERVER['PHP_SELF'] . '?status=f';exit;
                     }
+
+                }else{
+                    'Location:' . $_SERVER['PHP_SELF'] . '?status=f';exit;
+                    //echo $file['size'];exit;
+                    //print_r($file);exit;
+                    //Unknown error
 
                 }
             }
@@ -195,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <?php
                         }
-                        else if ($_GET['status'] == 'fs'){ ?>
+                        else if ($_GET['status'] == 'err_filesize'){ ?>
                             <div style="text-align:center;" class="alert alert-danger" role="alert">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
                                 Error! File size exceeded
@@ -203,7 +212,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <?php
                         }
-                        else if ($_GET['status'] == 'e'){ ?>
+                        else if ($_GET['status'] == 'err_filetype'){ ?>
                             <div style="text-align:center;" class="alert alert-danger" role="alert">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
                                 Error!
@@ -245,6 +254,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <form id="editTemplate" name="editTemplate" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" enctype="multipart/form-data">
 
                                     <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
+
                                     <div class="form-group">
                                         <label class="col-sm-2 control-label">Template Name</label>
 
@@ -308,23 +318,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <label class="col-sm-2 control-label">Template Name</label>
 
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" name="templateName" id="templateName" placeholder="Enter Template name" >
+                                            <input type="text" class="form-control" name="templateName" id="templateName" placeholder="Enter Template name or leave empty to set filename as template name" >
                                         </div>
                                     </div>
                                     <div class="form-group">
 
                                         <div class="col-sm-12">
-                                            <input type="file"  name="templateFile" accept=".doc ,.docx, .pdf, .rar, .zip, .jpg, .jpeg, .ppt, .pptx" required>
+                                            <input type="file"  name="templateFile" accept=".doc ,.docx, .pdf, .rar, .zip, .jpg, .jpeg, .ppt, .pptx " required>
                                             <br/>
-                                            <p class="text-muted">File size limit :20 MiB</p>
+                                            <p class="text-muted">File size limit :10 MiB</p>
                                             <span class="text-muted">Allowed File types : docx | pdf | zip | rar | jpeg | pptx   </span>
                                         </div>
                                     </div>
 
                                 </form>
                                 <div class="box-footer">
-                                    <a href="<?php echo $_SERVER['PHP_SELF'];?>" class="btn btn-default btn-sm pull-left">Back</a>
-                                    <button type="submit" name="btnUploadTemplate" id="btnUploadTemplate" form="uploadTemplates" class="btn btn-primary btn-sm pull-right"><i class="fa fa-upload" ></i>Upload</button>
+
+                                    <a href="<?php echo $_SERVER['PHP_SELF'];?>" class="btn btn-default  pull-left">Back</a>
+                                    <button type="submit" name="btnUploadTemplate" id="btnUploadTemplate" form="uploadTemplates" class="btn btn-primary  pull-right"><i class="fa fa-upload" ></i>Upload</button>
                                 </div>
 
 
@@ -355,6 +366,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                                 </h3>
 
+
+
                                 <div class="box-tools">
                                     <form id="selectBatch"  id="selectBatch" method="get" name="selectGroup">
                                         <div class="input-group input-group-sm" style="width: 250px;">
@@ -382,41 +395,46 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                             </div>
                             <!-- /.box-header -->
-                            <div class="box-body  no-padding">
-                                <table id="meetingLogs" class="table table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>Template Name</th>
-                                        <th>Template</th>
-                                        <th>Actions</th>
-                                    </tr>
-                                    </thead>
-
-                                    <?php
-
-                                    $batchId = filter_input(INPUT_GET,'batchId',FILTER_SANITIZE_NUMBER_INT);
-
-                                    $sql = "SELECT * from batch_templates WHERE batchId = '$batchId' ORDER BY templateId ASC";
-                                    $result = $conn->query($sql);
-                                    while($row = $result->fetch_assoc()) { ?>
+                            <?php if (isset($_GET['batchId']) && is_numeric($_GET['batchId']) && strlen($_GET['batchId']) >0 ){ ?>
+                                <div class="box-body  no-padding">
+                                    <table id="meetingLogs" class="table table-hover">
+                                        <thead>
                                         <tr>
-                                            <td><?php echo $row['templateName'];?></td>
-                                            <td><?php echo $row['templateLocation'];?></td>
-                                            <td>
-                                                <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['templateId']; ?>"  class="btn  btn-primary btn-xs">Edit</a>
-                                                <a href="<?php echo $_SERVER['PHP_SELF'] . '?delete=' . $row['templateId']; ?>" onclick="return confirm('Are you sure you want to delete this record?')" class="btn  btn-danger btn-xs">Delete</a>
-                                            </td>
+                                            <th>Template Name</th>
+                                            <th>Template</th>
+                                            <th>Actions</th>
                                         </tr>
-                                    <?php }
+                                        </thead>
 
-                                    ?>
-                                </table>
-                                <div class="box-footer">
-                                    <a href="<?php echo siteroot; ?>" class="btn  btn-default btn-sm  "><i class="fa fa-chevron-left" aria-hidden="true"></i> Back</a>
-                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?add='.$batchId; ?>" class="btn  btn-primary btn-sm pull-right "><i class="fa fa-upload" ></i> Add New Template</a>
+                                        <?php
+
+                                        $batchId = filter_input(INPUT_GET,'batchId',FILTER_SANITIZE_NUMBER_INT);
+
+                                        $sql = "SELECT * from batch_templates WHERE batchId = '$batchId' ORDER BY templateId ASC";
+                                        $result = $conn->query($sql);
+                                        while($row = $result->fetch_assoc()) { ?>
+                                            <tr>
+                                                <td><?php echo $row['templateName'];?></td>
+                                                <td><?php echo $row['templateLocation'];?></td>
+                                                <td>
+                                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['templateId']; ?>"  class="btn  btn-primary btn-xs">Edit</a>
+                                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?delete=' . $row['templateId']; ?>" onclick="return confirm('Are you sure you want to delete this record?')" class="btn  btn-danger btn-xs">Delete</a>
+                                                </td>
+                                            </tr>
+                                        <?php }
+
+                                        ?>
+                                    </table>
+                                    <div class="box-footer">
+                                        <a href="<?php echo siteroot; ?>" class="btn  btn-default btn-sm  "> Back</a>
+                                        <a href="<?php echo $_SERVER['PHP_SELF'] . '?add='.$batchId; ?>" class="btn  btn-primary btn-sm pull-right "><i class="fa fa-upload" ></i> Add New Template</a>
+                                    </div>
                                 </div>
-                            </div>
-                            <!-- /.box-body -->
+                                <!-- /.box-body -->
+
+                                <?php
+                            }?>
+
                         </div>
                         <!-- /.box -->
 

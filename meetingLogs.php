@@ -1,4 +1,5 @@
 <?php
+//TODO send meeting logs to student notifications
 $title="FYPMS";
 $subtitle="Meeting Logs";
 require_once("includes/header.php");
@@ -47,9 +48,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if (isset($_POST['btnEditLog'])){
         //EDIT log
         $logId = filter_input(INPUT_POST,'editId',FILTER_SANITIZE_NUMBER_INT);
-
+        $groupId = filter_input(INPUT_POST,'groupId',FILTER_SANITIZE_NUMBER_INT);
         //Validations
         if ($_POST['status'] != "" && $_POST['meetingTitle'] != ""){
+
+            $groupId = filter_input(INPUT_POST,'groupId',FILTER_SANITIZE_NUMBER_INT);
 
             $status = filter_input(INPUT_POST,'status',FILTER_SANITIZE_SPECIAL_CHARS);
             $title = filter_input(INPUT_POST,'meetingTitle',FILTER_SANITIZE_SPECIAL_CHARS);
@@ -58,9 +61,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $sql = "UPDATE meeting_logs SET meeting_title = '$title' , meeting_status='$status' , comments='$comments' WHERE id='$logId' ";
 
             if ($conn->query($sql) === TRUE) {
-                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t&id='.$groupId);
             } else {
-                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f&id='.$groupId);
             }
         }
     }
@@ -74,15 +77,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             $meetingTitle = filter_input(INPUT_POST,'meetingTitle',FILTER_SANITIZE_SPECIAL_CHARS);
             $groupId = filter_input(INPUT_POST,'groupId',FILTER_SANITIZE_NUMBER_INT);
-            $meetingDate = date('Y-m-d', strtotime($_POST['meetingDate']));
-            //$meetingTime = $_POST['meetingTime'];
 
-            $sql = "INSERT INTO meeting_logs (supervisor_id, group_id, meeting_title, meeting_dtm, meeting_status)VALUES ('$supervisorId', '$groupId', '$meetingTitle', '$meetingDate','1')";
+            //$meetingDate = date('Y-m-d', strtotime($_POST['meetingDate']));
+            $meetingDate = $_POST['meetingDate'];
+            $meetingTime = $_POST['meetingTime'];
+            //$meetingTime = $_POST['meetingTime'];
+            //Converting deadline to MySql format
+            $dateTime = $meetingDate ." ". $meetingTime;
+            $dateTime = date('Y-m-d H:i:s', strtotime($dateTime));
+
+            $sql = "INSERT INTO meeting_logs (supervisor_id, group_id, meeting_title, meeting_dtm, meeting_status)VALUES ('$supervisorId', '$groupId', '$meetingTitle', '$dateTime','1')";
 
             if ($conn->query($sql) === TRUE) {
-                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t&id='.$groupId);
             } else {
-                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f&id='.$groupId);
             }
 
 
@@ -95,17 +104,32 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         //echo 'HERE';exit
         //Validations
         if (isset($_POST['comments']) && $_POST['comments'] != ""){
-
+            $groupId = filter_input(INPUT_POST,'groupId',FILTER_SANITIZE_NUMBER_INT);
             $logId = filter_input(INPUT_POST,'editId',FILTER_SANITIZE_NUMBER_INT);
             $comments = $_POST['comments'];
 
             $sql = "UPDATE meeting_logs SET comments = '$comments' WHERE id='$logId' ";
 
             if ($conn->query($sql) === TRUE) {
-                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t&id='.$groupId);
             } else {
-                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f&id='.$groupId);
             }
+        }
+    }
+
+    //DELETE MEETING LOG
+    if (isset($_POST['btnDelete'])){
+        $groupId = filter_input(INPUT_POST,'groupId',FILTER_SANITIZE_NUMBER_INT);
+        $logId = filter_input(INPUT_POST,'logId',FILTER_SANITIZE_NUMBER_INT);
+
+        // sql to delete a record
+        $sql = "DELETE FROM meeting_logs WHERE id= '$logId' LIMIT 1";
+
+        if ($conn->query($sql) === TRUE) {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=t&id='.$groupId);
+        } else {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=f&id='.$groupId);
         }
     }
 
@@ -115,8 +139,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 ?>
 
-<!--Date Picker-->
-<link rel="stylesheet" href="plugins/datepicker/datepicker3.css"/>
+
 <!-- DataTables -->
 <link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
 <!-- bootstrap wysihtml5 - text editor -->
@@ -175,7 +198,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
             <?php if ($groupCheck == true){ ?>
-                <?php if (isset($_GET['add'])){ ?>
+                <?php if (isset($_GET['add'])){
+                    /*******************
+                     * ADD MEETING LOGS
+                     * ******************/?>
                     <div class="box no-border">
                         <div class="box-header">
                             <h3 class="box-title">Add New Meeting Log</h3>
@@ -210,13 +236,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="row">
 
                                     <div class="col-md-6">
-                                        <label>Select Date:</label>
-                                        <div class="input-group date" data-provide="datepicker">
-                                            <input type="text" name="meetingDate"  id="meetingDate"  class="form-control" >
-                                            <div class="input-group-addon"><span class="glyphicon glyphicon-th"></span></div>
+                                        <label>Select Date & Time:</label>
+                                        <div class="form-group">
+                                            <input name="meetingDate" id="meetingDate" type=date   required>
+                                            <input name="meetingTime" id="meetingTime" type=time required>
                                         </div>
 
+
                                     </div>
+
 
                                     <div class="col-md-6">
 
@@ -228,7 +256,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <!-- /.box-body -->
 
                             <div class="box-footer">
-                                <a href="<?php echo $_SERVER['PHP_SELF'];?>" class="btn btn-default ">Cancel</a>
+                                <button onclick="goBack()" class="btn btn-default">Back</button>
+<!--                                <a href="--><?php //echo $_SERVER['PHP_SELF'];?><!--" class="btn btn-default ">Cancel</a>-->
                                 <button type="submit" name="addNewLogBtn" class="btn btn-primary pull-right" onclick="return confirm('Are you sure?')">Submit</button>
                             </div>
                         </form>
@@ -258,6 +287,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             $meetingStatus = $row['meeting_status'];
                             $meetingComments = $row['comments'];
                             $meetingDtm = $row['meeting_dtm'];
+                            $groupId = $row['group_id'];
+                            $status = $row['meeting_status'];
                         }
                         ?>
                     <div class="box no-border">
@@ -268,7 +299,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="box-body">
                             <!-- form start -->
                             <form id="editLogs" name="editLogs" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
-
+                                <input type="hidden" name="groupId" value="<?php echo $groupId;?>">
                                 <input type="hidden" name="editId" id="editId" value="<?php echo $id;?>">
 
                                 <div class="box-body">
@@ -281,11 +312,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="form-group">
                                         <label>Change Status</label>
                                         <select class="form-control" id="status" name="status" required>
-                                            <option value="">SELECT STATUS</option>
-                                            <option value="Pending">Pending</option>
-                                            <option value="Postponed">Postponed</option>
-                                            <option value="Done">Done</option>
-                                            <option value="Cancelled">Cancelled</option>
+                                            <option value="" <?php if($status==""){echo "selected";}?>>SELECT STATUS</option>
+                                            <option value="Pending" <?php if($status=="Pending"){echo "selected";}?>>Pending</option>
+                                            <option value="Postponed" <?php if($status=="Postponed"){echo "selected";}?>>Postponed</option>
+                                            <option value="Done" <?php if($status=="Done"){echo "selected";}?>>Done</option>
+                                            <option value="Cancelled" <?php if($status=="Cancelled"){echo "selected";}?>>Cancelled</option>
                                         </select>
                                     </div>
 
@@ -303,7 +334,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             </form>
                                 <div class="box-footer">
-                                    <a href="<?php echo $_SERVER['PHP_SELF'];?>" class="btn btn-default">Back</a>
+                                    <button onclick="goBack()" class="btn btn-default">Back</button>
+<!--                                    <a href="--><?php //echo $_SERVER['PHP_SELF'];?><!--" class="btn btn-default">Back</a>-->
                                     <button type="submit" form="editLogs" name="btnEditLog"  class="btn btn-primary pull-right">Submit</button>
                                 </div>
 
@@ -348,7 +380,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="box-body">
                                 <!-- form start -->
                                 <form id="addComments" name="addComments" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
-
+                                    <input type="hidden" name="groupId" value="<?php echo $groupId;?>">
                                     <input type="hidden" name="editId" id="editId" value="<?php echo $id;?>">
 
                                     <div class="box-body">
@@ -369,7 +401,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                                 </form>
                                 <div class="box-footer">
-                                    <a href="<?php echo $_SERVER['PHP_SELF'];?>" class="btn btn-default">Back</a>
+                                    <button onclick="goBack()" class="btn btn-default">Back</button>
+<!--                                    <a href="--><?php //echo $_SERVER['PHP_SELF'];?><!--" class="btn btn-default">Back</a>-->
                                     <button type="submit" form="addComments" name="btnAddComments"  class="btn btn-primary pull-right">Submit</button>
                                 </div>
 
@@ -387,7 +420,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 }
 
 
-                else{ ?>
+                else{
+                    /*******************
+                     * SHOW MEETING LOGS
+                     * ******************/
+                    ?>
                     <div class="box no-border">
                         <div class="box-header">
                             <h3 class="box-title">Meeting Logs</h3>
@@ -418,23 +455,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                         </div>
 
+                        <?php
+                        if (isset($_GET['id']) && is_numeric($_GET['id']) && strlen($_GET['id'])>0){ ?>
+                            <!-- /.box-header -->
+                            <div class="box-body  no-padding">
+                                <table id="meetingLogs" class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>Group</th>
+                                        <th>Title</th>
+                                        <th>Meeting Time</th>
+                                        <th>Comments</th>
+                                        <th>Status</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                    </thead>
 
-                        <!-- /.box-header -->
-                        <div class="box-body  no-padding">
-                            <table id="meetingLogs" class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <th>Group</th>
-                                    <th>Title</th>
-                                    <th>Meeting Time</th>
-                                    <th>Comments</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                                </thead>
+                                    <?php
 
-                                <?php
-                                if (isset($_GET['id'])){
                                     $groupId = filter_input(INPUT_GET,'id',FILTER_SANITIZE_NUMBER_INT);
                                     //Check if this supervisor has this group
                                     $sql = "SELECT id from meeting_logs WHERE supervisor_id='$supervisorId' AND group_id='$groupId' LIMIT 1";
@@ -450,11 +488,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 <td><?php
                                                     if (is_null($row['comments'])){ ?>
                                                         <a href="<?php echo $_SERVER['PHP_SELF'] . '?comment=' . $row['id']; ?>"  class="btn  btn-default btn-flat btn-xs">Add Comments</a>
-                                                    <?php
+                                                        <?php
                                                     }else{
                                                         echo $row['comments'];
                                                     }
-                                                        ;?></td>
+                                                    ;?></td>
 
                                                 <form id="logActions" name="logActions" method="post">
                                                     <th><?php
@@ -485,20 +523,28 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                         ;?></th>
                                                 </form>
                                                 <td>
+                                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['id']; ?>"   class="btn  btn-default btn-flat  btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
+                                                    <form  action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" onsubmit="return confirm('Are you sure you want to delete this record?');">
+                                                        <input type="hidden" name="logId" value="<?php  echo $row['id'];?>">
+                                                        <input type="hidden" name="groupId" value="<?php echo $row['group_id'];?>">
+                                                        <button type="submit" name="btnDelete" class="btn  btn-danger btn-flat  btn-xs"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
+                                                    </form>
                                                     <input type="hidden" name="logId" value="<?php echo $row['id'];?>">
-                                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['id']; ?>"  class="btn  btn-primary btn-xs">Edit</a>
-                                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?delete=' . $row['id']; ?>" onclick="return confirm('Are you sure?')" class="btn  btn-danger btn-xs">Delete</a>
                                                 </td>
                                             </tr>
                                         <?php }
                                     }
-                                }
-                                ?>
-                            </table>
-                            <div class="box-footer  pull-right">
-                                <a href="<?php echo $_SERVER['PHP_SELF'] . '?add'; ?>" class="btn  btn-primary  ">Add New Log</a>
+
+                                    ?>
+                                </table>
+                                <div class="box-footer  pull-right">
+                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?id='.$groupId.'&add'; ?>" class="btn  btn-primary  ">Add New Log</a>
+                                </div>
                             </div>
-                        </div>
+
+                        <?php }
+                        ?>
+
                         <!-- /.box-body -->
                     </div>
                     <!-- /.box -->
@@ -537,24 +583,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 <?php
 require_once("includes/required_js.php");
 ?>
-<!--Datepicker-->
-<script src="plugins/datepicker/bootstrap-datepicker.js"></script>
-<!--TimePicker-->
-<script src="plugins/bootstrap-datetimepicker/bootstrap-datetimepicker.js"></script>
-<script>
-    $( document ).ready(function() {
-
-        $('.datepicker').datepicker({
-            format: 'dd/mm/yyyy',
-        });
-    });
-</script>
 <!-- Bootstrap WYSIHTML5 -->
 <script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
 <!-- DataTables -->
 <script src="plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script>
+    function goBack() {
+        window.history.back();
+    }
+
     $(document).ready(function() {
 
         $('.textarea').wysihtml5();

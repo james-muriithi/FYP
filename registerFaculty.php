@@ -137,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             else if ($_GET['status'] == 'validation_err'){ ?>
                 <div style="text-align:center;" class="alert alert-danger" role="alert">
                     <span class="glyphicon glyphicon-exclamation-sign"></span>
-                    Error! Please fill all the required fields
+                    Error! Please fill all the required fields correctly
                     <button type="button" class="close" data-dismiss="alert">x</button>
                 </div>
                 <?php
@@ -173,7 +173,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
       <div class="form-group has-feedback">
-        <input type="text" name="facultyContact" class="form-control bfh-phone" placeholder="Phone Number" />
+        <input type="text" name="facultyContact" pattern="[0-9]+" minlength="10" maxlength="11" class="form-control bfh-phone" placeholder="Phone Number" />
         <span class="glyphicon glyphicon-phone form-control-feedback"></span>
       </div>
 
