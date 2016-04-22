@@ -109,7 +109,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <div class="box-body">
 
                                     <?php if ($sdpPart ==1){ ?>
-                                        <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" onsubmit="return confirm('Are you sure you ?');">
+                                        <form action="" method="post" onsubmit="return confirm('Are you sure you ?');">
 
                                             <ul class="todo-list ui-sortable">
                                                 <li class="">
@@ -127,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <?php
                                     }?>
 
-                                    <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" onsubmit="return confirm('Are you sure you ?');">
+                                    <form action="" method="post" onsubmit="return confirm('Are you sure you ?');">
 
                                         <ul class="todo-list ui-sortable">
                                             <li class="">

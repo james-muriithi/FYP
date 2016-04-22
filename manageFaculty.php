@@ -166,7 +166,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <h3 class="box-title"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit: <?php echo $facultyName;?> </h3>
                             </div>
 
-                            <form class="form-horizontal" name="editFaculty" action="<?php echo $_SERVER['PHP_SELF'];?>"  method="post" onsubmit="return confirm('Are you sure you want to submit these changes?');" >
+                            <form class="form-horizontal" name="editFaculty" action=""  method="post" onsubmit="return confirm('Are you sure you want to submit these changes?');" >
                                 <input type="hidden" name="editId" value="<?php echo $editId; ?>">
                                 <div class="box-body">
 
@@ -253,7 +253,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <td><?php echo $row['facultyEmail'] ;?></td>
                                         <td>
                                             <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['facultyId']; ?>"   class="btn  btn-default btn-flat  btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
-                                            <form  action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" onsubmit="return confirm('Are you sure you want to delete this faculty?');">
+                                            <form  action="" method="post" onsubmit="return confirm('Are you sure you want to delete this faculty?');">
                                                 <input type="hidden" name="deleteId" value="<?php echo $row['facultyId'];?> ">
                                                 <button type="submit" name="btnDelete" class="btn  btn-danger btn-flat  btn-xs"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
                                             </form>

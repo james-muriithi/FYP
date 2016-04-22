@@ -127,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         </div>
 
-                        <form id="registerCoordinator" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+                        <form id="registerCoordinator" action="" method="post">
 
 
                             <div class="form-group has-feedback">

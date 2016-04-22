@@ -138,7 +138,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
-                        <form role="form" action="<?php echo $_SERVER['PHP_SELF'];?>" id="editItem" method="POST" ">
+                        <form role="form" action="" id="editItem" method="POST" ">
                             <div class="box-body">
                                 <div class="form-group">
                                     <label for="sdpPart">SDP Part</label>
@@ -204,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <!-- /.box-header -->
                             <!-- form start -->
-                            <form role="form" action="<?php echo $_SERVER['PHP_SELF'];?>" id="addNew" method="POST" enctype="multipart/form-data">
+                            <form role="form" action="" id="addNew" method="POST" enctype="multipart/form-data">
                                 <div class="box-body">
                                     <div class="form-group">
                                         <label for="sdpPart">SDP Part</label>

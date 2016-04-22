@@ -157,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <h4 class="text-center ">Register a Student</h4>
                         </div>
 
-                        <form id="registerStudent" name="registerStudent" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+                        <form id="registerStudent" name="registerStudent" action="" method="post">
 
                             <div class="form-group has-feedback">
                                 <input type="number" min="000000" max="99999" name="cms" class="form-control" placeholder="Enter CMS" required/>

@@ -174,7 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <!-- form start -->
 
                                     <div class="box-body">
-                                        <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" onsubmit="return confirm('Are you sure you want delete your own group?');">
+                                        <form action="" method="post" onsubmit="return confirm('Are you sure you want delete your own group?');">
 
                                         <ul class="todo-list ui-sortable">
                                             <li class="">

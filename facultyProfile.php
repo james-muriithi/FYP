@@ -257,7 +257,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <!-- /.box-header -->
                             <!-- form start -->
-                            <form role="form" action="<?php echo $_SERVER['PHP_SELF'];?>" id="facultyProfile" name="facultyProfile" method="POST" >
+                            <form role="form" action="" id="facultyProfile" name="facultyProfile" method="POST" >
 
                                 <div class="box-body">
                                     <div class="form-group has-feedback">
@@ -302,13 +302,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <ul class="list-group list-group-unbordered">
                                     <li class="list-group-item">
                                         <p class="text-aqua" style="text-align: center">Browse image and press upload</p>
-                                        <form action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" enctype="multipart/form-data">
+                                        <form action="" method="post" enctype="multipart/form-data">
                                             <input type="file" name="image" class="btn btn-block btn-flat">
                                             <input type="submit" value="Upload" class="btn btn-block ">
                                         </form>
                                     </li>
                                 </ul>
-                                <form role="form" id="change_image" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+                                <form role="form" id="change_image" action="" method="post">
                                     <input   name="btnDelete" id="btnDelete" value="Remove Photo" class="btn bg-maroon btn-block" />
                                 </form>
                             </div>

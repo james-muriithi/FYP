@@ -182,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <form role="form" action="<?php echo $_SERVER['PHP_SELF'];?>" id="gradeStudents" name="gradeStudents" method="POST" >
+                                    <form role="form" action="" id="gradeStudents" name="gradeStudents" method="POST" >
                                     <?php
                                     $sql = "SELECT *  FROM student WHERE student.groupId ='$groupId' ";
                                     $result = $conn->query($sql);

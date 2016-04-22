@@ -393,7 +393,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <!-- /.box-header -->
                             <!-- form start -->
-                            <form role="form" action="<?php echo $_SERVER['PHP_SELF'];?>" id="addNewConfig" method="POST" enctype="multipart/form-data">
+                            <form role="form" action="" id="addNewConfig" method="POST" enctype="multipart/form-data">
                                 <div class="box-body">
                                     <div class="form-group">
                                         <label for="sdpPart">SDP Part</label>
@@ -462,7 +462,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                                 <!-- /.box-header -->
                                 <!-- form start -->
-                                <form role="form" action="<?php echo $_SERVER['PHP_SELF'];?>" id="editUploadForm" method="POST" enctype="multipart/form-data">
+                                <form role="form" action="" id="editUploadForm" method="POST" enctype="multipart/form-data">
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label for="taskName">Attachment</label>

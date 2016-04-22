@@ -298,7 +298,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         <div class="box-body">
                             <!-- form start -->
-                            <form id="editLogs" name="editLogs" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+                            <form id="editLogs" name="editLogs" action="" method="post">
                                 <input type="hidden" name="groupId" value="<?php echo $groupId;?>">
                                 <input type="hidden" name="editId" id="editId" value="<?php echo $id;?>">
 
@@ -379,7 +379,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             <div class="box-body">
                                 <!-- form start -->
-                                <form id="addComments" name="addComments" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+                                <form id="addComments" name="addComments" action="" method="post">
                                     <input type="hidden" name="groupId" value="<?php echo $groupId;?>">
                                     <input type="hidden" name="editId" id="editId" value="<?php echo $id;?>">
 
@@ -524,7 +524,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 </form>
                                                 <td>
                                                     <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['id']; ?>"   class="btn  btn-default btn-flat  btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
-                                                    <form  action="<?php echo $_SERVER['PHP_SELF'];?>" method="post" onsubmit="return confirm('Are you sure you want to delete this record?');">
+                                                    <form  action="" method="post" onsubmit="return confirm('Are you sure you want to delete this record?');">
                                                         <input type="hidden" name="logId" value="<?php  echo $row['id'];?>">
                                                         <input type="hidden" name="groupId" value="<?php echo $row['group_id'];?>">
                                                         <button type="submit" name="btnDelete" class="btn  btn-danger btn-flat  btn-xs"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>

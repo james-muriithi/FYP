@@ -288,7 +288,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
-                        <form role="form" action="<?php echo $_SERVER['PHP_SELF'];?>" id="studentProfile" name="studentProfile" method="POST" >
+                        <form role="form" action="" id="studentProfile" name="studentProfile" method="POST" >
 
                             <div class="box-body">
                                 <div class="form-group has-feedback">

@@ -157,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <ul>
                     <li>You already have a group supervisor</li>
                     <!--<li>You have sent request to a supervisor</li>-->
-                    <form action="<?php echo $_SERVER['PHP_SELF'];?>" name="cancelRequest" method="POST">
+                    <form action="" name="cancelRequest" method="POST">
                       <li >You have sent request to a supervisor already
                         <?php if (isset($requestId)){ ?>
                             <input type="hidden" name="deleteId" value="<?php echo $requestId;?>">
@@ -202,7 +202,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </span>
                             </td>
                             <td>
-                            <form name="chooseSupervisor" action="<?php echo $_SERVER['PHP_SELF'];?>" method="post">
+                            <form name="chooseSupervisor" action="" method="post">
                                 <input type= "hidden" name="facultyId" value="<?php echo $row["facultyId"];?>"/>
                                 <button type="submit" name="btnChooseSupervisor" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-user-plus" aria-hidden="true"></i> Send Request</button>
                             </form>
