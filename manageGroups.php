@@ -13,27 +13,7 @@ if(!isset($_SESSION["isCord"]))
 
 //Check if form is submitted by GET
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-    //Function for delete Student
-    if (isset($_GET["delete"]) and is_numeric($_GET["delete"]) ){
-
-        $id = $_GET["delete"];
-
-        //Check if there is a student
-        $sql = "SELECT studentId FROM student WHERE studentId = $id";
-        $result = $conn->query($sql);
-        if ($result->num_rows > 0) {
-            // output data of each row
-            $sql = "DELETE FROM student WHERE studentId='$id' ";
-
-            if ($conn->query($sql) === TRUE) {
-                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');
-            } else {
-                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
-            }
-        }else{
-            header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
-        }
-    }
+    
 
 }
 
@@ -61,70 +41,108 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <div class="row">
                 <div class="col-md-12">
 
-                    <?php if (isset ($_GET['status'])){
+                    <?php
+                    if (isset($_GET['status'])){
                         if ($_GET['status'] == 't'){ ?>
                             <div style="text-align:center;" class="alert alert-success" role="alert">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
                                 Changes saved successfully!
                                 <button type="button" class="close" data-dismiss="alert">x</button>
                             </div>
-                        <?php   }
-                        else if ($_GET['status'] = 'f'){ ?>
+                            <?php
+                        }
+                        else  if ($_GET['status'] == 'f'){ ?>
                             <div style="text-align:center;" class="alert alert-danger" role="alert">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
                                 Error! Something Went Wrong
                                 <button type="button" class="close" data-dismiss="alert">x</button>
                             </div>
-                        <?php }
-
-                        else{ ?>
+                            <?php
+                        }
+                        else if ($_GET['status'] == 'n'){ ?>
                             <div style="text-align:center;" class="alert alert-danger" role="alert">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                Error! Something Went Wrong
+                                Error! This faculty is supervising a group. Can not delete this
                                 <button type="button" class="close" data-dismiss="alert">x</button>
                             </div>
-                        <?php    }
-                    }?>
+                            <?php
+                        }
+                        else if ($_GET['status'] == 'e'){ ?>
+                            <div style="text-align:center;" class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                Error!
+                                <button type="button" class="close" data-dismiss="alert">x</button>
+                            </div>
+                            <?php
+                        }
+                    }
+
+                    ?>
 
 
-                    <div class="box">
-                        <div class="box-header">
-                            <h3 class="box-title">Responsive Hover Table</h3>
-
+                    <!-- general form elements -->
+                    <div class="box no-border">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">List of Groups</h3>
                         </div>
                         <!-- /.box-header -->
-                        <div class="box-body  no-padding">
-                            <table id="manageStudents" class="table table-hover">
+
+                        <div class="box-body">
+                            <table id="manageGroups" class="table table-striped">
                                 <thead>
                                 <tr>
-                                    <th>CMS</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
                                     <th>Batch</th>
+                                    <th>Project Name</th>
+                                    <th>Group Members</th>
                                     <th>Actions</th>
+
                                 </tr>
                                 </thead>
                                 <?php
-                                $sql = "SELECT * FROM student JOIN student_group WHERE student.groupId = student.groupId AND student.isLeader = 1 ORDER BY studentId DESC LIMIT 1";
+                                $sql = "SELECT * FROM student JOIN student_group ON student.studentId = student_group.leaderId JOIN batch ON batch.batchId = student_group.batchId WHERE isLeader = 1 AND batch.isActive = 1";
                                 $result = $conn->query($sql);
-                                while($row = $result->fetch_assoc()) { ?>
-                                    <tr>
-                                        <td><?php echo $row['studentCMS'] ;?></td>
-                                        <td><?php echo $row['studentName'];?></td>
-                                        <td><?php echo $row['studentEmail'] ;?></td>
-                                        <td><?php echo $row['batchName'];?></td>
-                                        <td>
-                                            <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['studentId']; ?>"  class="btn  btn-primary btn-xs">Edit</a>
-                                            <a href="<?php echo $_SERVER['PHP_SELF'] . '?delete=' . $row['studentId']; ?>" onclick="return confirm('Are you sure?')" class="btn  btn-danger btn-xs">Delete</a>
 
+                                if ($result->num_rows > 0) {
+                                    // output data of each row
+                                    while($row = $result->fetch_assoc()) { ?>
+                                        <tr>
+                                            <td><?php echo $row['batchName'];?></td>
+                                            <td><?php echo $row['projectName'];?></td>
+                                            <td>
+                                                <?php
+                                                $groupId = $row['groupId'];
+                                                $groupMembers = $conn->query("SELECT * FROM student WHERE groupId = '$groupId' ");
+                                                if ($groupMembers -> num_rows > 0){
+                                                    while($member = $groupMembers->fetch_assoc()){ ?>
+                                                        <a href="<?php echo siteroot."studentProfile.php?id=".$member['studentId'] ;?>" target="_blank"><?php  echo $member['studentName']. " [" .$row['studentCMS']. " ]"."<br/>"; ?></a>
+                                                    <?php
+                                                    }
+                                                }
 
-                                        </td>
-                                    </tr>
-                                <?php }
+                                                ;?>
+                                            </td>
+
+                                            <td>
+                                                <a href="<?php echo siteroot."groupReport.php?id=".$row['groupId'] ;?>" class="btn btn-default btn-flat btn-sm" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i> Show Report</a>
+                                            </td>
+                                        </tr>
+
+                                    <?php
+                                    }
+                                }
                                 ?>
+
+
+
                             </table>
+
                         </div>
                         <!-- /.box-body -->
+
+                        <div class="box-footer">
+
+                        </div>
+
                     </div>
                     <!-- /.box -->
 
@@ -145,14 +163,20 @@ require_once("includes/required_js.php");
 <script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
 <script>
     $(document).ready(function() {
-        $('#manageStudents').DataTable({
-            "paging": false,
+        $('#manageGroups').DataTable({
+            "columnDefs": [
+                { "orderable": false, "targets": -1 }
+            ],
+            "paging": true,
             "lengthChange": false,
-            "searching": false,
+            "searching": true,
             "ordering": true,
-            "info": false,
+            "info": true,
             "autoWidth": false
         });
     } );
+
+
+
 </script>
 </body>

@@ -7,7 +7,7 @@ session_start();
 
 if(isset($_SESSION["usrnm"]))
 {
-	header('Location: '.'home.php');
+	header('Location: '."home.php");
 }
 
 if(isset($_POST["email"]) && isset($_POST["pasword"]))

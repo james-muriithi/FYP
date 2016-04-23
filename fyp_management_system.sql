@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 21, 2016 at 09:36 PM
+-- Generation Time: Apr 23, 2016 at 07:36 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -40,7 +40,8 @@ CREATE TABLE `batch` (
 --
 
 INSERT INTO `batch` (`batchId`, `batchName`, `startingDate`, `isActive`, `sdpPart`, `createdDtm`) VALUES
-(18, 'Spring 2016', '2016-02-07', 1, 1, '2016-04-17 21:55:46');
+(18, 'Spring 2016', '2016-02-07', 1, 2, '2016-04-17 21:55:46'),
+(19, 'Fall 2016', '2016-04-28', 1, 1, '2016-04-23 00:03:08');
 
 -- --------------------------------------------------------
 
@@ -92,25 +93,6 @@ INSERT INTO `batch_templates` (`templateId`, `batchId`, `templateName`, `templat
 (5, 18, 'Template -  02 - Inital Proposal.doc', 'Template -  02 - Inital Proposal.doc', '2016-04-21 20:27:06'),
 (6, 18, 'Template -  04 - Proposal  Plan.doc', 'Template -  04 - Proposal  Plan.doc', '2016-04-21 20:27:56'),
 (7, 18, 'Template -  05 - Project Report.doc', 'Template -  05 - Project Report.doc', '2016-04-21 20:27:59');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `configurations`
---
-
-CREATE TABLE `configurations` (
-  `configurationId` int(255) NOT NULL,
-  `taskName` varchar(255) NOT NULL,
-  `taskDetails` longtext,
-  `week` int(11) NOT NULL,
-  `projectPart` tinyint(4) NOT NULL DEFAULT '1',
-  `deadline` datetime DEFAULT NULL,
-  `attachment` varchar(100) DEFAULT NULL,
-  `configurationType` varchar(50) DEFAULT NULL,
-  `status` enum('open','close') NOT NULL DEFAULT 'close',
-  `deliverable` tinyint(1) DEFAULT '0' COMMENT 'does this project has deliverable to upload ? 1=yes'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Default Configurations';
 
 -- --------------------------------------------------------
 
@@ -458,6 +440,13 @@ CREATE TABLE `timeline_faculty` (
   `createdDtm` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='timeline for faculty';
 
+--
+-- Dumping data for table `timeline_faculty`
+--
+
+INSERT INTO `timeline_faculty` (`id`, `title`, `details`, `type`, `batchId`, `sdpPart`, `createdDtm`) VALUES
+(4, 'Batch Upgraded', 'Spring 2016has been upgraded to Senior Design Project Part 2', 'info', 18, 2, '2016-04-23 00:10:17');
+
 -- --------------------------------------------------------
 
 --
@@ -480,9 +469,10 @@ CREATE TABLE `timeline_student` (
 --
 
 INSERT INTO `timeline_student` (`id`, `title`, `details`, `type`, `taskId`, `batchId`, `sdpPart`, `createdDtm`) VALUES
-(1, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Zeeshan Sabir is now supervising group FYP Management System', 'info', NULL, 18, 0, '2016-04-20 22:54:48'),
-(2, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Hajra Murtaza is now supervising group RSATS', 'info', NULL, 18, 0, '2016-04-20 23:01:34'),
-(3, 'Deliverable 01: Project Team List', '<p>\r\n\r\n</p><ul><li>Use <b>â€œTemplate-01â€</b> to fill in the details of project team members and submit hard copy to Project Coordinator .</li><li>Due Date: Monday, 25th April 2016 (Before 3:30pm)</li></ul>\r\n\r\n<br><p></p>', 'task', 1, 18, 1, '2016-04-21 21:48:26');
+(1, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Zeeshan Sabir is now supervising group FYP Management System', 'info', NULL, 18, 1, '2016-04-22 23:57:34'),
+(2, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Hajra Murtaza is now supervising group RSATS', 'info', NULL, 18, 1, '2016-04-22 23:57:33'),
+(3, 'Deliverable 01: Project Team List', '<p>\r\n\r\n</p><ul><li>Use <b>â€œTemplate-01â€</b> to fill in the details of project team members and submit hard copy to Project Coordinator .</li><li>Due Date: Monday, 25th April 2016 (Before 3:30pm)</li></ul>\r\n\r\n<br><p></p>', 'task', 1, 18, 1, '2016-04-21 21:48:26'),
+(7, 'Batch Upgraded', 'Spring 2016has been upgraded to Senior Design Project Part 2', 'info', NULL, 18, 2, '2016-04-23 00:10:17');
 
 -- --------------------------------------------------------
 
@@ -530,12 +520,6 @@ ALTER TABLE `batch_tasks`
 --
 ALTER TABLE `batch_templates`
   ADD PRIMARY KEY (`templateId`);
-
---
--- Indexes for table `configurations`
---
-ALTER TABLE `configurations`
-  ADD PRIMARY KEY (`configurationId`);
 
 --
 -- Indexes for table `external_examiner`
@@ -641,7 +625,7 @@ ALTER TABLE `work_load`
 -- AUTO_INCREMENT for table `batch`
 --
 ALTER TABLE `batch`
-  MODIFY `batchId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `batchId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 --
 -- AUTO_INCREMENT for table `batch_tasks`
 --
@@ -652,11 +636,6 @@ ALTER TABLE `batch_tasks`
 --
 ALTER TABLE `batch_templates`
   MODIFY `templateId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
---
--- AUTO_INCREMENT for table `configurations`
---
-ALTER TABLE `configurations`
-  MODIFY `configurationId` int(255) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `external_examiner`
 --
@@ -701,7 +680,7 @@ ALTER TABLE `group_uploads`
 -- AUTO_INCREMENT for table `meeting_logs`
 --
 ALTER TABLE `meeting_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `project_repository`
 --
@@ -726,12 +705,12 @@ ALTER TABLE `student_group_request`
 -- AUTO_INCREMENT for table `timeline_faculty`
 --
 ALTER TABLE `timeline_faculty`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `timeline_student`
 --
 ALTER TABLE `timeline_student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `work_load`
 --

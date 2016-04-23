@@ -319,6 +319,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
                                                 <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['studentId'].'&batchId='.$batchId; ?>"  class="btn  btn-default btn-flat  btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
+
                                                 <br/>
                                                 <form  action="" method="post" onsubmit="return confirm('Are you sure you want to delete this student?');">
                                                     <input type="hidden" name="deleteId" value="<?php echo $row['studentId'];?>">
@@ -326,6 +327,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     <button type="submit" name="btnDelete" class="btn  btn-danger btn-flat  btn-xs"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
                                                 </form>
 
+                                                <a href="<?php echo siteroot."studentReport.php?id=".$row['studentId'] ;?>" class="btn btn-default btn-flat btn-xs" target="_blank"><i class="fa fa-external-link" aria-hidden="true"></i> View Report</a>
 
 
                                             </td>
@@ -385,8 +387,6 @@ require_once("includes/required_js.php");
             "autoWidth": false
         });
 
-
-
         function show() {
             var p = document.getElementById('password');
             p.setAttribute('type', 'text');
@@ -409,6 +409,8 @@ require_once("includes/required_js.php");
             }
         }, false);
     } );
+
+
 </script>
 
 </body>

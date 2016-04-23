@@ -186,7 +186,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <div class="form-group has-feedback">
                                <select name="batch" class="form-control" required>
-                                   <option value="">- Select Batch -</option>
+                                   
                                     <?php
                                     $sqlGet = "SELECT * FROM batch WHERE isActive= 1 ORDER BY createdDtm DESC";
                                     $result = $conn->query($sqlGet);

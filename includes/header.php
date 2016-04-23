@@ -24,6 +24,8 @@
     <link rel="stylesheet" href="plugins/sweet-alert/sweetalert.css">
     <!-- Pace Page -->
     <link rel="stylesheet" href="plugins/pace/pace.min.css">
+    <!-- jQuery 2.2.0 -->
+    <script src="plugins/jQuery/jQuery-2.2.0.min.js"></script>
 
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
     <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->

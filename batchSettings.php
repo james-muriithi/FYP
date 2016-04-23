@@ -20,6 +20,42 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 //Check if form is submitted by POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    if (isset($_POST['btnGradePt1'])){
+        //echo "ALLOW GRADE PART 1";
+    }
+
+    if (isset($_POST['btnUpgradeSdp'])){
+
+        $batchId = filter_input(INPUT_POST,'batchId',FILTER_SANITIZE_NUMBER_INT);
+
+        // Set autocommit to off
+//        mysqli_autocommit($conn, FALSE);
+
+        $sql = "UPDATE batch SET sdpPart = 2 WHERE batchId='$batchId' LIMIT 1";
+
+        if ($conn->query($sql) === TRUE) {
+            $sql = "UPDATE student_group SET sdpPart=2 WHERE batchId='$batchId'";
+
+            $batchName = $conn->query("SELECT batchName FROM batch WHERE batchId = '$batchId' LIMIT 1")->fetch_object()->batchName;
+
+            $title = "Batch Upgraded";
+            $details = $batchName ." has been upgraded to Senior Design Project Part 2";
+            $type = "info";
+            $sdpPart = 2;
+
+            //Add this info to timeline
+            $sql = "INSERT INTO timeline_student (title, details, type, batchId, sdpPart)VALUES ('$title', '$details', '$type', '$batchId', '$sdpPart');";
+            $sql .= "INSERT INTO timeline_faculty (title, details, type, batchId, sdpPart)VALUES ('$title', '$details', '$type', '$batchId', '$sdpPart');";
+            if ($conn->multi_query($sql) === TRUE) {
+                // Commit transaction
+                //mysqli_commit($conn);
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t&settings='.$batchId);die;
+            }
+
+        }
+
+    }
+
 
 
 }
@@ -110,6 +146,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                                     <?php if ($sdpPart ==1){ ?>
                                         <form action="" method="post" onsubmit="return confirm('Are you sure you ?');">
+                                            <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
 
                                             <ul class="todo-list ui-sortable">
                                                 <li class="">
@@ -124,23 +161,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             </ul>
                                         </form>
 
-                                    <?php
-                                    }?>
+                                        <form action="" method="post" onsubmit="return confirm('Are you sure you ?');">
 
-                                    <form action="" method="post" onsubmit="return confirm('Are you sure you ?');">
+                                            <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
 
-                                        <ul class="todo-list ui-sortable">
-                                            <li class="">
-                                                <!-- drag handle -->
+                                            <ul class="todo-list ui-sortable">
+                                                <li class="">
+                                                    <!-- drag handle -->
                                                   <span class="handle ui-sortable-handle">
                                                     <i class="fa fa-cog" aria-hidden="true"></i>
                                                   </span>
-                                                <span class="text">Upgrade Batch to SDP-2</span>
-                                                <small class="label label-primary"><?php echo $batchName;?></small>
-                                                <button type="submit" name="btnGradePt1" class="btn btn-defualt  btn-xs pull-right">Submit</button>
-                                            </li>
-                                        </ul>
-                                    </form>
+                                                    <span class="text">Upgrade Batch to SDP-2</span>
+                                                    <small class="label label-primary"><?php echo $batchName;?></small>
+                                                    <button type="submit" name="btnUpgradeSdp" class="btn btn-defualt  btn-xs pull-right">Submit</button>
+                                                </li>
+                                            </ul>
+                                        </form>
+
+                                    <?php
+                                    }else{
+                                        echo "No settings available";
+                                    }?>
+
+
 
 
 
@@ -149,7 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                                 <div class="box-footer">
 
-                                    <a href="<?php echo siteroot ;?>" class="btn btn-default">Back</a>
+                                    <a href="<?php echo $_SERVER['PHP_SELF'] ;?>" class="btn btn-default">Back</a>
                                 </div>
 
                             </div>
@@ -172,8 +215,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <div class="box-body">
                             <table class="table" >
                                 <tr>
-                                    <th>SDP Part</th>
                                     <th>Batch Name</th>
+                                    <th>SDP Part</th>
                                     <th>Start Date</th>
                                     <th>Status</th>
                                     <th >Actions</th>
@@ -186,8 +229,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     // output data of each row
                                     while($row = $result->fetch_assoc()) { ?>
                                         <tr>
-                                            <td><?php echo $row['sdpPart']; ?></td>
                                             <td><?php echo $row['batchName']; ?></td>
+                                            <td><?php echo $row['sdpPart']; ?></td>
                                             <td><?php echo $row['startingDate']; ?></td>
                                             <td><?php if ($row['isActive']){
                                                     echo "<span class=\"label label-success\">Active</span>";
