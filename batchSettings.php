@@ -20,6 +20,31 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 //Check if form is submitted by POST
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
+    /**********************************
+     * Add batch to Project Repository
+     **********************************/
+    
+    if (isset($_POST['btnAddtoProjectRep'])){
+        $batchId = filter_input(INPUT_POST,'batchId',FILTER_SANITIZE_NUMBER_INT);
+
+        $sql = "SELECT id FROM project_repository WHERE batchId = '$batchId' LIMIT 1";
+        $result = $conn->query($sql);
+
+        if ($result->num_rows > 0) {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=ae');die;
+        } else {
+            $sql = "INSERT INTO project_repository (batchId)VALUES ('$batchId')";
+
+            if ($conn->query($sql) === TRUE) {
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
+            } else {
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');die;
+            }
+        }
+    }
+
+
+
     if (isset($_POST['btnGradePt1'])){
         //echo "ALLOW GRADE PART 1";
     }
@@ -98,10 +123,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <?php
                         }
-                        else if ($_GET['status'] == 'n'){ ?>
+                        else if ($_GET['status'] == 'ae'){ ?>
                             <div style="text-align:center;" class="alert alert-danger" role="alert">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                Error!
+                                Error! This batch is already in Project Repository
                                 <button type="button" class="close" data-dismiss="alert">x</button>
                             </div>
                             <?php
@@ -144,6 +169,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="box no-border">
                                 <div class="box-body">
 
+                                    <form action="" method="post" onsubmit="return confirm('Are you sure you ?');">
+                                        <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
+
+                                        <ul class="todo-list ui-sortable">
+                                            <li class="">
+                                                <!-- drag handle -->
+                                                  <span class="handle ui-sortable-handle">
+                                                    <i class="fa fa-cog" aria-hidden="true"></i>
+                                                  </span>
+                                                <span class="text">Add this batch to Project Repository</span>
+                                                <small class="label label-primary"><?php echo $batchName;?></small>
+                                                <button type="submit" name="btnAddtoProjectRep" class="btn btn-defualt  btn-xs pull-right">Submit</button>
+                                            </li>
+                                        </ul>
+                                    </form>
+
+
+
                                     <?php if ($sdpPart ==1){ ?>
                                         <form action="" method="post" onsubmit="return confirm('Are you sure you ?');">
                                             <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
@@ -179,9 +222,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         </form>
 
                                     <?php
-                                    }else{
-                                        echo "No settings available";
-                                    }?>
+                                    }
+                                    ?>
 
 
 

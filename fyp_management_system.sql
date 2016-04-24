@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 24, 2016 at 01:12 PM
+-- Generation Time: Apr 24, 2016 at 02:49 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -215,21 +215,6 @@ INSERT INTO `grades` (`id`, `studentId`, `groupId`, `sdpPart`, `comments`, `grad
 -- --------------------------------------------------------
 
 --
--- Table structure for table `group_deliverables`
---
-
-CREATE TABLE `group_deliverables` (
-  `id` int(11) NOT NULL,
-  `group_id` int(11) NOT NULL,
-  `config_id` int(11) NOT NULL,
-  `uploaded_by` int(11) NOT NULL COMMENT 'Id of user who uploaded this deliverable',
-  `deliverable` varchar(100) NOT NULL,
-  `upload_dtm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `group_requests`
 --
 
@@ -292,9 +277,16 @@ INSERT INTO `meeting_logs` (`id`, `supervisor_id`, `group_id`, `meeting_title`, 
 --
 
 CREATE TABLE `project_repository` (
-  `project_id` int(11) NOT NULL,
-  `batch_id` int(11) NOT NULL DEFAULT '0'
+  `id` int(11) NOT NULL,
+  `batchId` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `project_repository`
+--
+
+INSERT INTO `project_repository` (`id`, `batchId`) VALUES
+(1, 18);
 
 -- --------------------------------------------------------
 
@@ -552,12 +544,6 @@ ALTER TABLE `grades`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexes for table `group_deliverables`
---
-ALTER TABLE `group_deliverables`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `group_requests`
 --
 ALTER TABLE `group_requests`
@@ -579,7 +565,7 @@ ALTER TABLE `meeting_logs`
 -- Indexes for table `project_repository`
 --
 ALTER TABLE `project_repository`
-  ADD PRIMARY KEY (`project_id`);
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `student`
@@ -662,11 +648,6 @@ ALTER TABLE `faculty_student_request`
 ALTER TABLE `grades`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 --
--- AUTO_INCREMENT for table `group_deliverables`
---
-ALTER TABLE `group_deliverables`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
---
 -- AUTO_INCREMENT for table `group_requests`
 --
 ALTER TABLE `group_requests`
@@ -685,7 +666,7 @@ ALTER TABLE `meeting_logs`
 -- AUTO_INCREMENT for table `project_repository`
 --
 ALTER TABLE `project_repository`
-  MODIFY `project_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `student`
 --
