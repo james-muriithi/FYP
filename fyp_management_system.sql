@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 23, 2016 at 07:36 PM
+-- Generation Time: Apr 24, 2016 at 01:12 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -460,7 +460,7 @@ CREATE TABLE `timeline_student` (
   `type` varchar(50) DEFAULT NULL,
   `taskId` int(11) DEFAULT NULL,
   `batchId` int(11) DEFAULT NULL,
-  `sdpPart` int(11) DEFAULT '1',
+  `sdpPart` int(11) DEFAULT NULL,
   `createdDtm` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Timeline for students';
 
@@ -705,12 +705,12 @@ ALTER TABLE `student_group_request`
 -- AUTO_INCREMENT for table `timeline_faculty`
 --
 ALTER TABLE `timeline_faculty`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT for table `timeline_student`
 --
 ALTER TABLE `timeline_student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT for table `work_load`
 --

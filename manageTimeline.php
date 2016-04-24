@@ -12,56 +12,12 @@ if (!isset($_SESSION["isCord"])) {
 //Check if for is submitted by GET
 if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
-    //Provide values for Placeholder in editConfigs
-    if (isset($_GET['edit'])) {
-        if (is_numeric($_GET['edit'])) {
-            $itemId = $_GET['edit'];
-            //Check if config id exists
-            $sql_check = "SELECT item_id from timeline WHERE item_id = '$itemId' ";
-            $result = $conn->query($sql_check);
-            if ($result->num_rows > 0) {
-
-                //Get Values from Database
-                $sql = "SELECT * FROM timeline WHERE item_id = '$itemId' LIMIT 1 ";
-
-                $result = $conn->query($sql);
-                while ($row = $result->fetch_assoc()) {
-                    $title = $row['title'];
-                    $details = $row['details'];
-                    $type = $row['type'];
-                    $visibility = $row['visibility'];
-                }
-            } else {
-                $_GET['edit'] = '';
-            }
-        }
-
-    }
 
 
 
-    //Function for delete configuration
-    if (isset($_GET["delete"]) and is_numeric($_GET["delete"]) ){
 
-        $id = $_GET["delete"];
 
-        //Check if there is a student
-        $sql = "SELECT item_id FROM timeline WHERE item_id = $id";
-        $result = $conn->query($sql);
-        if ($result->num_rows > 0) {
-            //Check for attachment
 
-            $sql = "DELETE FROM timeline WHERE item_id='$id' ";
-
-            if ($conn->query($sql) === TRUE) {
-                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');
-            } else {
-                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
-            }
-        }else{
-            header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
-        }
-    }
 
 
 }
@@ -71,39 +27,175 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
-    //Function for add
-    if (isset($_POST["btnAdd"])) {
+    if (isset($_POST['addStudentTimeline'])){
         //Validations
-        if ((isset($_POST['sdpPart'])) and (isset($_POST['title'])) and (isset($_POST['type']))   and (isset($_POST['visibility']))  ){
+        if ($_POST['batch'] != "" && $_POST['title'] != "" && $_POST['details'] != "" && $_POST['type'] != ""){
 
-            //Get Values from POST
+            //Getting values from POST
+            $batchId = filter_input(INPUT_POST,'batch',FILTER_SANITIZE_NUMBER_INT);
             $title = $_POST['title'];
             $details = $_POST['details'];
-            $sdpPart = $_POST['sdpPart'];
             $type = $_POST['type'];
-            $visibility = $_POST['visibility'];
-            $created_by = $_SESSION["usrnm"];
 
-            $sql = "INSERT INTO timeline (title, details, type, sdp_part, created_by, visibility)
-                VALUES ('$title', '$details', '$type', '$sdpPart', '$created_by', '$visibility')";
-            if ($conn->query($sql) === TRUE) {
-                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');
-            } else {
-                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
+            // prepare and bind
+            $stmt = $conn->prepare("INSERT INTO timeline_student (title, details, type, batchId ) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("sssi", $title, $details, $type, $batchId);
+            $stmt->execute();
+
+            if ($stmt->affected_rows > 0) {
+                $stmt->close();
+                $conn->close();
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
+            }
+            else{
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');die;
             }
 
         }
         else{
-            header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');
+
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=validation_err');die;
         }
     }
 
-    //Function for edit
-    if (isset($_POST["btnEdit"])) {
+    if (isset($_POST['addFacultyTimeline'])){
         //Validations
-        $configId = $_GET['edit'];
-        echo $configId;exit;
+        if ($_POST['batch'] != "" && $_POST['title'] != "" && $_POST['details'] != "" && $_POST['type'] != ""){
+
+            //Getting values from POST
+            $batchId = filter_input(INPUT_POST,'batch',FILTER_SANITIZE_NUMBER_INT);
+            $title = $_POST['title'];
+            $details = $_POST['details'];
+            $type = $_POST['type'];
+
+            // prepare and bind
+            $stmt = $conn->prepare("INSERT INTO timeline_faculty (title, details, type, batchId ) VALUES (?, ?, ?, ?)");
+            $stmt->bind_param("sssi", $title, $details, $type, $batchId);
+            $stmt->execute();
+
+            if ($stmt->affected_rows > 0) {
+                $stmt->close();
+                $conn->close();
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
+            }
+            else{
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');die;
+            }
+
+        }
+        else{
+
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=validation_err');die;
+        }
+
     }
+
+
+    if (isset($_POST['editStudentTimeline'])){
+
+        //Validations
+        if ($_POST['title'] != "" && $_POST['details'] != "" && $_POST['type'] != "" ){
+
+            $id = filter_input(INPUT_POST,'editId',FILTER_SANITIZE_NUMBER_INT);
+
+            //Getting values from POST
+            $title = $_POST['title'];
+            $details = $_POST['details'];
+            $type = $_POST['type'];
+
+            // prepare and bind
+            $stmt = $conn->prepare("UPDATE timeline_student SET title=?, details=?, type=? WHERE id=? ");
+            $stmt->bind_param("sssi", $title, $details, $type, $id);
+            $stmt->execute();
+
+            if ($stmt->affected_rows > 0) {
+                $stmt->close();
+                $conn->close();
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
+            }
+            else{
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');die;
+            }
+
+        }
+        else{
+
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=validation_err');die;
+        }
+
+    }
+
+
+    if (isset($_POST['editFacultyTimeline'])){
+        //Validations
+
+        if ($_POST['title'] != "" && $_POST['details'] != "" && $_POST['type'] != "" ){
+
+            $id = filter_input(INPUT_POST,'editId',FILTER_SANITIZE_NUMBER_INT);
+            //echo $id;exit;
+
+            //Getting values from POST
+            $title = $_POST['title'];
+            $details = $_POST['details'];
+            $type = $_POST['type'];
+
+            // prepare and bind
+            $stmt = $conn->prepare("UPDATE timeline_faculty SET title=?, details=?, type=? WHERE id=? ");
+            $stmt->bind_param("sssi", $title, $details, $type, $id);
+            $stmt->execute();
+
+            if ($stmt->affected_rows > 0) {
+                $stmt->close();
+                $conn->close();
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
+            }
+            else{
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');die;
+            }
+
+        }
+        else{
+
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=validation_err');die;
+        }
+
+    }
+
+    if (isset($_POST['btnDeleteSt'])){
+        $id = filter_input(INPUT_POST,'deleteId',FILTER_SANITIZE_NUMBER_INT);
+
+        // sql to delete a record
+        $sql = "DELETE FROM timeline_student WHERE id= '$id'";
+
+        if ($conn->query($sql) === TRUE) {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
+        } else {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');die;
+        }
+
+    }
+
+
+
+    if (isset($_POST['btnDeleteFa'])){
+        $id = filter_input(INPUT_POST,'deleteId',FILTER_SANITIZE_NUMBER_INT);
+
+        // sql to delete a record
+        $sql = "DELETE FROM timeline_faculty WHERE id= '$id' ";
+
+        if ($conn->query($sql) === TRUE) {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
+        } else {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');die;
+        }
+
+
+    }
+
+
+
+
+
 
 }
 
@@ -122,262 +214,525 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <div class="content-wrapper">
         <?php require_once("includes/content-header.php"); ?>
         <section class="content" style="min-height: 700px">
+
             <div class="row">
+                <div class="col-md-12">
 
-
-                <?php
-                if (isset($_GET['edit']) && is_numeric($_GET['edit'])){ ?>
-
-                <div class="col-md-2"></div>
-                <div class="col-md-8">
-                    <!--Code for edit a Configuration starts here-->
-                    <!-- general form elements -->
-                    <div class="box box-primary no-border">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Add new Timeline item</h3>
-                        </div>
-                        <!-- /.box-header -->
-                        <!-- form start -->
-                        <form role="form" action="" id="editItem" method="POST" ">
-                            <div class="box-body">
-                                <div class="form-group">
-                                    <label for="sdpPart">SDP Part</label>
-                                    <select name="sdpPart" class="form-control">
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label for="title">Title</label>
-                                    <input type="text" class="form-control" name="title" value="<?php echo $title;?>" required>
-                                </div>
-                                <div class="form-group">
-                                    <label for="details">Details</label>
-                                    <div class="box-body pad">
-                                        <form>
-                                            <textarea class="textarea" name="details" placeholder="Details.."  style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
-                                        </form>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <label for="type">Notification Type</label>
-                                    <select name="type" class="form-control">
-                                        <option value="info">Info</option>
-                                        <option value="task">Task</option>
-                                        <option value="email">Email</option>
-                                        <option value="other">Other</option>
-                                    </select>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="visibility">Visibility</label>
-                                    <select name="visibility" class="form-control">
-                                        <option value="PUBLIC">PUBLIC</option>
-                                        <option value="FACULTY">FACULTY ONLY</option>
-                                        <option value="SUPERVISORS">SUPERVISORS ONLY</option>
-                                        <option value="COORDINATORS">COORDINATORS ONLY</option>
-                                        <option value="EXTERNAL EXAMINERS">EXTERNAL EXAMINERS ONLY</option>
-                                    </select>
-                                </div>
+                    <?php
+                    if (isset($_GET['status'])){
+                        if ($_GET['status'] == 't'){ ?>
+                            <div style="text-align:center;" class="alert alert-success" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                Changes saved successfully!
+                                <button type="button" class="close" data-dismiss="alert">x</button>
                             </div>
-                            <!-- /.box-body -->
-                            <div class="box-footer">
-                                <a href="<?php echo $_SERVER['PHP_SELF']; ?>" class="btn btn-danger">Back </a>
-                                <button type="submit" name="btnEdit" form="editItem" class="btn btn-primary">Submit</button>
+                            <?php
+                        }
+                        else  if ($_GET['status'] == 'f'){ ?>
+                            <div style="text-align:center;" class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                Error! Something Went Wrong
+                                <button type="button" class="close" data-dismiss="alert">x</button>
                             </div>
-                        </form>
-                    </div>
-                    <!-- /.box -->
-                    <div class="col-md-2"></div>
-
-                    <!-- If add button is pressed -->
-                    <?php } else if (isset($_GET['add'])) { ?>
-
-
-                    <div class="col-md-2"></div>
-                    <div class="col-md-8">
-                        <!--Code for edit a Configuration starts here-->
-                        <!-- general form elements -->
-                        <div class="box box-primary no-border">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">Add new Timeline item</h3>
+                            <?php
+                        }
+                        else if ($_GET['status'] == 'validation_err'){ ?>
+                            <div style="text-align:center;" class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                Error! Please fill all the required fields correctly
+                                <button type="button" class="close" data-dismiss="alert">x</button>
                             </div>
-                            <!-- /.box-header -->
-                            <!-- form start -->
-                            <form role="form" action="" id="addNew" method="POST" enctype="multipart/form-data">
-                                <div class="box-body">
-                                    <div class="form-group">
-                                        <label for="sdpPart">SDP Part</label>
-                                        <select name="sdpPart" class="form-control">
-                                            <option value="1">1</option>
-                                            <option value="2">2</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="title">Title</label>
-                                        <input type="text" class="form-control" name="title" placeholder="Title" required>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="details">Details</label>
-                                        <div class="box-body pad">
-                                            <form>
-                                                <textarea class="textarea" name="details" placeholder="Place some text here"  style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
-                                            </form>
+                            <?php
+                        }
+                        else if ($_GET['status'] == 'e'){ ?>
+                            <div style="text-align:center;" class="alert alert-danger" role="alert">
+                                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                                Error!
+                                <button type="button" class="close" data-dismiss="alert">x</button>
+                            </div>
+                            <?php
+                        }
+                    }
+
+                    ?>
+
+                    <?php
+                        if (isset($_GET['stEdit']) && is_numeric($_GET['stEdit']) && strlen($_GET['stEdit'])>0){
+                            /************************
+                             * EDIT timeline_student
+                             ************************/
+
+                            $id = filter_input(INPUT_GET,'stEdit',FILTER_SANITIZE_NUMBER_INT);
+
+                            $sql = "SELECT * FROM timeline_student WHERE id = '$id' LIMIT 1";
+                            $result = $conn->query($sql);
+
+                            if ($result->num_rows > 0) {
+                                // output data of each row
+                                while($row = $result->fetch_assoc()) {
+                                    $title = $row['title'];
+                                    $details = $row['details'];
+                                    $type = $row['type'];
+                                    $batchId = $row['batchId'];
+                                    $sdpPart = $row['sdpPart'];
+                                }
+                            }
+                            ?>
+                            <!-- general form elements -->
+                            <div class="box no-border">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit: <?php echo $title;?></h3>
+                                </div>
+                                <!-- /.box-header -->
+
+                                <!-- form start -->
+                                <form class="form-horizontal"  action=""  method="post" onsubmit="return confirm('Are you sure you want to submit these changes?');" >
+                                    <input type="hidden" name="editId" value="<?php echo $id;?>">
+                                    <div class="box-body">
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label">Title</label>
+
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control"  name="title" value="<?php echo $title;?>" required>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="type">Notification Type</label>
-                                        <select name="type" class="form-control">
-                                            <option value="info">Info</option>
-                                            <option value="email">Email</option>
-                                            <option value="other">Other</option>
-                                        </select>
-                                    </div>
 
-                                    <div class="form-group">
-                                        <label for="visibility">Visibility</label>
-                                        <select name="visibility" class="form-control">
-                                            <option value="PUBLIC">PUBLIC</option>
-                                            <option value="FACULTY">FACULTY ONLY</option>
-                                            <option value="SUPERVISORS">SUPERVISORS ONLY</option>
-                                            <option value="COORDINATORS">COORDINATORS ONLY</option>
-                                            <option value="EXTERNAL EXAMINERS">EXTERNAL EXAMINERS ONLY</option>
-                                        </select>
+
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Details</label>
+
+                                            <div class="col-sm-10">
+                                                <textarea class="textarea" name="details"  style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
+                                                    <?php echo $details;?>
+                                                </textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label">Type</label>
+
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control"  name="type" value="<?php echo $type;?>">
+                                            </div>
+                                        </div>
+
+
+
                                     </div>
+                                    <!-- /.box-body -->
+                                    <div class="box-footer">
+                                        <a href="<?php echo $_SERVER['PHP_SELF'];?>" class="btn btn-default">Cancel</a>
+                                        <button type="submit" name="editStudentTimeline" class="btn btn-primary pull-right">Submit</button>
+                                    </div>
+                                    <!-- /.box-footer -->
+                                </form>
+
+                            </div>
+                            <!-- /.box -->
+
+                        <?php
+                        }
+
+                        else if (isset($_GET['faEdit']) && is_numeric($_GET['faEdit']) && strlen($_GET['faEdit'])>0){
+                            /************************
+                             * EDIT timeline_faculty
+                             ************************/
+                            $id = filter_input(INPUT_GET,'faEdit',FILTER_SANITIZE_NUMBER_INT);
+
+                            $sql = "SELECT * FROM timeline_faculty WHERE id = '$id' LIMIT 1";
+                            $result = $conn->query($sql);
+
+                            if ($result->num_rows > 0) {
+                                // output data of each row
+                                while($row = $result->fetch_assoc()) {
+                                    $title = $row['title'];
+                                    $details = $row['details'];
+                                    $type = $row['type'];
+                                    $batchId = $row['batchId'];
+                                    $sdpPart = $row['sdpPart'];
+                                }
+                            }
+                            ?>
+                            <!-- general form elements -->
+                            <div class="box no-border">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit: <?php echo $title;?></h3>
+                                </div>
+                                <!-- /.box-header -->
+
+                                <!-- form start -->
+                                <form class="form-horizontal"  action=""  method="post" onsubmit="return confirm('Are you sure you want to submit these changes?');" >
+                                    <input type="hidden" name="editId" value="<?php echo $id;?>">
+                                    <div class="box-body">
+
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label">Title</label>
+
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control"  name="title" value="<?php echo $title;?>" required>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Details</label>
+
+                                            <div class="col-sm-10">
+                                                <textarea class="textarea" name="details"  style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;">
+                                                    <?php echo $details;?>
+                                                </textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label">Type</label>
+
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" name="type" value="<?php echo $type;?>">
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                    <!-- /.box-body -->
+                                    <div class="box-footer">
+                                        <a href="<?php echo $_SERVER['PHP_SELF'];?>" class="btn btn-default">Cancel</a>
+                                        <button type="submit"  name="editFacultyTimeline" class="btn btn-primary pull-right">Submit</button>
+                                    </div>
+                                    <!-- /.box-footer -->
+                                </form>
+
+                            </div>
+                            <!-- /.box -->
+                        <?php
+                        }
+
+                        else if (isset($_GET['stAdd'])){
+                            /************************
+                             * ADD timeline_student
+                             ************************/
+                            ?>
+                            <div class="box no-border">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title"><i class="fa fa-plus-square-o" aria-hidden="true"></i> Student Timeline</h3>
+                                </div>
+                                <!-- /.box-header -->
+
+                                <!-- form start -->
+                                <form class="form-horizontal"  action=""  method="post" onsubmit="return confirm('Are you sure you want to submit these changes?');" >
+                                    <div class="box-body">
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label">Batch</label>
+
+                                            <div class="col-sm-10">
+                                                <select name="batch" id="batch" style="width: 400px;" required>
+                                                    <?php
+                                                    $sql = "SELECT * FROM batch";
+                                                    $result = $conn->query($sql);
+                                                    if ($result->num_rows > 0) {
+                                                        while($row = $result->fetch_assoc()) { ?>
+                                                            <option value="<?php echo $row['batchId'];?>"><?php echo $row['batchName'];?></option>
+                                                        <?php
+                                                        }
+                                                    }                                                    
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <br>
+
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label">Title</label>
+
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control"  name="title" placeholder="Enter title" required>
+                                            </div>
+                                        </div>
+
+
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Details</label>
+
+                                            <div class="col-sm-10">
+                                                <textarea class="textarea" name="details" placeholder="Enter details here"  style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" required>
+
+                                                </textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label">Type</label>
+
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" name="type" placeholder="Type of notification e.g info,task,other" required>
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                    <!-- /.box-body -->
+                                    <div class="box-footer">
+                                        <a href="<?php echo $_SERVER['PHP_SELF'];?>" class="btn btn-default">Cancel</a>
+                                        <button type="submit" name="addStudentTimeline" class="btn btn-primary pull-right">Submit</button>
+                                    </div>
+                                    <!-- /.box-footer -->
+                                </form>
+
+                            </div>
+
+
+                        <?php
+                        }
+                        else if (isset($_GET['faAdd'])){
+                            /************************
+                             * ADD timeline_faculty
+                             ************************/
+                            ?>
+                            <div class="box no-border">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title"><i class="fa fa-plus-square-o" aria-hidden="true"></i> Student Timeline</h3>
+                                </div>
+                                <!-- /.box-header -->
+
+                                <!-- form start -->
+                                <form class="form-horizontal" action=""  method="post" onsubmit="return confirm('Are you sure you want to submit these changes?');" >
+                                    <div class="box-body">
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label">Batch</label>
+
+                                            <div class="col-sm-10">
+                                                <select name="batch" id="batch" style="width: 400px;" required>
+                                                    <?php
+                                                    $sql = "SELECT * FROM batch";
+                                                    $result = $conn->query($sql);
+                                                    if ($result->num_rows > 0) {
+                                                        while($row = $result->fetch_assoc()) { ?>
+                                                            <option value="<?php echo $row['batchId'];?>"><?php echo $row['batchName'];?></option>
+                                                            <?php
+                                                        }
+                                                    }
+                                                    ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <br>
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label">Title</label>
+
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control"  name="title" placeholder="Enter title" required>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="form-group">
+                                            <label class="col-sm-2 control-label">Details</label>
+
+                                            <div class="col-sm-10">
+                                                <textarea class="textarea" name="details" placeholder="Enter details here"  style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;" required>
+
+                                                </textarea>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group">
+                                            <label  class="col-sm-2 control-label">Type</label>
+
+                                            <div class="col-sm-10">
+                                                <input type="text" class="form-control" name="type" placeholder="Type of notification e.g info,task,other" required>
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                    <!-- /.box-body -->
+                                    <div class="box-footer">
+                                        <a href="<?php echo $_SERVER['PHP_SELF'];?>" class="btn btn-default">Cancel</a>
+                                        <button type="submit"  name="addFacultyTimeline" class="btn btn-primary pull-right">Submit</button>
+                                    </div>
+                                    <!-- /.box-footer -->
+                                </form>
+
+                            </div>
+                        <?php
+                        }
+                        else{ ?>
+                            <!-- Student Timeline -->
+                            <div class="box no-border">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Student Timeline</h3>
+                                </div>
+                                <!-- /.box-header -->
+
+                                <div class="box-body">
+                                    <table id="studentTimeline" class="table">
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Details</th>
+                                            <th>Type</th>
+                                            <th>Batch</th>
+                                            <th>Created</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        <?php
+                                        $sql = "SELECT * FROM timeline_student ORDER BY createdDtm DESC";
+                                        $result = $conn->query($sql);
+
+                                        if ($result->num_rows > 0) {
+                                            // output data of each row
+                                            while($row = $result->fetch_assoc()) { ?>
+                                                <tr>
+                                                    <td><?php echo $row['title'];?></td>
+                                                    <td>
+                                                        <?php if (strlen($row['details']) > 150){
+                                                            echo getExcerpt($row['details'],0,150); ?>
+                                                            <a href="<?php echo "manageTimeline.php?details=".$row["id"] ;?>">Show More</a>
+                                                            <?php
+                                                        }
+                                                        else{
+                                                            echo $row['details'];
+                                                        }
+                                                        ?>
+                                                    </td>
+
+                                                    <td><?php echo $row['type'];?></td>
+                                                    <td>
+                                                        <?php
+                                                        $batchId= $row['batchId'];
+                                                        if (strlen($batchId)>0 && is_numeric($batchId) && $batchId != 0){
+                                                            echo $conn->query("SELECT batchName FROM batch WHERE batchId = '$batchId' LIMIT 1")->fetch_object()->batchName;
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td><?php echo$row['createdDtm'];?></td>
+                                                    <td><a href="<?php echo $_SERVER['PHP_SELF'] . '?stEdit=' . $row['id']; ?>"   class="btn  btn-default btn-flat  btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
+                                                        <form  action="" method="post" onsubmit="return confirm('Are you sure you want to delete this record?');">
+                                                            <input type="hidden" name="deleteId" value="<?php echo $row['id'];?> ">
+                                                            <button type="submit" name="btnDeleteSt" class="btn  btn-danger btn-flat  btn-xs"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+
+
+                                    </table>
+
                                 </div>
                                 <!-- /.box-body -->
+
                                 <div class="box-footer">
-                                    <a href="<?php echo $_SERVER['PHP_SELF']; ?>" class="btn btn-danger">Back </a>
-                                    <button type="submit" name="btnAdd" form="addNew" onclick="return confirm('Are you sure?')"  class="btn btn-primary">Submit</button>
+                                    <a href="manageTimeline.php?stAdd" class="btn btn-primary btn-sm pull-right"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add New</a>
                                 </div>
-                            </form>
-                        </div>
-                        <!-- /.box -->
-                        <div class="col-md-2"></div>
 
+                            </div>
+                            <!-- /.box -->
 
-
-
-                            <?php } else { ?>
-                                <div class="col-md-12 ">
-
-                                    <?php if (isset ($_GET['status'])){
-                                        if ($_GET['status'] == 't'){ ?>
-                                            <div style="text-align:center;" class="alert alert-success" role="alert">
-                                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                                Changes saved successfully!
-                                                <button type="button" class="close" data-dismiss="alert">x</button>
-                                            </div>
-                                        <?php   }
-                                        else if ($_GET['status'] = 'f'){ ?>
-                                            <div style="text-align:center;" class="alert alert-danger" role="alert">
-                                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                                Error! Something Went Wrong
-                                                <button type="button" class="close" data-dismiss="alert">x</button>
-                                            </div>
-                                        <?php }
-
-                                        else{ ?>
-                                            <div style="text-align:center;" class="alert alert-danger" role="alert">
-                                                <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                                Error! Something Went Wrong
-                                                <button type="button" class="close" data-dismiss="alert">x</button>
-                                            </div>
-                                        <?php    }
-                                    }?>
-
-
-
-                                    <div class="box">
-                                        <div class="box-header">
-                                            <a href="home.php"><i class="fa fa-arrow-left"></i></a>
-                                            <h4 class="text-center ">Timeline Entries</h4>
-                                        </div>
-                                        <div class="box-header">
-                                            <h3 class="box-title">SDP - Part I</h3>
-                                        </div>
-                                        <!-- /.box-header -->
-                                        <div class="box-body  no-padding">
-                                            <table id="sdppart1" class="table  table-striped table-responsive table-condensed ">
-                                                <thead>
-                                                <tr>
-                                                    <th>Title</th>
-                                                    <th>Details</th>
-                                                    <th>Type</th>
-                                                    <th>Created</th>
-                                                    <th>Visibility</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                                </thead>
-                                                <?php
-                                                $sql = "SELECT * FROM timeline_student WHERE  sdpPart='1' ORDER BY createdDtm DESC";
-                                                $result = $conn->query($sql);
-                                                if ($result->num_rows > 0) {
-                                                    while ($row = $result->fetch_assoc()) {
-                                                        ?>
-                                                        <tr>
-                                                            <td><?php echo $row["title"]; ?></td>
-                                                            <td><?php echo getExcerpt($row["details"],0,80); ?></td>
-                                                            <td><?php echo $row["type"]; ?></td>
-                                                            <td><?php echo time2str($row["created_dtm"]); ?></td>
-                                                            <td><?php echo $row["visibility"]; ?></td>
-                                                            <td>
-                                                                <div class="form-group">
-                                                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['item_id']; ?>" class="btn  btn-primary btn-xs ">Edit</a>
-                                                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?delete=' . $row['item_id']; ?>" onclick="return confirm('Are you sure?')"  class="btn  btn-danger btn-xs ">Delete</a>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    <?php }
-                                                } ?>
-                                            </table>
-                                            <div class="box-header">
-                                                <h3 class="box-title">SDP - Part II</h3>
-                                            </div>
-                                            <table id="sdppart2" class="table  table-striped table-responsive table-condensed">
-                                                <thead>
-                                                <tr>
-                                                    <th>Title</th>
-                                                    <th>Details</th>
-                                                    <th>Type</th>
-                                                    <th>Created</th>
-                                                    <th>Visibility</th>
-                                                    <th>Actions</th>
-                                                </tr>
-                                                </thead>
-                                                <?php
-                                                $sql = "SELECT * FROM timeline_student WHERE  sdpPart='2' ORDER BY createdDtm DESC";
-                                                $result = $conn->query($sql);
-                                                if ($result->num_rows > 0) {
-                                                    while ($row = $result->fetch_assoc()) {
-                                                        ?>
-                                                        <tr>
-                                                            <td><?php echo $row["title"]; ?></td>
-                                                            <td><?php echo getExcerpt($row["details"],0,80); ?></td>
-                                                            <td><?php echo $row["type"]; ?></td>
-                                                            <td><?php echo time2str($row["created_dtm"]); ?></td>
-                                                            <td><?php echo $row["visibility"]; ?></td>
-                                                            <td>
-                                                                <div class="form-group">
-                                                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['item_id']; ?>" class="btn  btn-primary btn-xs ">Edit</a>
-                                                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?delete=' . $row['item_id']; ?>" onclick="return confirm('Are you sure?')"  class="btn  btn-danger btn-xs ">Delete</a>
-                                                                </div>
-                                                            </td>
-                                                        </tr>
-                                                    <?php }
-                                                } ?>
-                                            </table>
-                                            <div class="box-footer  pull-right">
-                                                <a href="<?php echo $_SERVER['PHP_SELF'] . '?add'; ?>"
-                                                   class="btn  btn-primary btn-sm ">Add New</a>
-
-                                            </div>
-                                        </div>
-                                        <!-- /.box-body -->
-                                    </div>
-                                    <!-- /.box -->
+                            <!-- Faculty Timeline -->
+                            <div class="box no-border">
+                                <div class="box-header with-border">
+                                    <h3 class="box-title">Faculty Timeline</h3>
                                 </div>
-                            <?php } ?>
+                                <!-- /.box-header -->
+
+                                <div class="box-body">
+                                    <table id="facultyTimeline" class="table">
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Details</th>
+                                            <th>Type</th>
+                                            <th>Batch</th>
+                                            <th>Created</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                        <?php
+                                        $sql = "SELECT * FROM timeline_faculty ORDER BY createdDtm DESC";
+                                        $result = $conn->query($sql);
+
+                                        if ($result->num_rows > 0) {
+                                            // output data of each row
+                                            while($row = $result->fetch_assoc()) { ?>
+                                                <tr>
+                                                    <td><?php echo $row['title'];?></td>
+                                                    <td>
+                                                        <?php if (strlen($row['details']) > 150){
+                                                            echo getExcerpt($row['details'],0,150); ?>
+                                                            <a href="<?php echo "manageTimeline.php?details=".$row["id"] ;?>">Show More</a>
+                                                            <?php
+                                                        }
+                                                        else{
+                                                            echo $row['details'];
+                                                        }
+                                                        ?>
+                                                    </td>
+
+                                                    <td><?php echo $row['type'];?></td>
+                                                    <td>
+                                                        <?php
+                                                        $batchId= $row['batchId'];
+                                                        if (strlen($batchId)>0 && is_numeric($batchId) && $batchId != 0){
+                                                            echo $conn->query("SELECT batchName FROM batch WHERE batchId = '$batchId' LIMIT 1")->fetch_object()->batchName;
+                                                        }
+                                                        ?>
+                                                    </td>
+                                                    <td><?php echo$row['createdDtm'];?></td>
+                                                    <td><a href="<?php echo $_SERVER['PHP_SELF'] . '?faEdit=' . $row['id']; ?>"   class="btn  btn-default btn-flat  btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
+                                                        <form  action="" method="post" onsubmit="return confirm('Are you sure you want to delete this record?');">
+                                                            <input type="hidden" name="deleteId" value="<?php echo $row['id'];?> ">
+                                                            <button type="submit" name="btnDeleteFa" class="btn  btn-danger btn-flat  btn-xs"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
+                                                        </form>
+                                                    </td>
+                                                </tr>
+
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+
+
+                                    </table>
+
+                                </div>
+                                <!-- /.box-body -->
+
+                                <div class="box-footer">
+                                    <a href="manageTimeline.php?faAdd" class="btn btn-primary btn-sm pull-right"><i class="fa fa-plus-circle" aria-hidden="true"></i> Add New</a>
+                                </div>
+
+                            </div>
+                            <!-- /.box -->
+
+
+                        <?php
+                        }
+
+                    ?>
+
+
+
+
+
+
+
+                </div>
+            </div>
+
+
 
 
         </section>
@@ -390,12 +745,6 @@ require_once("includes/main-footer.php");
 <?php
 require_once("includes/required_js.php");
 ?>
-<!-- Select2 -->
-<script src="plugins/select2/select2.full.min.js"></script>
-<!-- InputMask -->
-<script src="plugins/input-mask/jquery.inputmask.js"></script>
-<script src="plugins/input-mask/jquery.inputmask.date.extensions.js"></script>
-<script src="plugins/input-mask/jquery.inputmask.extensions.js"></script>
 <!-- Bootstrap WYSIHTML5 -->
 <script src="plugins/bootstrap-wysihtml5/bootstrap3-wysihtml5.all.min.js"></script>
 <!-- Sweet-Alert -->
@@ -403,11 +752,7 @@ require_once("includes/required_js.php");
 <!-- Page script -->
 <script>
     $(function () {
-        //Initialize Select2 Elements
-        $(".select2").select2();
-        //Datemask dd/mm/yyyy
-        $("#datemask").inputmask("yyyy/mm/dd", {"placeholder": "yyyy/mm/dd"});
-        $("[data-mask]").inputmask();
+
 
         $('.textarea').wysihtml5();
 
