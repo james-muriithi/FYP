@@ -268,7 +268,7 @@
 
 
 
-            <li><a href="#"><i class="fa fa-book"></i> <span>Documentation</span></a></li>
+            <li><a href="./Documents/" target="_blank"><i class="fa fa-book"></i>  <span>Documentation</span> </a></li>
 
         </ul>
     </section>
