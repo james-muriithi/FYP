@@ -13,6 +13,7 @@
 
 <body>
 <div id="container">
+    <br>
     <p style="text-align:center;">
 	<img src="../img/logo_type.png" alt="fyp_logo" width="360" length="52" align="middle">
     </p>
