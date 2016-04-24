@@ -106,7 +106,7 @@ $check=0;
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="<?php echo siteroot;?>"><img src="./img/fyp_logo_50x50.png" alt="fyp_logo"> <h2>Final Year Project</h2> <p>Management System</p></a>
+    <a href="<?php echo siteroot;?>"><img src="./img/logo_type.png" alt="fyp_logo" width="360" length="52">
   </div>
   <!-- /.login-logo -->
   <div class="login-box-body">

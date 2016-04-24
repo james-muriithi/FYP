@@ -200,8 +200,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         <div class="row">
             <div class="col-xs-12">
                 <h2 class="page-header">
-                    <img src="./img/fyp_logo_50x50.png" alt="fyp_logo">
-                    FYP Management System
+                    <img src="./img/logo_type.png" alt="fyp_logo" length="52" width="250">
                     <small class="pull-right">Date: <?php echo date("d/m/Y");?></small>
                 </h2>
             </div>
