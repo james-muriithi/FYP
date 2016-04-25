@@ -160,12 +160,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <form id="registerStudent" name="registerStudent" action="" method="post">
 
                             <div class="form-group has-feedback">
-                                <input type="number" min="000000" max="99999" name="cms" class="form-control" placeholder="Enter CMS" required/>
+                                <input type="number" min="000001" max="99999" name="cms" class="form-control" placeholder="Enter CMS" required/>
                                 <span class="glyphicon glyphicon-asterisk form-control-feedback"></span>
                             </div>
 
                             <div class="form-group has-feedback">
-                                <input type="text" name="name"  class="form-control" placeholder="Enter Full name"  required/>
+                                <input type="text" name="name"  class="form-control" placeholder="Enter Full name"  required/> <!--TODO : Regex for name-->
                                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
                             </div>
 
