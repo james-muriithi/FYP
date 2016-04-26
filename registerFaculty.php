@@ -178,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
       </div>
 
 	  <div class="form-group has-feedback">
-		<input type="number" name="supervisingQuota" class="form-control bfh-phone" placeholder="Enter Group supervising Quota" min="0" max="6" required/>
+		<input type="number" name="supervisingQuota" class="form-control bfh-phone" placeholder="Enter Group supervising Quota" min="0" max="10" required/>
         <span class="glyphiconglyphicon glyphicon-plus form-control-feedback"></span>
 	  </div>
 

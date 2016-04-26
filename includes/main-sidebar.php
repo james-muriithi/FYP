@@ -239,7 +239,7 @@
                         $totalLoad = $row['totalLoad'];
                     }
                 } else {
-                    echo "0 results";
+                    $totalLoad = 0;
                 }
                 ?>
              <?php if ($_SESSION["type"]== 'Faculty' && $totalLoad !=0){ ?>

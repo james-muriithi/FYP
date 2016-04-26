@@ -149,7 +149,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <span class="glyphicon glyphicon-phone form-control-feedback"></span>
                             </div>
                             <div class="form-group has-feedback">
-                                <input type="number" name="quota" class="form-control bfh-phone" placeholder="Supervising Quota" min="0" max="5" required/> <!-- TODO coordQuota Limit-->
+                                <input type="number" name="quota" class="form-control bfh-phone" placeholder="Supervising Quota" min="0" max="10" required/> <!-- TODO coordQuota Limit-->
                                 <span class="glyphicon glyphicon-shopping-cart form-control-feedback"></span>
                             </div>
                             <div class="form-group has-feedback">

@@ -47,33 +47,125 @@ if(isset($_POST['signout'])) { // logout button
     <section class="content">
     <!-- row -->
       <div class="row">
+          <?php
+          //Coordinator
+          if (isset($_SESSION["isCord"]) && $_SESSION["isCord"] = 1){
+              $num_of_batch = $conn->query("SELECT batchId FROM batch WHERE isActive = 1 ")->num_rows;
+              $num_of_students = $conn->query("SELECT studentId FROM student ")->num_rows;
+              $num_of_groups = $conn->query("SELECT groupId FROM student_group JOIN batch ON student_group.batchId = batch.batchId WHERE batch.isActive = 1 ")->num_rows;
+              $num_of_supervisor = $conn->query("SELECT * FROM faculty JOIN work_load ON faculty.facultyId = work_load.facultyId WHERE totalLoad > 0")->num_rows;
+              ?>
+              <div class="col-lg-3 col-xs-6">
+                  <!-- small box -->
+                  <div class="small-box bg-aqua">
+                      <div class="inner">
+                          <h3><?php echo $num_of_batch;?></h3>
+
+                          <p>Batch Active</p>
+                      </div>
+                      <div class="icon">
+                          <i class="ion ion-university"></i>
+                      </div>
+                      <a href="./manageBatch.php" class="small-box-footer" target="_blank">More info <i class="fa fa-arrow-circle-right"></i></a>
+                  </div>
+              </div>
+              <!-- ./col -->
+              <div class="col-lg-3 col-xs-6">
+                  <!-- small box -->
+                  <div class="small-box bg-green">
+                      <div class="inner">
+                          <h3><?php echo $num_of_students;?></h3>
+
+                          <p>Students Registered</p>
+                      </div>
+                      <div class="icon">
+                          <i class="ion ion-person-add"></i>
+                      </div>
+                      <a href="./manageStudents.php" class="small-box-footer" target="_blank">More info <i class="fa fa-arrow-circle-right"></i></a>
+                  </div>
+              </div>
+              <!-- ./col -->
+              <div class="col-lg-3 col-xs-6">
+                  <!-- small box -->
+                  <div class="small-box bg-yellow">
+                      <div class="inner">
+                          <h3><?php echo $num_of_groups;?></h3>
+
+                          <p>Groups Created</p>
+                      </div>
+                      <div class="icon">
+                          <i class="ion ion-ios-people"></i>
+                      </div>
+                      <a href="./manageGroups.php" class="small-box-footer" target="_blank">More info <i class="fa fa-arrow-circle-right"></i></a>
+                  </div>
+              </div>
+              <!-- ./col -->
+              <div class="col-lg-3 col-xs-6">
+                  <!-- small box -->
+                  <div class="small-box bg-red">
+                      <div class="inner">
+                          <h3><?php echo $num_of_supervisor;?></h3>
+
+                          <p>Supervisors</p>
+                      </div>
+                      <div class="icon">
+                          <i class="ion-ios-personadd"></i>
+                      </div>
+                      <a href="./manageFaculty.php" class="small-box-footer" target="_blank">More info <i class="fa fa-arrow-circle-right"></i></a>
+                  </div>
+              </div>
+              <!-- ./col -->
+              <?php
+          }
+          ?>
         <div class="col-md-12">
+
+
+
             <?php
-            if (isset($_SESSION['usrCMS'])){
-                require_once ("studentTimeline.php");
+            if (isset($_SESSION['usrCMS'])){ ?>
+                <div id="ajax-timeline">
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+
+                            $('#ajax-timeline').load('studentTimeline.php')
+
+                            function getTimelineData(){
+                                setInterval(function () {
+                                    $('#ajax-timeline').load('studentTimeline.php')
+                                }, 3000);
+                            }
+                            getTimelineData();
+                        });
+                    </script>
+                </div>
+
+
+                <?php
             }
-            if (isset($_SESSION['facultyId'])){
-                require_once("facultyTimeline.php");
+            if (isset($_SESSION['facultyId'])){ ?>
+                <div id="ajax-timeline">
+                    <script type="text/javascript">
+                        $(document).ready(function() {
+
+                            $('#ajax-timeline').load('facultyTimeline.php')
+
+                            function getTimelineData(){
+                                setInterval(function () {
+                                    $('#ajax-timeline').load('facultyTimeline.php')
+                                }, 3000);
+                            }
+                            getTimelineData();
+                        });
+                    </script>
+                </div>
+
+            <?php
             }
            
 
             ?>
 
-<!--            <div id="ajax-timeline">-->
-<!--            <script type="text/javascript">-->
-<!--                $(document).ready(function() {-->
-<!---->
-<!--                    $('#ajax-timeline').load('timeline.php')-->
-<!---->
-<!--                    function getTimelineData(){-->
-<!--                        setInterval(function () {-->
-<!--                            $('#ajax-timeline').load('timeline.php')-->
-<!--                        }, 3000);-->
-<!--                    }-->
-<!--                    getTimelineData();-->
-<!--                });-->
-<!--            </script>-->
-<!--            </div>-->
         </div>
         <!-- /.col -->
       </div>

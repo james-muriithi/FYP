@@ -151,6 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="form-group has-feedback">
                         <b>Year</b>
                         <select name="year" class="form-control" required>
+                            <option selected value="<?php echo date('Y')-1;?>" selected><?php echo date('Y')-1;?></option>
                             <option value="<?php echo date('Y');?>" selected><?php echo date('Y');?></option>
                         </select>
                     </div>
