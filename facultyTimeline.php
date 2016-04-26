@@ -60,7 +60,7 @@
     if (isset($_SESSION['facultyId'])){
 
 
-        //$whereSQL = "WHERE batch_id = '$batchId' ";
+
     }
 
     //Get Values from Database

@@ -73,8 +73,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             while($row = $result->fetch_assoc()) {
                 $inGroup = $row['inGroup'];
                 $spdPart = $row['sdpPart'];
+                $groupId = $row['groupId'];
             }
-            if ($inGroup <= 1 OR $spdPart ==1){
+            if ($inGroup < 1 OR $spdPart ==1){
 
                 // Set autocommit to off
                 mysqli_autocommit($conn, FALSE);
@@ -84,17 +85,36 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $sql = "DELETE from student_group WHERE leaderId = '$studentId' ";
 
                 if ($conn->query($sql) === TRUE) {
-                    $sql = "UPDATE student SET groupId=null ,isLeader = null WHERE studentId=' $studentId' ";
+                    //Check and delete request send
+                    $sql = "SELECT requestId FROM faculty_student_request WHERE groupId ='$groupId' LIMIT 1";
+                    $result = $conn->query($sql);
 
-                    if ($conn->query($sql) === TRUE) {
-                        // Commit transaction
-                        mysqli_commit($conn);
-                        header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
-                    } else {
-                        header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');die;
+                    if ($result->num_rows > 0) {
+                        $sql = "DELETE from faculty_student_request WHERE groupId = '$groupId' ";
+                        if ($conn->query($sql) === TRUE) {
+                            //Update student record
+                            $sql = "UPDATE student SET groupId=null ,isLeader = null WHERE studentId=' $studentId' ";
+
+                            if ($conn->query($sql) === TRUE) {
+                                // Commit transaction
+                                mysqli_commit($conn);
+                                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
+                            } else {
+                                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');die;
+                            }
+                        }
+                    }else{
+                        //Update student record
+                        $sql = "UPDATE student SET groupId=null ,isLeader = null WHERE studentId=' $studentId' ";
+
+                        if ($conn->query($sql) === TRUE) {
+                            // Commit transaction
+                            mysqli_commit($conn);
+                            header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
+                        } else {
+                            header('Location:' . $_SERVER['PHP_SELF'] . '?status=f');die;
+                        }
                     }
-
-
                 }
             }
             else{
@@ -174,7 +194,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <!-- form start -->
 
                                     <div class="box-body">
-                                        <form action="" method="post" onsubmit="return confirm('Are you sure you want delete your own group?');">
+                                        <form action="" method="post" onsubmit="return confirm('Are you sure you want delete your own group?');" data-toggle="validator">
 
                                         <ul class="todo-list ui-sortable">
                                             <li class="">

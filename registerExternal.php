@@ -127,7 +127,7 @@ if((isset($_POST['externalName'])) && (isset($_POST['externalEmail']))) {
             if ($_GET['status'] == 't'){ ?>
                 <div style="text-align:center;" class="alert alert-success" role="alert">
                     <span class="glyphicon glyphicon-exclamation-sign"></span>
-                    Faculty Registered successfully!
+                    External Examiner Registered successfully!
                     <button type="button" class="close" data-dismiss="alert">x</button>
                 </div>
                 <?php
@@ -176,7 +176,7 @@ if((isset($_POST['externalName'])) && (isset($_POST['externalEmail']))) {
 
       </div>
 
-    <form id="registerExternal" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+    <form id="registerExternal" action="" method="post" data-toggle="validator">
 
       <div class="form-group has-feedback">
         <input type="text" name="name" class="form-control" placeholder="Full name" required/>

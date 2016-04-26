@@ -192,7 +192,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <!-- /.box-header -->
                             <div class="box-body ">
                                 <div class="form-group">
-                                    <form action="<?php echo $_SERVER['PHP_SELF'] ?>"  method="post" enctype="multipart/form-data">
+                                    <form action=""  method="post" enctype="multipart/form-data" data-toggle="validator">
                                         <div class="col-sm-10">
                                             <input type="file" name="deliverable" class="filestyle " data-size="sm" />
                                         </div>

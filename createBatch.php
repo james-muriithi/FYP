@@ -137,7 +137,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             <!-- /.box-header -->
 
             <div class="box-body">
-                <form id="createBatch" action="" method="post">
+                <form id="createBatch" action="" method="post" data-toggle="validator">
                     <div class="form-group has-feedback">
                         <b>Batch</b>
                         <select name="batch" class="form-control" required>

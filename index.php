@@ -61,7 +61,7 @@ $check=0;
                 $_SESSION["isCord"]=$row2["isCoordinator"];
                 $_SESSION["isAdmin"]=$row2["isAdmin"];
                 $_SESSION["type"]="Faculty";
-                $_SESSION["image"]=$row2["profileImage"];
+                $_SESSION["image"]=$row2["facultyImage"];
                 $check=1;
                 header('Location: '.'home.php');
             }

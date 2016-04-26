@@ -174,7 +174,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     while ($row = $result->fetch_assoc()) {
                         $requestFrom = getStudentData($row['studentId']); ?>
 
-                        <form action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
+                        <form action="" method="post" data-toggle="validator">
                             <input type="hidden" name="requestId" value="<?php echo $row['requestId']?>">
                         <li>
                             <i class="fa fa-user text-aqua"></i><?php echo $requestFrom['name']." [".$requestFrom['cms']."] "; ?> has sent you group request

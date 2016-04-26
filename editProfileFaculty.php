@@ -109,7 +109,7 @@ if (isset($_FILES['image'])){
                                 </div>
                                 <!-- /.box-header -->
                                 <!-- form start -->
-                                <form role="form" id="add_coordinator" action="studentProfile.php" method="post">
+                                <form role="form" id="add_coordinator" action="studentProfile.php" method="post" data-toggle="validator">
                                     <div class="box-body">
                                         <div class="form-group has-feedback">
                                             <input type="text" name="userCMS" class="form-control " disabled="" placeholder="<?php echo $_SESSION["usrCMS"]; ?>" />
@@ -151,7 +151,7 @@ if (isset($_FILES['image'])){
                                     <ul class="list-group list-group-unbordered">
                                         <li class="list-group-item">
                                             <p class="text-aqua" style="text-align: center">Browse image and press upload</p>
-                                            <form action="studentProfile.php" method="post" enctype="multipart/form-data">
+                                            <form action="studentProfile.php" method="post" enctype="multipart/form-data" data-toggle="validator">
                                                 <input type="file" name="image" class="btn btn-block btn-flat">
                                                 <input type="submit" value="Upload" class="btn btn-block ">
                                                 <?php if(isset($error_msg)){?><br/><p class="text-red" style="text-align: center"><?php echo $error_msg?></p><?php }?>
@@ -159,7 +159,7 @@ if (isset($_FILES['image'])){
                                             </form>
                                         </li>
                                     </ul>
-                                    <form role="form" id="change_image" action="studentProfile.php" method="post">
+                                    <form role="form" id="change_image" action="studentProfile.php" method="post" data-toggle="validator">
                                         <input   name="btnDelete" id="btnDelete" value="Remove Photo" class="btn bg-maroon btn-block" />
                                     </form>
                                 </div>

@@ -256,6 +256,105 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     ?>
 
+                    <?php if (isset($_GET['stDetails']) && is_numeric($_GET['stDetails']) && strlen($_GET['stDetails'])>0){
+                        $detailsId = filter_input(INPUT_GET,'stDetails',FILTER_SANITIZE_NUMBER_INT);
+                        $sql = "SELECT * FROM timeline_student WHERE id='$detailsId' LIMIT 1 ";
+                        $result = $conn->query($sql);
+
+                        if ($result->num_rows > 0) {
+                            // output data of each row
+                            while($row = $result->fetch_assoc()) {
+                                $title = $row['title'];
+                                $details = $row['details'];
+                                $type = $row['type'];
+                                $createdDtm = $row['createdDtm'];
+
+
+                            }
+                        } else {
+                            $title = "--";
+                            $details = "--";
+                            $type = "--";
+                            $createdDtm = "--";
+
+                        }
+
+                        ?>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel"><?php echo $title;?></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <?php echo $type;?>
+                                        <?php echo $details;?>
+                                        <br/>
+
+                                        <p >Created : <?php echo $createdDtm; ?></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                    } ?>
+
+                    <?php if (isset($_GET['faDetails']) && is_numeric($_GET['faDetails']) && strlen($_GET['faDetails'])>0){
+                        $detailsId = filter_input(INPUT_GET,'faDetails',FILTER_SANITIZE_NUMBER_INT);
+                        $sql = "SELECT * FROM timeline_faculty WHERE id='$detailsId' LIMIT 1 ";
+                        $result = $conn->query($sql);
+
+                        if ($result->num_rows > 0) {
+                            // output data of each row
+                            while($row = $result->fetch_assoc()) {
+                                $title = $row['title'];
+                                $details = $row['details'];
+                                $type = $row['type'];
+                                $createdDtm = $row['createdDtm'];
+
+
+                            }
+                        } else {
+                            $title = "--";
+                            $details = "--";
+                            $type = "--";
+                            $createdDtm = "--";
+
+                        }
+
+                        ?>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                        <h4 class="modal-title" id="myModalLabel"><?php echo $title;?></h4>
+                                    </div>
+                                    <div class="modal-body">
+                                        <?php echo $type;?>
+                                        <?php echo $details;?>
+                                        <br/>
+
+                                        <p >Created : <?php echo $createdDtm; ?></p>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                    } ?>
+
+
                     <?php
                         if (isset($_GET['stEdit']) && is_numeric($_GET['stEdit']) && strlen($_GET['stEdit'])>0){
                             /************************
@@ -286,7 +385,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <!-- /.box-header -->
 
                                 <!-- form start -->
-                                <form class="form-horizontal"  action=""  method="post" onsubmit="return confirm('Are you sure you want to submit these changes?');" >
+                                <form class="form-horizontal"  action=""  method="post" onsubmit="return confirm('Are you sure you want to submit these changes?');" data-toggle="validator" >
                                     <input type="hidden" name="editId" value="<?php echo $id;?>">
                                     <div class="box-body">
 
@@ -363,7 +462,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <!-- /.box-header -->
 
                                 <!-- form start -->
-                                <form class="form-horizontal"  action=""  method="post" onsubmit="return confirm('Are you sure you want to submit these changes?');" >
+                                <form class="form-horizontal"  action=""  method="post" onsubmit="return confirm('Are you sure you want to submit these changes?');" data-toggle="validator" >
                                     <input type="hidden" name="editId" value="<?php echo $id;?>">
                                     <div class="box-body">
 
@@ -424,7 +523,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <!-- /.box-header -->
 
                                 <!-- form start -->
-                                <form class="form-horizontal"  action=""  method="post" onsubmit="return confirm('Are you sure you want to submit these changes?');" >
+                                <form class="form-horizontal"  action=""  method="post" onsubmit="return confirm('Are you sure you want to submit these changes?');" data-toggle="validator" >
                                     <div class="box-body">
 
                                         <div class="form-group">
@@ -504,7 +603,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <!-- /.box-header -->
 
                                 <!-- form start -->
-                                <form class="form-horizontal" action=""  method="post" onsubmit="return confirm('Are you sure you want to submit these changes?');" >
+                                <form class="form-horizontal" action=""  method="post" onsubmit="return confirm('Are you sure you want to submit these changes?');"  data-toggle="validator">
                                     <div class="box-body">
 
                                         <div class="form-group">
@@ -598,7 +697,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     <td>
                                                         <?php if (strlen($row['details']) > 150){
                                                             echo getExcerpt($row['details'],0,150); ?>
-                                                            <a href="<?php echo "manageTimeline.php?details=".$row["id"] ;?>">Show More</a>
+                                                            <a href="<?php echo "manageTimeline.php?stDetails=".$row["id"] ;?>">Show More</a>
                                                             <?php
                                                         }
                                                         else{
@@ -618,7 +717,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     </td>
                                                     <td><?php echo$row['createdDtm'];?></td>
                                                     <td><a href="<?php echo $_SERVER['PHP_SELF'] . '?stEdit=' . $row['id']; ?>"   class="btn  btn-default btn-flat  btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
-                                                        <form  action="" method="post" onsubmit="return confirm('Are you sure you want to delete this record?');">
+                                                        <form  action="" method="post" onsubmit="return confirm('Are you sure you want to delete this record?');" data-toggle="validator">
                                                             <input type="hidden" name="deleteId" value="<?php echo $row['id'];?> ">
                                                             <button type="submit" name="btnDeleteSt" class="btn  btn-danger btn-flat  btn-xs"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
                                                         </form>
@@ -672,7 +771,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     <td>
                                                         <?php if (strlen($row['details']) > 150){
                                                             echo getExcerpt($row['details'],0,150); ?>
-                                                            <a href="<?php echo "manageTimeline.php?details=".$row["id"] ;?>">Show More</a>
+                                                            <a href="<?php echo "manageTimeline.php?faDetails=".$row["id"] ;?>">Show More</a>
                                                             <?php
                                                         }
                                                         else{
@@ -692,7 +791,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     </td>
                                                     <td><?php echo$row['createdDtm'];?></td>
                                                     <td><a href="<?php echo $_SERVER['PHP_SELF'] . '?faEdit=' . $row['id']; ?>"   class="btn  btn-default btn-flat  btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
-                                                        <form  action="" method="post" onsubmit="return confirm('Are you sure you want to delete this record?');">
+                                                        <form  action="" method="post" onsubmit="return confirm('Are you sure you want to delete this record?');" data-toggle="validator">
                                                             <input type="hidden" name="deleteId" value="<?php echo $row['id'];?> ">
                                                             <button type="submit" name="btnDeleteFa" class="btn  btn-danger btn-flat  btn-xs"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
                                                         </form>
@@ -750,15 +849,19 @@ require_once("includes/required_js.php");
 <!-- Sweet-Alert -->
 <script src="plugins/sweet-alert/sweetalert.min.js"></script>
 <!-- Page script -->
+<script type="text/javascript">
+
+
+
+</script>
 <script>
     $(function () {
-
+        $('#myModal').modal('show');
 
         $('.textarea').wysihtml5();
 
     });
-</script>
-<script>
+
     function goBack() {
         window.history.back();
     }

@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <!-- /.box-header -->
 
                         <div class="box-body">
-                            <form name="listOfStudents" id="listOfStudents" method="post" >
+                            <form name="listOfStudents" id="listOfStudents" method="post" data-toggle="validator">
                             <div class="form-group">
                                 <label>Select Batch</label>
                                 <select class="form-control" name="batch" required>
@@ -133,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <!-- /.box-header -->
 
                         <div class="box-body">
-                            <form name="listOfStudents" id="listOfStudents" method="post" >
+                            <form name="listOfStudents" id="listOfStudents" method="post" data-toggle="validator">
                                 <div class="form-group">
                                     <label>Select Batch</label>
                                     <select class="form-control" name="batch" required>

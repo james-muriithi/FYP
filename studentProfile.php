@@ -288,7 +288,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
-                        <form role="form" action="" id="studentProfile" name="studentProfile" method="POST" >
+                        <form role="form" action="" id="studentProfile" name="studentProfile" method="POST" data-toggle="validator">
 
                             <div class="box-body">
                                 <div class="form-group has-feedback">
@@ -333,13 +333,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <ul class="list-group list-group-unbordered">
                                 <li class="list-group-item">
                                     <p class="text-aqua" style="text-align: center">Browse image and press upload</p>
-                                    <form action="studentProfile.php" method="post" enctype="multipart/form-data">
-                                        <input type="file" name="image" class="btn btn-block btn-flat">
+                                    <form action="" method="post" enctype="multipart/form-data" data-toggle="validator">
+                                        <div class="form-group">
+                                        <input type="file" name="image" class="btn btn-block btn-flat" accept=".jpg ,.jpeg, .png, .bmp, .svg" required>
                                         <input type="submit" value="Upload" class="btn btn-block ">
+                                        </div>
                                     </form>
                                 </li>
                             </ul>
-                            <form role="form" id="change_image" action="studentProfile.php" method="post">
+                            <form role="form" id="change_image" action="" method="post" data-toggle="validator">
                                 <input   name="btnDelete" id="btnDelete" value="Remove Photo" class="btn bg-maroon btn-block" />
                             </form>
                         </div>

@@ -238,7 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             <div class="box-body ">
                                 <div class="form-group">
-                                    <form action="<?php echo $_SERVER['PHP_SELF'] ?>"  method="post" enctype="multipart/form-data">
+                                    <form action="<?php echo $_SERVER['PHP_SELF'] ?>"  method="post" enctype="multipart/form-data" data-toggle="validator">
                                         <div class="col-sm-10">
                                             <input type="file" name="uploadTask" class="filestyle " data-size="sm" accept=".doc ,.docx, .pdf, .rar, .zip, .jpg, .jpeg, .ppt, .pptx" required />
                                         </div>

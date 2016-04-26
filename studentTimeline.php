@@ -1,5 +1,6 @@
 
 <?php if (isset($_GET['details']) && is_numeric($_GET['details']) && strlen($_GET['details'])>0){
+   
     $detailsId = filter_input(INPUT_GET,'details',FILTER_SANITIZE_NUMBER_INT);
     $sql = "SELECT * FROM timeline_student WHERE id='$detailsId' LIMIT 1 ";
     $result = $conn->query($sql);
@@ -58,10 +59,12 @@
 
     //If student is logged in
     if (isset($_SESSION['usrCMS'])){
-        $batchId = $_SESSION['BatchID'];
 
-        //$whereSQL = "WHERE batch_id = '$batchId' ";
+        $batchId = $_SESSION['BatchID'];
+        
+
     }
+    
 
     //Get Values from Database
     $sql = "SELECT * FROM timeline_student WHERE batchId ='$batchId' ORDER BY createdDtm DESC  ";//Chronoligical Order

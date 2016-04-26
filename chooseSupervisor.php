@@ -4,9 +4,9 @@ $subtitle="Choose Supervisor";
 require_once("includes/header.php");
 require_once("includes/config.php");
 session_start();
-//Query to use SELECT * FROM faculty JOIN work_load ON faculty.facultyId = work_load.facultyId WHERE totalLoad > 0 AND totalLoad > currentLoad
 
-if($_SESSION["isLead"]!="1")
+//Check if student is logged in
+if(!isset($_SESSION["usrCMS"]))
 {
     header('Location: '.'index.php');
 }
@@ -20,7 +20,12 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $batchId = $row['batchId'];
         $groupId = $row['groupId'];
+        $isLeader = $row['isLeader'];
     }
+}
+//If leader
+if ($isLeader != 1 OR is_null($groupId)){
+    header('Location: '.'index.php');
 }
 
 $sql_check = "SELECT requestId FROM faculty_student_request WHERE groupId = '$groupId ' LIMIT 1";
@@ -157,7 +162,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <ul>
                     <li>You already have a group supervisor</li>
                     <!--<li>You have sent request to a supervisor</li>-->
-                    <form action="" name="cancelRequest" method="POST">
+                    <form action="" name="cancelRequest" method="POST" data-toggle="validator">
                       <li >You have sent request to a supervisor already
                         <?php if (isset($requestId)){ ?>
                             <input type="hidden" name="deleteId" value="<?php echo $requestId;?>">
@@ -202,7 +207,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </span>
                             </td>
                             <td>
-                            <form name="chooseSupervisor" action="" method="post">
+                            <form name="chooseSupervisor" action="" method="post" data-toggle="validator">
                                 <input type= "hidden" name="facultyId" value="<?php echo $row["facultyId"];?>"/>
                                 <button type="submit" name="btnChooseSupervisor" class="btn btn-primary btn-sm btn-flat"><i class="fa fa-user-plus" aria-hidden="true"></i> Send Request</button>
                             </form>

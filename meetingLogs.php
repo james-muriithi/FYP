@@ -209,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </div>
                         <!-- /.box-header -->
                         <!-- form start -->
-                        <form role="form" id="addNewLog" name="addNewLog" method="post">
+                        <form role="form" id="addNewLog" name="addNewLog" method="post" data-toggle="validator">
                             <div class="box-body">
                                 <div class="form-group">
                                     <label>Meeting Title</label>
@@ -298,7 +298,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         <div class="box-body">
                             <!-- form start -->
-                            <form id="editLogs" name="editLogs" action="" method="post">
+                            <form id="editLogs" name="editLogs" action="" method="post" data-toggle="validator">
                                 <input type="hidden" name="groupId" value="<?php echo $groupId;?>">
                                 <input type="hidden" name="editId" id="editId" value="<?php echo $id;?>">
 
@@ -323,7 +323,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="form-group">
                                         <label>Add Comments</label>
                                         <div class="box-body pad">
-                                            <form>
+                                            <form data-toggle="validator">
                                                 <textarea class="textarea" name="addComments"  placeholder="Add Comments..."  style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
                                             </form>
                                         </div>
@@ -379,7 +379,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                             <div class="box-body">
                                 <!-- form start -->
-                                <form id="addComments" name="addComments" action="" method="post">
+                                <form id="addComments" name="addComments" action="" method="post" data-toggle="validator">
                                     <input type="hidden" name="groupId" value="<?php echo $groupId;?>">
                                     <input type="hidden" name="editId" id="editId" value="<?php echo $id;?>">
 
@@ -390,7 +390,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <div class="form-group">
                                             <label>Add Comments</label>
                                             <div class="box-body pad">
-                                                <form>
+                                                <form data-toggle="validator">
                                                     <textarea class="textarea" name="comments"  placeholder="Add Comments..."  style="width: 100%; height: 200px; font-size: 14px; line-height: 18px; border: 1px solid #dddddd; padding: 10px;"></textarea>
                                                 </form>
                                             </div>
@@ -430,7 +430,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <h3 class="box-title">Meeting Logs</h3>
 
                             <div class="box-tools">
-                                <form id="selectGroup"  method="get" name="selectGroup">
+                                <form id="selectGroup"  method="get" name="selectGroup" data-toggle="validator">
                                     <div class="input-group input-group-sm" style="width: 250px;">
 
                                         <select name="id" class="form-control" required>
@@ -494,7 +494,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     }
                                                     ;?></td>
 
-                                                <form id="logActions" name="logActions" method="post">
+                                                <form id="logActions" name="logActions" method="post" data-toggle="validator">
                                                     <th><?php
                                                         $status =$row['meeting_status'];
                                                         if ($status == 'Pending'){ ?>
@@ -524,7 +524,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 </form>
                                                 <td>
                                                     <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['id']; ?>"   class="btn  btn-default btn-flat  btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
-                                                    <form  action="" method="post" onsubmit="return confirm('Are you sure you want to delete this record?');">
+                                                    <form  action="" method="post" onsubmit="return confirm('Are you sure you want to delete this record?');" data-toggle="validator">
                                                         <input type="hidden" name="logId" value="<?php  echo $row['id'];?>">
                                                         <input type="hidden" name="groupId" value="<?php echo $row['group_id'];?>">
                                                         <button type="submit" name="btnDelete" class="btn  btn-danger btn-flat  btn-xs"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>

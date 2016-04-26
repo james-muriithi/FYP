@@ -169,7 +169,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="box no-border">
                                 <div class="box-body">
 
-                                    <form action="" method="post" onsubmit="return confirm('Are you sure you ?');">
+                                    <form action="" method="post" onsubmit="return confirm('Are you sure you ?');" data-toggle="validator">
                                         <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
 
                                         <ul class="todo-list ui-sortable">
@@ -188,7 +188,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
                                     <?php if ($sdpPart ==1){ ?>
-                                        <form action="" method="post" onsubmit="return confirm('Are you sure you ?');">
+                                        <form action="" method="post" onsubmit="return confirm('Are you sure you ?');" data-toggle="validator">
                                             <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
 
                                             <ul class="todo-list ui-sortable">
@@ -204,7 +204,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             </ul>
                                         </form>
 
-                                        <form action="" method="post" onsubmit="return confirm('Are you sure you ?');">
+                                        <form action="" method="post" onsubmit="return confirm('Are you sure you ?');" data-toggle="validator">
 
                                             <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
 

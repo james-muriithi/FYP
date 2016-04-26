@@ -251,7 +251,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body  no-padding">
-                                <form id="editTemplate" name="editTemplate" action="" method="post" enctype="multipart/form-data">
+                                <form id="editTemplate" name="editTemplate" action="" method="post" enctype="multipart/form-data" data-toggle="validator">
 
                                     <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
 
@@ -311,7 +311,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <!-- /.box-header -->
                             <div class="box-body  no-padding">
-                                <form id="uploadTemplates" name="uploadTemplates" action="" method="post" enctype="multipart/form-data">
+                                <form id="uploadTemplates" name="uploadTemplates" action="" method="post" enctype="multipart/form-data" data-toggle="validator">
 
                                     <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
                                     <div class="form-group">
@@ -369,7 +369,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
                                 <div class="box-tools">
-                                    <form id="selectBatch"  id="selectBatch" method="get" name="selectGroup">
+                                    <form id="selectBatch"  id="selectBatch" method="get" name="selectGroup" data-toggle="validator">
                                         <div class="input-group input-group-sm" style="width: 250px;">
 
                                             <select name="batchId"  id="batchId" class="form-control" required>

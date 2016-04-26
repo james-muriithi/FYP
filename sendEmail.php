@@ -104,7 +104,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <h3 class="box-title">Compose New Message</h3>
                         </div>
                         <!-- /.box-header -->
-                        <form role="form" action="<?php echo $_SERVER['PHP_SELF']; ?>" id="sendEmail" name="sendEmail" method="POST">
+                        <form role="form" action="" id="sendEmail" name="sendEmail" method="POST" data-toggle="validator">
                         <div class="box-body">
                             <div class="form-group">
                                 <input type="email" name="recipient" class="form-control" placeholder="To:" required>

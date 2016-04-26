@@ -136,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 if ($result->num_rows > 0) {
                                     // output data of each row
                                     while($row = $result->fetch_assoc()) { ?>
-                                        <form name="detailForm" id="detailForm" method="post">
+                                        <form name="detailForm" id="detailForm" method="post" data-toggle="validator">
                                             <input type="hidden" name="downloadId" value="<?php echo $row['id'];?>" >
                                             <tr>
                                                 <td><?php echo $row['studentCMS']; ?></td>

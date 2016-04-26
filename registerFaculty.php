@@ -153,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
           <h4 class="text-center ">Register a Faculty</h4>
       </div>
 
-    <form id="registerFaculty" action="" method="post">
+    <form id="registerFaculty" action="" method="post" data-toggle="validator">
 
       <div class="form-group has-feedback">
         <input type="text" name="facultyName" class="form-control" placeholder="Enter Full name" required/>

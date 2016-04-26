@@ -177,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <td><a href="<?php echo siteroot.'studentProfile.php?id='.$row['studentId'];?>" ><?php echo $row['studentName']." [".$row['studentCMS']."]";?></a></td>
                                 <td><?php echo time2str($row['createdDtm']) ;?></td>
                                 <td>
-                                    <form  action="" method="post" onsubmit="return confirm('Are you sure you want to send request to this group?');">
+                                    <form  action="" method="post" onsubmit="return confirm('Are you sure you want to send request to this group?');" data-toggle="validator">
                                         <input type="hidden" name="requestId" value="<?php echo $row['groupId'];?>">
                                         <button type="submit" name="btnSendRequest" class="btn  btn-primary btn-block  btn-sm"<i class="fa fa-user-plus" aria-hidden="true"></i> Send Request</button>
                                     </form>
@@ -209,7 +209,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 <div class="box-body">
                     <p>You have already sent request to a group</p>
-                    <form  action="" method="post" onsubmit="return confirm('Are you sure you want to cancel your sent request?');">
+                    <form  action="" method="post" onsubmit="return confirm('Are you sure you want to cancel your sent request?');" data-toggle="validator">
                         <button type="submit" name="btnDeleteRequest" class="btn  btn-default  "><i class="fa fa-times" aria-hidden="true"></i> Cancel Request</button>
                     </form>
 

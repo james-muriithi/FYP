@@ -257,7 +257,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <!-- /.box-header -->
                             <!-- form start -->
-                            <form role="form" action="" id="facultyProfile" name="facultyProfile" method="POST" >
+                            <form role="form" action="" id="facultyProfile" name="facultyProfile" method="POST" data-toggle="validator">
 
                                 <div class="box-body">
                                     <div class="form-group has-feedback">
@@ -302,13 +302,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <ul class="list-group list-group-unbordered">
                                     <li class="list-group-item">
                                         <p class="text-aqua" style="text-align: center">Browse image and press upload</p>
-                                        <form action="" method="post" enctype="multipart/form-data">
+                                        <form action="" method="post" enctype="multipart/form-data" data-toggle="validator">
                                             <input type="file" name="image" class="btn btn-block btn-flat">
                                             <input type="submit" value="Upload" class="btn btn-block ">
                                         </form>
                                     </li>
                                 </ul>
-                                <form role="form" id="change_image" action="" method="post">
+                                <form role="form" id="change_image" action="" method="post" data-toggle="validator">
                                     <input   name="btnDelete" id="btnDelete" value="Remove Photo" class="btn bg-maroon btn-block" />
                                 </form>
                             </div>

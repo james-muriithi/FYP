@@ -157,7 +157,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <h4 class="text-center ">Register a Student</h4>
                         </div>
 
-                        <form id="registerStudent" name="registerStudent" action="" method="post">
+                        <form id="registerStudent" name="registerStudent" action="" method="post" data-toggle="validator">
 
                             <div class="form-group has-feedback">
                                 <input type="number" min="000001" max="99999" name="cms" class="form-control" placeholder="Enter CMS" required/>
@@ -165,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
 
                             <div class="form-group has-feedback">
-                                <input type="text" name="name"  class="form-control" placeholder="Enter Full name"  required/> <!--TODO : Regex for name-->
+                                <input type="text" name="name"  class="form-control" placeholder="Enter Full name" maxlength="30" minlength="5" required/> <!--TODO : Regex for name-->
                                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
                             </div>
 

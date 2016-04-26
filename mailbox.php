@@ -181,7 +181,7 @@ require_once 'includes/swal_css.php';
         <!-- /.col -->
       </div>
       <!-- /.row -->
-	<form id="Cancel" action="home.php" method="post">
+	<form id="Cancel" action="home.php" method="post" data-toggle="validator">
 	<br/>
 		<div class="row">
 			<div class="col-lg-12">

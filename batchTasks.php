@@ -225,7 +225,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </h3>
                                 </div>
                                 <!-- /.box-header -->
-                                <form name="addNewTask" id="addNewTask" action="<?php echo $_SERVER['PHP_SELF']; ?>" class="form-horizontal" method="post">
+                                <form name="addNewTask" id="addNewTask" action="" class="form-horizontal" method="post" data-toggle="validator">
                                     <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
                                     <div class="box-body  no-padding">
 
@@ -363,7 +363,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </h3>
 
                                 <div class="box-tools">
-                                    <form name="selectBatch"  id="selectBatch" method="get" name="selectGroup">
+                                    <form name="selectBatch"  id="selectBatch" method="get" name="selectGroup" data-toggle="validator">
 
                                         <div class="input-group input-group-sm" style="width: 250px;">
 
@@ -439,7 +439,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <?php } ?>
                                 <div class="box-footer">
                                     <a href="<?php echo siteroot; ?>" class="btn  btn-default btn-sm  "><i class="fa fa-chevron-left" aria-hidden="true"></i> Back</a>
-                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId; ?>" class="btn  btn-primary btn-sm pull-right  ">Add New Task</a>
+                                    <a href="<?php echo $_SERVER['PHP_SELF'] . '?add='.$batchId.'&batchId='.$batchId; ?>" class="btn  btn-primary btn-sm pull-right" <?php if (!isset($_GET['batchId'])){echo 'disabled';}?>>Add New Task</a>
                                 </div>
                             </div>
                             <!-- /.box-body -->

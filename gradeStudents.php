@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'GET') {
         $groupId =  filter_input(INPUT_GET, "group",FILTER_SANITIZE_SPECIAL_CHARS);
 
         //Check if group is already graded
-        $sql = "SELECT id FROM grades WHERE groupId='$groupId' AND sdpPart=1 LIMIT 1 ";
+        $sql = "SELECT id FROM grades WHERE groupId='$groupId' AND sdpPart=2 LIMIT 1 ";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
@@ -182,7 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <form role="form" action="" id="gradeStudents" name="gradeStudents" method="POST" >
+                                    <form role="form" action="" id="gradeStudents" name="gradeStudents" method="POST"  data-toggle="validator">
                                     <?php
                                     $sql = "SELECT *  FROM student WHERE student.groupId ='$groupId' ";
                                     $result = $conn->query($sql);
@@ -236,6 +236,33 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                                     <p>This group has already been graded.Select another group from the dropdown list</p>
                                 </div>
+                                    <table class="table table-condensed">
+                                        <tr>
+                                            <th style="width: 20px;">CMS</th>
+                                            <th>Name</th>
+                                            <th sty="width: 10px;">Grade</th>
+
+                                        </tr>
+                                        <?php
+                                        $sql = "SELECT studentCMS,studentName,grade,gradedBy FROM grades JOIN student ON student.studentId = grades.studentId WHERE grades.groupId = '$groupId' AND sdpPart = 2";
+                                        $result = $conn->query($sql);
+
+                                        if ($result->num_rows > 0) {
+                                            // output data of each row
+                                            while($row = $result->fetch_assoc()) {
+                                                $gradedBy = $row['gradedBy'];
+                                                ?>
+                                                <tr>
+                                                    <td><?php echo $row['studentCMS'];?></td>
+                                                    <td><?php echo $row['studentName'];?></td>
+                                                    <td><?php echo $row['grade'];?></td>
+                                                </tr>
+
+                                                <?php
+                                            }
+                                        }
+                                        ?>
+                                    </table>
 
                             <?php
                             }   }

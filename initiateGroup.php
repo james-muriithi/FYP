@@ -20,23 +20,36 @@ $studentId = $_SESSION['usrId'];
     /* Check if:
      * - User already initiated a group
      * - User is already in a group
+     * - User sent request to group
      */
 
-    $sql = "SELECT groupId FROM student WHERE batchId = '$batchId' AND studentId = '$studentId' LIMIT 1";
+    $sql = "SELECT groupId,isLeader FROM student WHERE batchId = '$batchId' AND studentId = '$studentId' LIMIT 1";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
         while($row = $result->fetch_assoc()) {
-            if ($row['groupId'] != null){
+            if ($row['groupId'] != null OR $row['isLeader'] == 1){
 
                 //User is already in a group
                 $check = false;
             }
             else{
                 $check = true;
+
+                $sql = "SELECT studentId FROM student_group_request WHERE studentId = '$studentId' LIMIT 1";
+                $result = $conn->query($sql);
+
+                if ($result->num_rows > 0) {
+                    //User already sent request to group
+                    $check = false;
+                }else{
+                    $check = true;
+                }
             }
         }
     }
+
+
 
 
 
@@ -164,7 +177,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 </div>
                                 <!-- /.box-header -->
                                 <!-- form start -->
-                                <form id="initiateGroup" name="initiateGroup" method="post">
+                                <form id="initiateGroup" name="initiateGroup" method="post" data-toggle="validator">
                                     <div class="box-body">
                                         <div class="form-group">
                                             <label >Set Group Name</label>
@@ -193,7 +206,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                                     <div class="box-body">
                                         <h3>You can not initiate a group</h3>
-                                        <p>You are either part of a Project group OR you initiated a group already</p>
+                                        <ul>
+                                            <li>You are either part of a Project group</li>
+                                            <li>You have sent request to a group</li>
+                                            <li>You initiated a group already</li>
+                                        </ul>
+
                                     </div>
                                     <!-- /.box-body -->
 

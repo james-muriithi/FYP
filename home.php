@@ -123,46 +123,12 @@ if(isset($_POST['signout'])) { // logout button
 
 
             <?php
-            if (isset($_SESSION['usrCMS'])){ ?>
-                <div id="ajax-timeline">
-                    <script type="text/javascript">
-                        $(document).ready(function() {
-
-                            $('#ajax-timeline').load('studentTimeline.php')
-
-                            function getTimelineData(){
-                                setInterval(function () {
-                                    $('#ajax-timeline').load('studentTimeline.php')
-                                }, 3000);
-                            }
-                            getTimelineData();
-                        });
-                    </script>
-                </div>
-
-
-                <?php
+            if (isset($_SESSION['usrCMS'])){
+               require_once ('studentTimeline.php');
             }
-            if (isset($_SESSION['facultyId'])){ ?>
-                <div id="ajax-timeline">
-                    <script type="text/javascript">
-                        $(document).ready(function() {
-
-                            $('#ajax-timeline').load('facultyTimeline.php')
-
-                            function getTimelineData(){
-                                setInterval(function () {
-                                    $('#ajax-timeline').load('facultyTimeline.php')
-                                }, 3000);
-                            }
-                            getTimelineData();
-                        });
-                    </script>
-                </div>
-
-            <?php
+            if (isset($_SESSION['facultyId'])){
+                require_once ('facultyTimeline.php');
             }
-           
 
             ?>
 

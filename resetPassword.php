@@ -178,7 +178,7 @@ if (isset($_GET['status'])){
 
 
 
-        <form role="form" action="<?php echo $_SERVER['PHP_SELF']; ?>" id="forgetPass" name="forgetPass" method="POST">
+        <form role="form" action="<?php echo $_SERVER['PHP_SELF']; ?>" id="forgetPass" name="forgetPass" method="POST" data-toggle="validator">
             <div class="form-group has-feedback">
                 <input type="email" name="email" class="form-control" name="email"
                        placeholder="Enter your email address" required >

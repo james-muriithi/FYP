@@ -127,7 +127,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                         </div>
 
-                        <form id="registerCoordinator" action="" method="post">
+                        <form id="registerCoordinator" action="" method="post" data-toggle="validator">
 
 
                             <div class="form-group has-feedback">

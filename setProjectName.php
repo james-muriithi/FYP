@@ -136,7 +136,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 <h3 class="box-title">Set Project Name</h3>
                             </div>
                             <!-- /.box-header -->
-                            <form role="form" action="<?php echo $_SERVER['PHP_SELF']; ?>" id="changeProjName" method="POST">
+                            <form role="form" action="<?php echo $_SERVER['PHP_SELF']; ?>" id="changeProjName" method="POST" data-toggle="validator">
                                 <div class="box-body">
 
 

@@ -178,7 +178,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                             <!-- /.box-header -->
 
-                            <form class="form-horizontal" name="editStudent" action=""  method="post" onsubmit="return confirm('Are you sure you want to submit these changes?');" >
+                            <form class="form-horizontal" name="editStudent" action=""  method="post" onsubmit="return confirm('Are you sure you want to submit these changes?');" data-toggle="validator">
                                 <input type="hidden" name="editId" value="<?php echo $editId; ?>">
                                 <input type="hidden" name="batchId" value="<?php echo $batchId; ?>">
                                 <div class="box-body">
@@ -187,7 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <label class="col-sm-2 control-label">CMS</label>
 
                                         <div class="col-sm-10">
-                                            <input type="number" min="0000000" max="99999" class="form-control" id="cms" name="cms" value="<?php echo $cms;?>" required>
+                                            <input type="number" min="000001" max="99999" class="form-control" id="cms" name="cms" value="<?php echo $cms;?>" required>
                                         </div>
                                     </div>
 
@@ -250,9 +250,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <h3 class="box-title">List of students</h3>
 
                             <div class="box-tools">
-                                <form name="selectBatch"  id="selectBatch" method="get" name="selectGroup">
+                                <form name="selectBatch"  id="selectBatch" method="get"  data-toggle="validator">
 
-                                    <div class="input-group input-group-sm" style="width: 250px;">
+                                    <div class="form-group input-group input-group-sm" style="width: 250px;">
 
                                         <select name="batchId"  id="batchId" class="form-control" required>
                                             <?php
@@ -321,7 +321,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['studentId'].'&batchId='.$batchId; ?>"  class="btn  btn-default btn-flat  btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
 
                                                 <br/>
-                                                <form  action="" method="post" onsubmit="return confirm('Are you sure you want to delete this student?');">
+                                                <form  action="" method="post" onsubmit="return confirm('Are you sure you want to delete this student?');" data-toggle="validator">
                                                     <input type="hidden" name="deleteId" value="<?php echo $row['studentId'];?>">
                                                     <input type="hidden" name="batchId" value="<?php echo $batchId; ?>">
                                                     <button type="submit" name="btnDelete" class="btn  btn-danger btn-flat  btn-xs"><i class="fa fa-trash-o" aria-hidden="true"></i> Delete</button>
