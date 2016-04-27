@@ -38,7 +38,7 @@
       <!-- Tasks: style can be found in dropdown.less -->
 
       <!-- Notifications: style can be found in dropdown.less -->
-      <?php require_once ('notifications.php');?>
+<!--      --><?php //require_once ('notifications.php');?>
       <!-- Tasks: style can be found in dropdown.less -->
 
       

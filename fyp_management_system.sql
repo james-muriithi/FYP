@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 26, 2016 at 09:35 PM
+-- Generation Time: Apr 27, 2016 at 08:27 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -264,6 +264,13 @@ CREATE TABLE `meeting_logs` (
   `created_dtm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Maintain all meeting logs of supervisors with students';
 
+--
+-- Dumping data for table `meeting_logs`
+--
+
+INSERT INTO `meeting_logs` (`id`, `supervisor_id`, `group_id`, `meeting_title`, `meeting_dtm`, `comments`, `meeting_status`, `created_dtm`) VALUES
+(1, 24, 2, 'Meeting 4', '2016-04-28 00:00:00', NULL, 'Pending', '2016-04-27 22:38:19');
+
 -- --------------------------------------------------------
 
 --
@@ -305,7 +312,7 @@ INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentEmail`,
 (14, 'Muneeb Khan', '7757', 'muneeb_420@gmail.com', '01234565', 'male', '123', '571fc1ed78e844.19123851.jpg', NULL, NULL, 1, 1, '2016-04-03 13:30:06'),
 (15, 'Umair Qamar', '10776', 'umairqamar@live.com', '03458541454', 'male', '123', '571fc167eb6844.89367165.jpg', 12, 1, 1, 1, '2016-04-03 13:30:06'),
 (21, 'Bilal Hassan', '7471', 'bilalhassan@live.com', '+923458541454', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-03 13:30:06'),
-(43, 'Aizaz Ahmed Abbasi', '7736', 'aizaz@gmail.com', '923211234567', 'male', '123', '571fafa2118908.51169619.jpg', 11, 1, 1, 1, '2016-04-10 14:28:47'),
+(43, 'Aizaz Ahmed Abbasi', '7736', 'aizaz@gmail.com', '923211234567', 'male', '123', '571fafa2118908.51169619.jpg', 2, 1, 1, 1, '2016-04-10 14:28:47'),
 (44, 'Najeeb Qureshi', '8781', 'najeeb@gmail.com', '1234567', 'male', '123', '571fafb8cf5792.07778878.jpg', 2, NULL, 1, 1, '2016-04-13 14:17:37'),
 (45, 'Muhammad Waqar Khan', '7740', 'waqar@gmail.com', '033569870', 'male', '123', '571fafaeb7f8e2.46039702.jpg', 2, NULL, 1, 1, '2016-04-14 22:03:41'),
 (46, 'Muhammad Fahad Khan', '7759', 'fahad@hotmail.com', '03356980', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:04:52'),
@@ -642,7 +649,7 @@ ALTER TABLE `work_load`
 -- AUTO_INCREMENT for table `batch`
 --
 ALTER TABLE `batch`
-  MODIFY `batchId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `batchId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 --
 -- AUTO_INCREMENT for table `batch_tasks`
 --
@@ -672,7 +679,7 @@ ALTER TABLE `faculty_student_group`
 -- AUTO_INCREMENT for table `faculty_student_request`
 --
 ALTER TABLE `faculty_student_request`
-  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `grades`
 --
@@ -692,7 +699,7 @@ ALTER TABLE `group_uploads`
 -- AUTO_INCREMENT for table `meeting_logs`
 --
 ALTER TABLE `meeting_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `project_repository`
 --
@@ -712,7 +719,7 @@ ALTER TABLE `student_group`
 -- AUTO_INCREMENT for table `student_group_request`
 --
 ALTER TABLE `student_group_request`
-  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `timeline_faculty`
 --
