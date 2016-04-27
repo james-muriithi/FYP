@@ -160,6 +160,19 @@ function get_icon($filename){
 
 }
 
+function check_group_uploads ($groupId,$taskId,$batchId){
+    global $conn;
+
+    $sql = "SELECT * FROM batch_tasks JOIN group_uploads ON batch_tasks.taskId = group_uploads.taskId WHERE groupId = '$groupId' AND batchId = '$batchId' AND batch_tasks.taskId = '$taskId' LIMIT 1 ";
+    $result = $conn->query($sql);
+
+    if ($result->num_rows > 0) {
+        return true;
+    } else {
+        return false;
+    }
+
+}
 
 
 

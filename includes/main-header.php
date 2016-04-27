@@ -24,6 +24,7 @@
         //Student
         if(isset ($_SESSION["usrCMS"]) ){
             require_once ('requests-student.php');
+            require_once ('dropdownStudentTasks.php');
         }
         //Supervisor
        if (isset ($_SESSION["facultyId"]) ){
