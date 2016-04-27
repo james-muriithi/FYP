@@ -123,6 +123,12 @@
                         </a>
                     </li>
 
+                    <li>
+                        <a href="./studentMeetingLogs.php">
+                            <i class="fa fa-list-ul"></i> <span>Meeting Logs</span>
+                        </a>
+                    </li>
+
                     <?php
                 } ?>
 
