@@ -134,7 +134,7 @@ if (isset($_GET['status'])){
     if ($_GET['status'] == 't'){ ?>
         <div style="text-align:center;" class="alert alert-success" role="alert">
             <span class="glyphicon glyphicon-exclamation-sign"></span>
-            Changes saved successfully!
+            An email has been sent to your account with new password
             <button type="button" class="close" data-dismiss="alert">x</button>
         </div>
         <?php
@@ -169,7 +169,7 @@ if (isset($_GET['status'])){
 <body class="hold-transition login-page">
 <div class="login-box">
     <div class="login-logo">
-        <a href="<?php echo siteroot;?>"><img src="./img/fyp_logo_50x50.png" alt="fyp_logo"> <h2>Final Year Project</h2> <p>Management System</p></a>
+        <a href="<?php echo siteroot;?>"><img src="./img/logo_type.png" alt="fyp_logo" width="360" length="52"></a>
     </div>
 
     <!-- /.login-logo -->
@@ -181,16 +181,17 @@ if (isset($_GET['status'])){
         <form role="form" action="<?php echo $_SERVER['PHP_SELF']; ?>" id="forgetPass" name="forgetPass" method="POST" data-toggle="validator">
             <div class="form-group has-feedback">
                 <input type="email" name="email" class="form-control" name="email"
-                       placeholder="Enter your email address" required >
+                       placeholder="Enter your email address" required  autofocus>
                 <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
             </div>
 
             <div class="row">
                 <div class="col-xs-8">
-
+                    <a href="<?php echo siteroot;?>" class="btn btn-default  btn-flat">Back</a>
                 </div>
                 <!-- /.col -->
                 <div class="col-xs-4">
+
                     <button type="submit" name="forgetPassBtn"
                             class="btn btn-primary btn-block btn-flat">Submit
                     </button>
