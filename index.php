@@ -9,94 +9,98 @@ if(isset($_SESSION["usrnm"]))
 {
 	header('Location: '."home.php");
 }
+//Check if form is submitted by POST
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if(isset($_POST["email"]) && isset($_POST["pasword"]))
+    {
+        $userEmail =  filter_input(INPUT_POST, "email",FILTER_SANITIZE_SPECIAL_CHARS);
+        $userPass = filter_input(INPUT_POST, "pasword",FILTER_SANITIZE_SPECIAL_CHARS);
 
-if(isset($_POST["email"]) && isset($_POST["pasword"]))
-{
-$userEmail =  filter_input(INPUT_POST, "email",FILTER_SANITIZE_SPECIAL_CHARS);
-$userPass = filter_input(INPUT_POST, "pasword",FILTER_SANITIZE_SPECIAL_CHARS);
+        $sql = "SELECT * FROM student";
+        $sql2 = "SELECT * FROM faculty";
+        $sql3 ="SELECT * FROM external_examiner";
 
-$sql = "SELECT * FROM student";
-$sql2 = "SELECT * FROM faculty";
-$sql3 ="SELECT * FROM external_examiner";
+        $result = $conn->query($sql);
+        $result2 = $conn->query($sql2);
+        $result3 = $conn->query($sql3);
 
-$result = $conn->query($sql);
-$result2 = $conn->query($sql2);
-$result3 = $conn->query($sql3);
-
-$check=0;
-    if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            if($row["studentEmail"]==$userEmail && $row["studentPassword"]==$userPass)
-            {
+        $check=0;
+        if ($result->num_rows > 0) {
+            while($row = $result->fetch_assoc()) {
+                if($row["studentEmail"]==$userEmail && $row["studentPassword"]==$userPass)
+                {
                     //SETTING UP SESSION VALUES FOR STUDENT;
                     $_SESSION["usrId"]=$row["studentId"];
                     $_SESSION["usrnm"]=$row["studentName"];
                     $_SESSION["usrCMS"]=$row["studentCMS"];
-					$_SESSION["usrEmail"]=$row["studentEmail"];
-					$_SESSION["usrGender"]=$row["studentGender"];
+                    $_SESSION["usrEmail"]=$row["studentEmail"];
+                    $_SESSION["usrGender"]=$row["studentGender"];
                     $_SESSION["type"]="Student";
                     $_SESSION["usrId"]=$row["studentId"];
                     $_SESSION["isLead"]=$row["isLeader"];
                     $_SESSION["GroupID"]=$row["groupId"];
-					$_SESSION["BatchID"]=$row["batchId"];
+                    $_SESSION["BatchID"]=$row["batchId"];
                     $_SESSION["usrEmail"]=$row["studentEmail"];
                     $_SESSION["image"]=$row["studentImage"];
                     $_SESSION["contact"]=$row["studentPhoneNo"];
                     $check=1;
-					header('Location: '.'home.php');
+                    header('Location: '.'home.php');
+                }
             }
         }
-    }
-    if ($result2->num_rows > 0) {
-        while($row2 = $result2->fetch_assoc()) {
-            if($row2["facultyEmail"]==$userEmail && $row2["facultyPassword"]==$userPass)
-            {
-                //SETTING UP SESSION VALUES FOR FACULTY
-                session_start();
-                $_SESSION["facultyId"]=$row2["facultyId"];
-                $_SESSION["usrnm"]=$row2["facultyName"];
-                $_SESSION["email"]=$row2["facultyEmail"];
-                $_SESSION["contact"]=$row2["facultyPhoneNo"];
-                $_SESSION["design"]=$row2["designation"];
-                $_SESSION["isCord"]=$row2["isCoordinator"];
-                $_SESSION["isAdmin"]=$row2["isAdmin"];
-                $_SESSION["type"]="Faculty";
-                $_SESSION["image"]=$row2["facultyImage"];
-                $check=1;
-                header('Location: '.'home.php');
+        if ($result2->num_rows > 0) {
+            while($row2 = $result2->fetch_assoc()) {
+                if($row2["facultyEmail"]==$userEmail && $row2["facultyPassword"]==$userPass)
+                {
+                    //SETTING UP SESSION VALUES FOR FACULTY
+                    session_start();
+                    $_SESSION["facultyId"]=$row2["facultyId"];
+                    $_SESSION["usrnm"]=$row2["facultyName"];
+                    $_SESSION["email"]=$row2["facultyEmail"];
+                    $_SESSION["contact"]=$row2["facultyPhoneNo"];
+                    $_SESSION["design"]=$row2["designation"];
+                    $_SESSION["isCord"]=$row2["isCoordinator"];
+                    $_SESSION["isAdmin"]=$row2["isAdmin"];
+                    $_SESSION["type"]="Faculty";
+                    $_SESSION["image"]=$row2["facultyImage"];
+                    $check=1;
+                    header('Location: '.'home.php');
+                }
             }
         }
-    }
-	if ($result3->num_rows > 0) {
-        while($row3 = $result3->fetch_assoc()) {
-            if($row3["examinerEmail"]==$userEmail && $row3["examinerPassword"]==$userPass)
-            {
-                //SETTING UP SESSION VALUES FOR EXTERNAL EXAMINER
-                session_start();
-                $_SESSION["examinerId"]=$row3["examinerId"];
-                $_SESSION["usrnm"]=$row3["examinerName"];
-				$examiner=$row3["examinerId"];
-                $_SESSION["design"]="External Examiner";
-                $_SESSION["type"]="Examiner";
-                $_SESSION["image"]=$row2["profileImage"];
-                $check=1;
-                header('Location: '.'home.php');
+        if ($result3->num_rows > 0) {
+            while($row3 = $result3->fetch_assoc()) {
+                if($row3["examinerEmail"]==$userEmail && $row3["examinerPassword"]==$userPass)
+                {
+                    //SETTING UP SESSION VALUES FOR EXTERNAL EXAMINER
+                    session_start();
+                    $_SESSION["examinerId"]=$row3["examinerId"];
+                    $_SESSION["usrnm"]=$row3["examinerName"];
+                    $examiner=$row3["examinerId"];
+                    $_SESSION["design"]="External Examiner";
+                    $_SESSION["type"]="Examiner";
+                    $_SESSION["image"]=$row2["profileImage"];
+                    $check=1;
+                    header('Location: '.'home.php');
+                }
             }
         }
+
+        if($check==0)
+        {
+            $error="Email or Password is invalid";?>
+            <div style="text-align:center;" class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign"></span>
+                <?php echo $error?>
+                <button type="button" class="close" data-dismiss="alert">x</button>
+            </div>
+            <?php
+        }
+        $conn->close();
     }
 
-    if($check==0)
-    {
-        $error="Email or Password is invalid";?>
-        <div style="text-align:center;" class="alert alert-danger" role="alert">
-        <span class="glyphicon glyphicon-exclamation-sign"></span>
-        <?php echo $error?>
-        <button type="button" class="close" data-dismiss="alert">x</button>
-        </div>        
-      <?php
-    }
-    $conn->close();
-    }
+
+}
 
 ?>
 
@@ -114,7 +118,7 @@ $check=0;
 
     <form action="index.php" method="POST">
       <div class="form-group has-feedback">
-          <input type="email" class="form-control" name="email" placeholder="Email" required>
+          <input type="email" class="form-control" name="email" placeholder="Email" data-toggle="validator" required autofocus >
         <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
       </div>
       <div class="form-group has-feedback">

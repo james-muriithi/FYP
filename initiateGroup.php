@@ -23,7 +23,7 @@ $studentId = $_SESSION['usrId'];
      * - User sent request to group
      */
 
-    $sql = "SELECT groupId,isLeader FROM student WHERE batchId = '$batchId' AND studentId = '$studentId' LIMIT 1";
+    $sql = "SELECT * FROM student WHERE batchId = '$batchId' AND studentId = '$studentId' LIMIT 1";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {

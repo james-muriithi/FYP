@@ -130,7 +130,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                     <div class="box">
                         <div class="box-header">
-                            <h3 class="box-title">List of students</h3>
+                            <h3 class="box-title">Grade Supervising groups</h3>
+                            <p class="text-muted">Select a group you are supervising and Grade SDP - 1</p>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body  ">
@@ -143,6 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                            <li><a href="<?php echo $_SERVER['PHP_SELF'];?>">---</a></li>
                                             <?php
                                             $sql = "SELECT * FROM faculty_student_group JOIN student_group ON faculty_student_group.groupId = student_group.groupId WHERE facultyId= '$facultyId'";
                                             $result = $conn->query($sql);
@@ -274,6 +276,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         <!-- /.box-body -->
                     </div>
                     <!-- /.box -->
+
+                  
+
 
                 </div>
 

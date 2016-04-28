@@ -41,7 +41,7 @@
 
                 <?php
                 if ($_SESSION["type"] === "Examiner"){ ?>
-            <li><a href="gradeStudents.php"><i class="fa fa-graduation-cap"></i> <span>Grade Students</span></a></li>
+            <li><a href="gradeStudents.php"><i class="fa fa-graduation-cap"></i> <span>Grading</span></a></li>
 
             <?php }
 
@@ -262,8 +262,8 @@
                     </a>
                 </li>
                 <li>
-                    <a href="./gradeStudentsPart1.php">
-                        <i class="fa fa-check-circle-o" aria-hidden="true"></i><span>Grade Students</span>
+                    <a href="./gradingPart1.php">
+                        <i class="fa fa-check-circle-o" aria-hidden="true"></i><span>Gradings</span>
                     </a>
 
                 </li>
