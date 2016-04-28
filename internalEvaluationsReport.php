@@ -65,10 +65,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 <div class="col-md-10">
                     <div class="box no-padding no-border">
                         <div class="box-body ">
-                            <div class="col-md-6 col-md-offset-3">
+                            <div class="col-md-8 col-md-offset-2">
                                 <div class="text-center">
-                                    <button class='export-pdf btn btn-defualt btn-flat btn-lg'><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export as PDF</button>
-                                    <button class='export-img btn btn-defualt btn-flat btn-lg'><i class="fa fa-file-image-o" aria-hidden="true"></i> Export as Image</button>
+                                    <button class='export-pdf btn btn-defualt btn-flat '><i class="fa fa-file-pdf-o" aria-hidden="true"></i> Export as PDF</button>
+                                    <button class='export-img btn btn-defualt btn-flat '><i class="fa fa-file-image-o" aria-hidden="true"></i> Export as Image</button>
+                                    <button class='anon-faculty btn btn-defualt btn-flat  '><i class="fa fa-eye" aria-hidden="true"></i> Anonymize Faculty</button>
                                 </div>
                             </div>
 
@@ -150,7 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 // output data of each row
                                                 while($row = $result->fetch_assoc()) { ?>
                                                     <tr>
-                                                        <td><?php echo $row['facultyName']; ;?></td>
+                                                        <td class="faculty-name"><?php echo $row['facultyName']; ;?></td>
                                                         <td><?php
                                                             if ($row['aeVote'] <= 0){ ?>
                                                                 <span class="label label-danger"><?php echo $row['aeVote'];?></span>
@@ -366,21 +367,9 @@ require_once("includes/required_js.php");
                 });
         });
 
-        $(".export-svg").click(function() {
-            // Convert the DOM element to a drawing using kendo.drawing.drawDOM
-            kendo.drawing.drawDOM($(".internal-report"))
-                .then(function(group) {
-                    // Render the result as a SVG document
-                    return kendo.drawing.exportSVG(group);
-                })
-                .done(function(data) {
-                    // Save the SVG document
-                    kendo.saveAs({
-                        dataURI: data,
-                        fileName: "internal-report.svg",
-                        //proxyURL: "//demos.telerik.com/kendo-ui/service/export"
-                    });
-                });
+        $(".anon-faculty").click(function() {
+            $( ".faculty-name" ).replaceWith( "xxxxx" );
+            alert("To show faculty names,refresh page")
         });
 
 
