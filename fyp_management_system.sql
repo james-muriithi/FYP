@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 28, 2016 at 08:34 PM
+-- Generation Time: Apr 28, 2016 at 08:50 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -258,7 +258,6 @@ CREATE TABLE `internal_evaluations` (
   `id` int(11) NOT NULL,
   `groupId` int(11) NOT NULL,
   `votedBy` int(11) NOT NULL COMMENT 'facultyId of Gradedby',
-  `votedByPrivacy` tinyint(4) NOT NULL COMMENT '0=no privacy , 1 = set privacy',
   `aeVote` int(11) NOT NULL COMMENT 'Allow External Exam',
   `ohVote` int(11) NOT NULL COMMENT 'Allow Partition in Open House'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -267,18 +266,18 @@ CREATE TABLE `internal_evaluations` (
 -- Dumping data for table `internal_evaluations`
 --
 
-INSERT INTO `internal_evaluations` (`id`, `groupId`, `votedBy`, `votedByPrivacy`, `aeVote`, `ohVote`) VALUES
-(4, 2, 24, 0, 2, 2),
-(5, 12, 24, 0, -1, -1),
-(6, 2, 25, 0, 2, 2),
-(7, 2, 29, 0, 1, 1),
-(8, 12, 29, 0, -1, 1),
-(9, 2, 26, 0, 1, 1),
-(10, 12, 26, 0, 2, 2),
-(11, 2, 27, 0, 2, 1),
-(12, 12, 27, 0, -1, -1),
-(13, 2, 28, 0, 2, 2),
-(14, 12, 28, 0, 2, 2);
+INSERT INTO `internal_evaluations` (`id`, `groupId`, `votedBy`, `aeVote`, `ohVote`) VALUES
+(4, 2, 24, 2, 2),
+(5, 12, 24, -1, -1),
+(6, 2, 25, 2, 2),
+(7, 2, 29, 1, 1),
+(8, 12, 29, -1, 1),
+(9, 2, 26, 1, 1),
+(10, 12, 26, 2, 2),
+(11, 2, 27, 2, 1),
+(12, 12, 27, -1, -1),
+(13, 2, 28, 2, 2),
+(14, 12, 28, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -326,6 +325,13 @@ CREATE TABLE `project_repository` (
   `id` int(11) NOT NULL,
   `batchId` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `project_repository`
+--
+
+INSERT INTO `project_repository` (`id`, `batchId`) VALUES
+(1, 1);
 
 -- --------------------------------------------------------
 
@@ -762,7 +768,7 @@ ALTER TABLE `meeting_logs`
 -- AUTO_INCREMENT for table `project_repository`
 --
 ALTER TABLE `project_repository`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `student`
 --
