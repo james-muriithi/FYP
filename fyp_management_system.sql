@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 27, 2016 at 08:27 PM
+-- Generation Time: Apr 28, 2016 at 08:34 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -168,7 +168,8 @@ CREATE TABLE `faculty_student_group` (
 --
 
 INSERT INTO `faculty_student_group` (`facultyStudentId`, `groupId`, `facultyId`) VALUES
-(1, 2, 24);
+(1, 2, 24),
+(2, 12, 24);
 
 -- --------------------------------------------------------
 
@@ -250,6 +251,38 @@ INSERT INTO `group_uploads` (`id`, `groupId`, `taskId`, `uploadFile`, `uploadedB
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `internal_evaluations`
+--
+
+CREATE TABLE `internal_evaluations` (
+  `id` int(11) NOT NULL,
+  `groupId` int(11) NOT NULL,
+  `votedBy` int(11) NOT NULL COMMENT 'facultyId of Gradedby',
+  `votedByPrivacy` tinyint(4) NOT NULL COMMENT '0=no privacy , 1 = set privacy',
+  `aeVote` int(11) NOT NULL COMMENT 'Allow External Exam',
+  `ohVote` int(11) NOT NULL COMMENT 'Allow Partition in Open House'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `internal_evaluations`
+--
+
+INSERT INTO `internal_evaluations` (`id`, `groupId`, `votedBy`, `votedByPrivacy`, `aeVote`, `ohVote`) VALUES
+(4, 2, 24, 0, 2, 2),
+(5, 12, 24, 0, -1, -1),
+(6, 2, 25, 0, 2, 2),
+(7, 2, 29, 0, 1, 1),
+(8, 12, 29, 0, -1, 1),
+(9, 2, 26, 0, 1, 1),
+(10, 12, 26, 0, 2, 2),
+(11, 2, 27, 0, 2, 1),
+(12, 12, 27, 0, -1, -1),
+(13, 2, 28, 0, 2, 2),
+(14, 12, 28, 0, 2, 2);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `meeting_logs`
 --
 
@@ -270,6 +303,18 @@ CREATE TABLE `meeting_logs` (
 
 INSERT INTO `meeting_logs` (`id`, `supervisor_id`, `group_id`, `meeting_title`, `meeting_dtm`, `comments`, `meeting_status`, `created_dtm`) VALUES
 (1, 24, 2, 'Meeting 4', '2016-04-28 00:00:00', NULL, 'Pending', '2016-04-27 22:38:19');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `project`
+--
+
+CREATE TABLE `project` (
+  `projectId` int(11) DEFAULT NULL,
+  `projectName` varchar(50) DEFAULT NULL,
+  `projectStatus` tinyint(4) DEFAULT NULL COMMENT '1=SDP-1 ,2=SDP-2,3=Passed'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -309,9 +354,9 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentEmail`, `studentPhoneNo`, `studentGender`, `studentPassword`, `studentImage`, `groupId`, `isLeader`, `batchId`, `isActive`, `createdDtm`) VALUES
-(14, 'Muneeb Khan', '7757', 'muneeb_420@gmail.com', '01234565', 'male', '123', '571fc1ed78e844.19123851.jpg', NULL, NULL, 1, 1, '2016-04-03 13:30:06'),
+(14, 'Muneeb Khan', '7757', 'muneeb_420@gmail.com', '01234565', 'male', '123', '571fc1ed78e844.19123851.jpg', 12, NULL, 1, 1, '2016-04-03 13:30:06'),
 (15, 'Umair Qamar', '10776', 'umairqamar@live.com', '03458541454', 'male', '123', '571fc167eb6844.89367165.jpg', 12, 1, 1, 1, '2016-04-03 13:30:06'),
-(21, 'Bilal Hassan', '7471', 'bilalhassan@live.com', '+923458541454', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-03 13:30:06'),
+(21, 'Bilal Hassan', '7471', 'bilalhassan@live.com', '+923458541454', 'male', '123', NULL, 12, NULL, 1, 1, '2016-04-03 13:30:06'),
 (43, 'Aizaz Ahmed Abbasi', '7736', 'aizaz@gmail.com', '923211234567', 'male', '123', '571fafa2118908.51169619.jpg', 2, 1, 1, 1, '2016-04-10 14:28:47'),
 (44, 'Najeeb Qureshi', '8781', 'najeeb@gmail.com', '1234567', 'male', '123', '571fafb8cf5792.07778878.jpg', 2, NULL, 1, 1, '2016-04-13 14:17:37'),
 (45, 'Muhammad Waqar Khan', '7740', 'waqar@gmail.com', '033569870', 'male', '123', '571fafaeb7f8e2.46039702.jpg', 2, NULL, 1, 1, '2016-04-14 22:03:41'),
@@ -436,7 +481,7 @@ CREATE TABLE `student_group` (
 
 INSERT INTO `student_group` (`groupId`, `projectName`, `batchId`, `sdpPart`, `groupLimit`, `inGroup`, `leaderId`, `createdDtm`) VALUES
 (2, 'Club Cricket Info', 1, 1, 3, 3, 43, '2016-04-26 23:00:54'),
-(12, 'Fyp Management System', 1, 1, 3, 1, 15, '2016-04-27 00:27:44');
+(12, 'Fyp Management System', 1, 1, 3, 3, 15, '2016-04-27 00:27:44');
 
 -- --------------------------------------------------------
 
@@ -474,7 +519,8 @@ CREATE TABLE `timeline_faculty` (
 INSERT INTO `timeline_faculty` (`id`, `title`, `details`, `type`, `batchId`, `sdpPart`, `createdDtm`) VALUES
 (1, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Saud Khan is now supervising group Club Cricket Info', 'info', 1, 0, '2016-04-26 23:01:26'),
 (2, 'Consultant', '<p>\r\n\r\n</p><p>Mr. Asim Asfaq (asimizb@gmail.com) will be available for consultation for any project related advise during this semester.</p><ul><li><strong>Timing:</strong>&nbsp;11:30am - 01:00pm</li><li><strong>Day:</strong>&nbsp;Every Monday</li><li><strong>Location:</strong>&nbsp;Project Lab, Block A</li></ul>\r\n\r\n<br><p></p>', 'info', 1, NULL, '2016-04-26 23:44:47'),
-(3, 'Batch Upgraded', 'Fall 2016 has been upgraded to Senior Design Project Part 2', 'info', 1, 2, '2016-04-27 00:12:00');
+(3, 'Batch Upgraded', 'Fall 2016 has been upgraded to Senior Design Project Part 2', 'info', 1, 2, '2016-04-27 00:12:00'),
+(4, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Saud Khan is now supervising group Fyp Management System', 'info', 1, 0, '2016-04-28 20:14:05');
 
 -- --------------------------------------------------------
 
@@ -502,7 +548,8 @@ INSERT INTO `timeline_student` (`id`, `title`, `details`, `type`, `taskId`, `bat
 (2, 'Consultant', '<p>\r\n\r\n</p><p>Mr. Asim Asfaq (asimizb@gmail.com) will be available for consultation for any project related advise during this semester.</p><ul><li><strong>Timing:</strong>&nbsp;11:30am - 01:00pm</li><li><strong>Day:</strong>&nbsp;Every Monday</li><li><strong>Location:</strong>&nbsp;Project Lab, Block A</li></ul>\r\n\r\n<br><p></p>', 'info', NULL, 1, NULL, '2016-04-26 23:15:36'),
 (3, 'Deliverable 02: Project Proposal', '<p></p><p>Â· &nbsp; &nbsp; &nbsp; &nbsp;\r\nUse â€œTemplate-02â€ &nbsp;to write down initial proposal and submit\r\nhard copy to project coordinator.</p>\r\n\r\n<p>Â· &nbsp; &nbsp; &nbsp; &nbsp;\r\nDue Date: Monday, 14th September 2051 (Before 3:30pm)</p><br><p></p>', 'task', 1, 1, 1, '2016-04-26 23:49:01'),
 (4, 'Batch Upgraded', 'Fall 2016 has been upgraded to Senior Design Project Part 2', 'info', NULL, 1, 2, '2016-04-27 00:12:00'),
-(5, 'Orientation Presentation', '<p>Orientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation Presentation<br></p>', 'task', 2, 19, 1, '2016-04-27 00:14:46');
+(5, 'Orientation Presentation', '<p>Orientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation Presentation<br></p>', 'task', 2, 19, 1, '2016-04-27 00:14:46'),
+(6, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Saud Khan is now supervising group Fyp Management System', 'info', NULL, 1, 0, '2016-04-28 20:14:05');
 
 -- --------------------------------------------------------
 
@@ -522,7 +569,7 @@ CREATE TABLE `work_load` (
 --
 
 INSERT INTO `work_load` (`loadId`, `facultyId`, `totalLoad`, `currentLoad`) VALUES
-(1, 24, 6, 1),
+(1, 24, 6, 2),
 (2, 25, 3, 0),
 (3, 26, 1, 0),
 (4, 27, 1, 0),
@@ -591,6 +638,12 @@ ALTER TABLE `group_requests`
 -- Indexes for table `group_uploads`
 --
 ALTER TABLE `group_uploads`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `internal_evaluations`
+--
+ALTER TABLE `internal_evaluations`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -674,12 +727,12 @@ ALTER TABLE `faculty`
 -- AUTO_INCREMENT for table `faculty_student_group`
 --
 ALTER TABLE `faculty_student_group`
-  MODIFY `facultyStudentId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `facultyStudentId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `faculty_student_request`
 --
 ALTER TABLE `faculty_student_request`
-  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `grades`
 --
@@ -695,6 +748,11 @@ ALTER TABLE `group_requests`
 --
 ALTER TABLE `group_uploads`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `internal_evaluations`
+--
+ALTER TABLE `internal_evaluations`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT for table `meeting_logs`
 --
@@ -719,17 +777,17 @@ ALTER TABLE `student_group`
 -- AUTO_INCREMENT for table `student_group_request`
 --
 ALTER TABLE `student_group_request`
-  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `timeline_faculty`
 --
 ALTER TABLE `timeline_faculty`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `timeline_student`
 --
 ALTER TABLE `timeline_student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `work_load`
 --

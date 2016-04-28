@@ -194,11 +194,11 @@
                     </a>
                 </li>
 
-                <li>
-                    <a href="generateReports.php">
-                        <i class="fa fa fa-file-pdf-o"></i><span>Generate Reports</span>
-                    </a>
-                </li>
+<!--                <li>-->
+<!--                    <a href="generateReports.php">-->
+<!--                        <i class="fa fa fa-file-pdf-o"></i><span>Generate Reports</span>-->
+<!--                    </a>-->
+<!--                </li>-->
 
                 <li>
                     <a href="projectRepository.php">

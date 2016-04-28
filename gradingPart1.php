@@ -277,6 +277,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     </div>
                     <!-- /.box -->
 
+                    <!-- general form elements -->
+                    <div class="box no-border">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Internal Demo Evaluation</h3>
+                        </div>
+                        <!-- /.box-header -->
+
+                        <div class="box-body">
+                            <a href="./internalEvaluations.php" target="_blank" class="btn btn-default btn-flat btn-sm"><i class="fa fa-external-link" aria-hidden="true"></i> Goto Internal Demo Evaluation</a>
+                        </div>
+                        <!-- /.box-body -->
+
+                        <div class="box-footer">
+
+                        </div>
+
+                    </div>
+
                   
 
 
