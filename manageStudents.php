@@ -33,11 +33,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $password = filter_input(INPUT_POST,'password',FILTER_SANITIZE_SPECIAL_CHARS);
             $editId = filter_input(INPUT_POST,'editId',FILTER_SANITIZE_NUMBER_INT);
             $batchId = filter_input(INPUT_POST,'batchId',FILTER_SANITIZE_NUMBER_INT);
-
+            $isActive = filter_input(INPUT_POST,'isActive',FILTER_SANITIZE_NUMBER_INT);
 
             // prepare and bind
-            $stmt = $conn->prepare("UPDATE  student  SET studentCMS = ?, studentName = ?, studentEmail = ?, studentPhoneNo =?, studentPassword=? WHERE student.studentId = ?");
-            $stmt->bind_param("sssssi", $cms, $name,$email, $contact, $password , $editId);
+            $stmt = $conn->prepare("UPDATE  student  SET studentCMS = ?, studentName = ?, studentEmail = ?, studentPhoneNo =?, studentPassword=?, isActive=? WHERE student.studentId = ?");
+            $stmt->bind_param("sssssii", $cms, $name,$email, $contact, $password , $isActive , $editId);
 
 
             $stmt->execute();
@@ -93,8 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 ?>
 <!-- DataTables -->
-<link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">
-
+<!--<link rel="stylesheet" href="plugins/datatables/dataTables.bootstrap.css">-->
+<link rel="stylesheet" href="plugins/datatables/datatables.min.css">
 </head>
 
 <body class="hold-transition skin-blue sidebar-mini">
@@ -168,6 +168,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 $password = $row['studentPassword'];
                                 $isActive = $row['isActive'];
                                 $batchId = $row['batchId'];
+                                $isActive = $row['isActive'];
                             }
                         }
                         ?>
@@ -212,7 +213,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <label class="col-sm-2 control-label">Contact</label>
 
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="contact" name="contact" value="<?php echo $contact;?>" required>
+                                            <input type="text" class="form-control" id="contact" name="contact" value="<?php echo $contact;?>" >
                                         </div>
                                     </div>
 
@@ -226,6 +227,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         </div>
 
                                     </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Status</label>
+
+                                        <div class="col-sm-10">
+                                            <select name="isActive" id="isActive" style="width:200px;" required>
+                                                <option value="1" <?php if ($isActive==1){echo 'selected';}?>>Active</option>
+                                                <option value="0" <?php if ($isActive==0){echo 'selected';}?>>Inactive</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
 
 
 
@@ -370,14 +384,18 @@ require_once("includes/main-footer.php");
 require_once("includes/required_js.php");
 ?>
 <!-- DataTables -->
-<script src="plugins/datatables/jquery.dataTables.min.js"></script>
-<script src="plugins/datatables/dataTables.bootstrap.min.js"></script>
+<!--<script src="plugins/datatables/jquery.dataTables.min.js"></script>-->
+<!--<script src="plugins/datatables/dataTables.bootstrap.min.js"></script>-->
+<script src="plugins/datatables/datatables.min.js"></script>
 <script>
     $(document).ready(function() {
         $('#manageStudents').DataTable({
+
+          
             "columnDefs": [
                 { "orderable": false, "targets": -1 }
             ],
+
             "pageLength": 15,
             "paging": true,
             "lengthChange": false,

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 28, 2016 at 08:50 PM
+-- Generation Time: May 07, 2016 at 06:43 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -42,6 +42,19 @@ CREATE TABLE `batch` (
 INSERT INTO `batch` (`batchId`, `batchName`, `startingDate`, `isActive`, `sdpPart`, `createdDtm`) VALUES
 (1, 'Fall 2016', '2015-08-31', 1, 2, '2016-04-26 21:55:58'),
 (19, 'Spring 2016', '2016-02-08', 1, 1, '2016-04-27 00:09:22');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `batch_configurations`
+--
+
+CREATE TABLE `batch_configurations` (
+  `configId` int(11) NOT NULL,
+  `configuration` varchar(50) NOT NULL DEFAULT '0',
+  `value` int(11) NOT NULL DEFAULT '0',
+  `batchId` int(11) NOT NULL DEFAULT '0'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- --------------------------------------------------------
 
@@ -109,15 +122,16 @@ CREATE TABLE `external_examiner` (
   `examinerPassword` varchar(255) NOT NULL,
   `company` varchar(255) NOT NULL,
   `designation` varchar(255) NOT NULL,
-  `isActive` tinyint(1) NOT NULL DEFAULT '1'
+  `isActive` tinyint(1) NOT NULL DEFAULT '1',
+  `createdDtm` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='examinerGroupInfo';
 
 --
 -- Dumping data for table `external_examiner`
 --
 
-INSERT INTO `external_examiner` (`examinerId`, `examinerName`, `examinerEmail`, `examinerPhone`, `examinerPassword`, `company`, `designation`, `isActive`) VALUES
-(1, 'Bill Gates', 'gates@microsoft.com', '', '123', 'Microsoft', 'CEO', 1);
+INSERT INTO `external_examiner` (`examinerId`, `examinerName`, `examinerEmail`, `examinerPhone`, `examinerPassword`, `company`, `designation`, `isActive`, `createdDtm`) VALUES
+(1, 'Bill Gates', 'gates@microsoft.com', '', '123', 'Microsoft', 'CEO', 1, '2016-05-05 19:50:01');
 
 -- --------------------------------------------------------
 
@@ -135,6 +149,7 @@ CREATE TABLE `faculty` (
   `facultyPassword` varchar(255) NOT NULL,
   `isAdmin` tinyint(1) DEFAULT '0',
   `isCoordinator` tinyint(1) DEFAULT NULL,
+  `isActive` tinyint(1) NOT NULL DEFAULT '1',
   `createdDtm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Faculty Details';
 
@@ -142,14 +157,14 @@ CREATE TABLE `faculty` (
 -- Dumping data for table `faculty`
 --
 
-INSERT INTO `faculty` (`facultyId`, `facultyName`, `facultyPhoneNo`, `facultyEmail`, `designation`, `facultyImage`, `facultyPassword`, `isAdmin`, `isCoordinator`, `createdDtm`) VALUES
-(0, 'Super Admin', '', 'superadmin@fypms.com', '--', NULL, '123', 1, 0, '0000-00-00 00:00:00'),
-(24, 'Saud Khan', '03451234567', 'saudkhan@riu.edu.pk', 'Coordinator', '571faf21f35406.63893346.jpg', '123', 0, 1, '2016-04-26 21:19:21'),
-(25, 'Adeel Zafar', '', 'adeel@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, '2016-04-26 22:24:34'),
-(26, 'Musharif Ahmed', '', 'musharif@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, '2016-04-26 22:25:11'),
-(27, 'Samir Obaid', '', 'samir@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, '2016-04-26 22:35:27'),
-(28, 'Muhammad Fawad Chaudry', '', 'fawad@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, '2016-04-26 22:37:14'),
-(29, 'Uzair Muhammad', '', 'uzair@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, '2016-04-26 22:38:13');
+INSERT INTO `faculty` (`facultyId`, `facultyName`, `facultyPhoneNo`, `facultyEmail`, `designation`, `facultyImage`, `facultyPassword`, `isAdmin`, `isCoordinator`, `isActive`, `createdDtm`) VALUES
+(0, 'Super Admin', '', 'superadmin@fypms.com', '--', NULL, '123', 1, 0, 1, '0000-00-00 00:00:00'),
+(24, 'Saud Khan', '03451234567', 'saudkhan@riu.edu.pk', 'Coordinator', '571faf21f35406.63893346.jpg', '123', 0, 1, 1, '2016-04-26 21:19:21'),
+(25, 'Adeel Zafar', '', 'adeel@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-04-26 22:24:34'),
+(26, 'Musharif Ahmed', '', 'musharif@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-04-26 22:25:11'),
+(27, 'Samir Obaid', '', 'samir@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-04-26 22:35:27'),
+(28, 'Muhammad Fawad Chaudry', '', 'fawad@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-04-26 22:37:14'),
+(29, 'Uzair Muhammad', '', 'uzair@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-04-26 22:38:13');
 
 -- --------------------------------------------------------
 
@@ -593,6 +608,12 @@ ALTER TABLE `batch`
   ADD PRIMARY KEY (`batchId`);
 
 --
+-- Indexes for table `batch_configurations`
+--
+ALTER TABLE `batch_configurations`
+  ADD PRIMARY KEY (`configId`);
+
+--
 -- Indexes for table `batch_tasks`
 --
 ALTER TABLE `batch_tasks`
@@ -710,6 +731,11 @@ ALTER TABLE `work_load`
 ALTER TABLE `batch`
   MODIFY `batchId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 --
+-- AUTO_INCREMENT for table `batch_configurations`
+--
+ALTER TABLE `batch_configurations`
+  MODIFY `configId` int(11) NOT NULL AUTO_INCREMENT;
+--
 -- AUTO_INCREMENT for table `batch_tasks`
 --
 ALTER TABLE `batch_tasks`
@@ -738,7 +764,7 @@ ALTER TABLE `faculty_student_group`
 -- AUTO_INCREMENT for table `faculty_student_request`
 --
 ALTER TABLE `faculty_student_request`
-  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `grades`
 --
@@ -783,7 +809,7 @@ ALTER TABLE `student_group`
 -- AUTO_INCREMENT for table `student_group_request`
 --
 ALTER TABLE `student_group_request`
-  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `timeline_faculty`
 --

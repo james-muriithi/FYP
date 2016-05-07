@@ -29,6 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             while($row = $result->fetch_assoc()) {
                 if($row["studentEmail"]==$userEmail && $row["studentPassword"]==$userPass)
                 {
+                    //Check if account is active
+                    if ($row['isActive'] != 1){
+                        header('Location: '.'index.php?status=deactivated');die;
+                    }
                     //SETTING UP SESSION VALUES FOR STUDENT;
                     $_SESSION["usrId"]=$row["studentId"];
                     $_SESSION["usrnm"]=$row["studentName"];
@@ -52,6 +56,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             while($row2 = $result2->fetch_assoc()) {
                 if($row2["facultyEmail"]==$userEmail && $row2["facultyPassword"]==$userPass)
                 {
+                    //Check if account is active
+                    if ($row2['isActive'] != 1){
+                        header('Location: '.'index.php?status=deactivated');die;
+                    }
                     //SETTING UP SESSION VALUES FOR FACULTY
                     session_start();
                     $_SESSION["facultyId"]=$row2["facultyId"];
@@ -72,6 +80,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             while($row3 = $result3->fetch_assoc()) {
                 if($row3["examinerEmail"]==$userEmail && $row3["examinerPassword"]==$userPass)
                 {
+                    //Check if account is active
+                    if ($row3['isActive'] != 1){
+                        header('Location: '.'index.php?status=deactivated');die;
+                    }
                     //SETTING UP SESSION VALUES FOR EXTERNAL EXAMINER
                     session_start();
                     $_SESSION["examinerId"]=$row3["examinerId"];
@@ -100,6 +112,44 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
 
+}
+
+?>
+
+<?php
+if (isset($_GET['status'])){
+    if ($_GET['status'] == 't'){ ?>
+        <div style="text-align:center;" class="alert alert-success" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
+            Changes saved successfully!
+            <button type="button" class="close" data-dismiss="alert">x</button>
+        </div>
+        <?php
+    }
+    else  if ($_GET['status'] == 'f'){ ?>
+        <div style="text-align:center;" class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
+            Error! Something Went Wrong
+            <button type="button" class="close" data-dismiss="alert">x</button>
+        </div>
+        <?php
+    }
+    else if ($_GET['status'] == 'deactivated'){ ?>
+        <div style="text-align:center;" class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
+            Your account is deactivated.
+            <button type="button" class="close" data-dismiss="alert">x</button>
+        </div>
+        <?php
+    }
+    else if ($_GET['status'] == 'e'){ ?>
+        <div style="text-align:center;" class="alert alert-danger" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign"></span>
+            Error!
+            <button type="button" class="close" data-dismiss="alert">x</button>
+        </div>
+        <?php
+    }
 }
 
 ?>

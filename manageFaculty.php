@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if (isset($_POST['btnEditFaculty'])){
         //Validations
-        if ($_POST['name']!="" && $_POST['designation']!="" && $_POST['email']!="" && $_POST['contact']!="" && $_POST['quota'] !="" ){
+        if ($_POST['name']!="" && $_POST['designation']!="" && $_POST['email']!=""  && $_POST['quota'] !="" ){
             //Getting values from POST and sanitizing
             $editId = filter_input(INPUT_POST,'editId',FILTER_SANITIZE_NUMBER_INT);
             $name = filter_input(INPUT_POST,'name',FILTER_SANITIZE_SPECIAL_CHARS);
@@ -60,10 +60,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $email = filter_input(INPUT_POST,'email',FILTER_SANITIZE_EMAIL);
             $contact = filter_input(INPUT_POST,'contact',FILTER_SANITIZE_NUMBER_INT);
             $quota = filter_input(INPUT_POST,'quota',FILTER_SANITIZE_NUMBER_INT);
-
+            $isActive = filter_input(INPUT_POST,'isActive',FILTER_SANITIZE_NUMBER_INT);
             // prepare and bind
-            $stmt = $conn->prepare("UPDATE  faculty JOIN work_load ON faculty.facultyId= work_load.facultyId SET facultyName = ?, designation = ?, facultyPhoneNo = ?, facultyEmail = ?, totalLoad =? WHERE faculty.facultyId = ?");
-            $stmt->bind_param("ssssii", $name, $designation,$contact, $email,$quota,$editId);
+            $stmt = $conn->prepare("UPDATE  faculty JOIN work_load ON faculty.facultyId= work_load.facultyId SET facultyName = ?, designation = ?, facultyPhoneNo = ?, facultyEmail = ?, totalLoad =?, isActive=? WHERE faculty.facultyId = ?");
+            $stmt->bind_param("ssssiii", $name, $designation,$contact, $email,$quota,$isActive,$editId);
 
 
             $stmt->execute();
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         }
         else{
-            header('Location:' . $_SERVER['PHP_SELF'] . '?status=r');die;
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=validation_err');die;
         }
 
 
@@ -155,8 +155,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 $facultyName = $row['facultyName'];
                                 $designation = $row['designation'];
                                 $email = $row['facultyEmail'];
+                                $password = $row['facultyPassword'];
                                 $contact = $row['facultyPhoneNo'];
                                 $quota = $row['totalLoad'];
+                                $isActive = $row['isActive'];
                             }
                         }
                         ?>
@@ -195,10 +197,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </div>
 
                                     <div class="form-group">
+
+
+                                        <label class="col-sm-2 control-label">Password <i class="fa fa-eye text-primary" id="eye" aria-hidden="true"></i> </label>
+                                        <div class="col-sm-10 " >
+
+                                            <input type="password"  class="form-control" id="password" name="password" value="<?php echo $password ;?>"  required>
+                                        </div>
+
+                                    </div>
+
+                                    <div class="form-group">
                                         <label class="col-sm-2 control-label">Contact</label>
 
                                         <div class="col-sm-10">
-                                            <input type="text" class="form-control" id="contact" name="contact" value="<?php echo $contact;?>" required>
+                                            <input type="text" class="form-control" id="contact" name="contact" value="<?php echo $contact;?>" >
                                         </div>
                                     </div>
 
@@ -209,6 +222,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <input type="number" min="0" max="5" class="form-control" id="quota" name="quota" value="<?php echo $quota ;?>" required>
                                         </div>
                                     </div>
+
+                                    <div class="form-group">
+                                        <label class="col-sm-2 control-label">Status</label>
+
+                                        <div class="col-sm-10">
+                                            <select name="isActive" id="isActive" style="width:200px;" required>
+                                                <option value="1" <?php if ($isActive==1){echo 'selected';}?>>Active</option>
+                                                <option value="0" <?php if ($isActive==0){echo 'selected';}?>>Inactive</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+
+
 
 
                                 </div>
@@ -240,6 +267,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <th>Name</th>
                                     <th>Designation</th>
                                     <th>Email</th>
+                                    <th>Status</th>
                                     <th>Actions</th>
                                 </tr>
                                 </thead>
@@ -251,6 +279,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <td><?php echo $row['facultyName'] ; if ($row["isCoordinator"] == 1){echo ' <span class="label label-primary">Coordinator</span>';}?></td>
                                         <td><?php echo $row['designation'];?></td>
                                         <td><?php echo $row['facultyEmail'] ;?></td>
+                                        <td><?php
+                                            if ($row['isActive'] == 1){ ?>
+                                                <span class="label label-success">Active</span>
+                                            <?php
+                                            }
+                                            else if ($row['isActive'] == 0){ ?>
+                                                <span class="label label-danger">Inactive</span>
+                                            <?php
+                                            }
+                                            ;?></td>
                                         <td>
                                             <a href="<?php echo $_SERVER['PHP_SELF'] . '?edit=' . $row['facultyId']; ?>"   class="btn  btn-default btn-flat  btn-sm"><i class="fa fa-pencil-square-o" aria-hidden="true"></i> Edit</a>
                                             <form  action="" method="post" onsubmit="return confirm('Are you sure you want to delete this faculty?');" data-toggle="validator">
@@ -303,6 +341,29 @@ require_once("includes/required_js.php");
             "info": true,
             "autoWidth": false
         });
+
+        function show() {
+            var p = document.getElementById('password');
+            p.setAttribute('type', 'text');
+        }
+
+        function hide() {
+            var p = document.getElementById('password');
+            p.setAttribute('type', 'password');
+        }
+
+        var pwShown = 0;
+
+        document.getElementById("eye").addEventListener("click", function () {
+            if (pwShown == 0) {
+                pwShown = 1;
+                show();
+            } else {
+                pwShown = 0;
+                hide();
+            }
+        }, false);
+        
     } );
 </script>
 </body>
