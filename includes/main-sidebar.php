@@ -183,6 +183,7 @@
                         <li><a href="manageStudents.php"><i class="fa fa-circle-o"></i> <span>Students</span></a></li>
                         <li><a href="manageGroups.php"><i class="fa fa-circle-o"></i> <span>Student Groups</span></a></li>
                         <li><a href="manageFaculty.php"><i class="fa fa-circle-o "></i> <span>Faculty</span></a></li>
+                        <li><a href="manageExternal.php"><i class="fa fa-circle-o "></i> <span>External Examiner</span></a></li>
                         <li><a href="manageTimeline.php"><i class="fa fa-circle-o "></i><span>Timeline</span></a></li>
 
                     </ul>

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 07, 2016 at 06:43 PM
+-- Generation Time: May 07, 2016 at 08:39 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -131,7 +131,7 @@ CREATE TABLE `external_examiner` (
 --
 
 INSERT INTO `external_examiner` (`examinerId`, `examinerName`, `examinerEmail`, `examinerPhone`, `examinerPassword`, `company`, `designation`, `isActive`, `createdDtm`) VALUES
-(1, 'Bill Gates', 'gates@microsoft.com', '', '123', 'Microsoft', 'CEO', 1, '2016-05-05 19:50:01');
+(1, 'Bill Gates', 'gates@microsoft.com', '+923458541454', '123', 'Microsoft', 'Founder', 1, '2016-05-05 19:50:01');
 
 -- --------------------------------------------------------
 
