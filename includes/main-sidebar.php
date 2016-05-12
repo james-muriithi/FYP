@@ -31,7 +31,7 @@
 
             <li class="header">MAIN NAVIGATION </li>
             <li>
-                <a href="./home.php">
+                <a href="home.php">
                     <i class="fa fa-dashboard"></i><span>Dashboard</span>
                 </a>
             </li>

@@ -79,6 +79,26 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         }
 
     }
+
+    /**************
+     * Edit Grade
+     ************/
+    if (isset($_POST['btnEditGrade'])){
+
+        $gradeId = filter_input(INPUT_POST,'gradeId',FILTER_SANITIZE_NUMBER_INT);
+        $groupId = filter_input(INPUT_POST,'groupId',FILTER_SANITIZE_NUMBER_INT);
+        $grade = filter_input(INPUT_POST,'grade',FILTER_SANITIZE_SPECIAL_CHARS);
+
+
+        $sql = "UPDATE grades SET grade='$grade' WHERE id='$gradeId' ";
+
+        if ($conn->query($sql) === TRUE) {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?group='.$groupId.'&status=t');die;
+        } else {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?group='.$groupId.'&status=f');die;
+        }
+
+    }
 }
 
 
@@ -113,7 +133,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         else if ($_GET['status'] = 'f'){ ?>
                             <div style="text-align:center;" class="alert alert-danger" role="alert">
                                 <span class="glyphicon glyphicon-exclamation-sign"></span>
-                                Error! Please select grade
+                                Error! Something went wrong
                                 <button type="button" class="close" data-dismiss="alert">x</button>
                             </div>
                         <?php }
@@ -126,6 +146,63 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
                         <?php    }
                     }?>
+
+                    <?php
+                    if (isset($_GET['edit']) && is_numeric($_GET['edit']) && strlen($_GET['edit'])>0 ){
+                        $gradeId = filter_input(INPUT_GET,'edit',FILTER_SANITIZE_NUMBER_INT);
+
+
+                        $sql = "SELECT * FROM grades JOIN student ON student.studentId = grades.studentId LIMIT 1";
+                        $result = $conn->query($sql);
+
+                        if ($result->num_rows > 0) {
+                        // output data of each row
+                            while($row = $result->fetch_assoc()) {
+                                $name = $row['studentName'];
+                                $cms = $row['studentCMS'];
+                                $grade = $row['grade'];
+                                $groupId = $row['groupId'];
+                            }
+                        }
+                        ?>
+                        <div class="box no-border">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Edit Grade: <?php echo $name;?> </h3>
+                            </div>
+                            <!-- /.box-header -->
+
+                            <div class="box-body">
+                                <form action="" method="post" class="form-horizontal">
+                                    <input type="hidden" name="gradeId" value="<?php echo $gradeId;?>">
+                                    <input type="hidden" name="groupId" value="<?php echo $groupId;?>">
+                                    <label for="grade">Select Grade</label>
+                                    <select class="form-control" name="grade" style="width:200px;" required>
+                                        <option value="A+" <?php if ($grade=="A+"){echo 'selected';} ?> >A+</option>
+                                        <option value="A" <?php if ($grade=="A"){echo 'selected';} ?> >A</option>
+                                        <option value="B+" <?php if ($grade=="B+"){echo 'selected';} ?>>B+</option>
+                                        <option value="B" <?php if ($grade=="B"){echo 'selected';} ?>>B</option>
+                                        <option value="C+" <?php if ($grade=="C+"){echo 'selected';} ?>>C+</option>
+                                        <option value="C" <?php if ($grade=="C"){echo 'selected';} ?>>C</option>
+                                        <option value="D+" <?php if ($grade=="D+"){echo 'selected';} ?>>D+</option>
+                                        <option value="D" <?php if ($grade=="D"){echo 'selected';} ?>>D</option>
+                                        <option value="F" <?php if ($grade=="F"){echo 'selected';} ?>>F</option>
+                                    </select>
+                                    <br>
+
+                                </form>
+                            </div>
+                            <!-- /.box-body -->
+
+                            <div class="box-footer">
+                                <button type="submit" name="btnEditGrade" class="btn btn-primary btn-sm pull-right">Submit</button>
+                                <a href="<?php echo $_SERVER['PHP_SELF'];?>" class="btn btn-default">Back</a>
+                            </div>
+
+                        </div>
+
+                    <?php
+                    }
+                    ?>
 
 
                     <div class="box">
@@ -236,7 +313,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <div class="callout callout-info">
                                         <h4>Already Graded!</h4>
 
-                                        <p>This group has already been graded.Select another group from the dropdown list</p>
+                                        <p>This group has already been graded.You can edit Grades until coordinator locks them</p>
                                     </div>
 
                                     <table class="table table-condensed">
@@ -244,10 +321,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <th style="width: 20px;">CMS</th>
                                             <th>Name</th>
                                             <th sty="width: 10px;">Grade</th>
+                                            <th sty="width: 10px;">Actions</th>
 
                                         </tr>
                                         <?php
-                                        $sql = "SELECT studentCMS,studentName,grade,gradedBy FROM grades JOIN student ON student.studentId = grades.studentId WHERE grades.groupId = '$groupId' AND sdpPart = 1";
+                                        $sql = "SELECT * FROM grades JOIN student ON student.studentId = grades.studentId WHERE grades.groupId = '$groupId' AND sdpPart = 1";
                                         $result = $conn->query($sql);
 
                                         if ($result->num_rows > 0) {
@@ -259,6 +337,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                     <td><?php echo $row['studentCMS'];?></td>
                                                     <td><?php echo $row['studentName'];?></td>
                                                     <td><?php echo $row['grade'];?></td>
+                                                    <td><a href="<?php echo $_SERVER['PHP_SELF']."?group=".$row['groupId']."&edit=".$row['id'];?>" class="btn btn-default btn-sm">Edit</a></td>
                                                 </tr>
 
                                                 <?php
@@ -271,6 +350,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 }   }
 
                             ?>
+
+
 
                         </div>
                         <!-- /.box-body -->

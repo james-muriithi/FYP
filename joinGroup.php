@@ -169,12 +169,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </tr>
                         </thead>
                         <?php
-                        $sql = " SELECT student_group.createdDtm,projectName,studentCMS,studentName,student_group.groupId FROM student_group INNER JOIN student ON student.studentId = student_group.leaderId WHERE inGroup < groupLimit AND studentGender = '$gender' " ;
+                        $sql = " SELECT student.studentId,student_group.createdDtm,projectName,studentCMS,studentName,student_group.groupId FROM student_group INNER JOIN student ON student.studentId = student_group.leaderId WHERE inGroup < groupLimit AND studentGender = '$gender' " ;
                         $result = $conn->query($sql);
                         while($row = $result->fetch_assoc()) { ?>
                             <tr>
                                 <td><?php echo $row['projectName'] ;?></td>
-                                <td><a href="<?php echo siteroot.'studentProfile.php?id='.$row['studentId'];?>" ><?php echo $row['studentName']." [".$row['studentCMS']."]";?></a></td>
+                                <td><a target="_blank" href="<?php echo siteroot.'studentProfile.php?id='.$row['studentId'];?>" ><?php echo $row['studentName']." [".$row['studentCMS']."]";?></a></td>
                                 <td><?php echo time2str($row['createdDtm']) ;?></td>
                                 <td>
                                     <form  action="" method="post" onsubmit="return confirm('Are you sure you want to send request to this group?');" data-toggle="validator">

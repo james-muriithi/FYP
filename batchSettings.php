@@ -169,6 +169,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             <div class="box no-border">
                                 <div class="box-body">
 
+
+
                                     <form action="" method="post" onsubmit="return confirm('Are you sure you ?');" data-toggle="validator">
                                         <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
 
@@ -197,9 +199,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                   <span class="handle ui-sortable-handle">
                                                     <i class="fa fa-cog" aria-hidden="true"></i>
                                                   </span>
-                                                    <span class="text">Allow supervisors to grade SDP Part 1</span>
+                                                    <span class="text">Lock SDP Part 1 Grading</span>
                                                     <small class="label label-primary"><?php echo $batchName;?></small>
-                                                    <button type="submit" name="btnGradePt1" class="btn btn-defualt  btn-xs pull-right">Submit</button>
+                                                    <button type="submit" name="btnLockGrade" class="btn btn-defualt  btn-xs pull-right">Submit</button>
                                                 </li>
                                             </ul>
                                         </form>
