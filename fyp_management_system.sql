@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 07, 2016 at 08:39 PM
+-- Generation Time: May 14, 2016 at 02:34 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -40,21 +40,29 @@ CREATE TABLE `batch` (
 --
 
 INSERT INTO `batch` (`batchId`, `batchName`, `startingDate`, `isActive`, `sdpPart`, `createdDtm`) VALUES
-(1, 'Fall 2016', '2015-08-31', 1, 2, '2016-04-26 21:55:58'),
-(19, 'Spring 2016', '2016-02-08', 1, 1, '2016-04-27 00:09:22');
+(1, 'Fall 2015', '2016-09-04', 1, 1, '2016-05-12 23:07:40');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `batch_configurations`
+-- Table structure for table `batch_settings`
 --
 
-CREATE TABLE `batch_configurations` (
-  `configId` int(11) NOT NULL,
-  `configuration` varchar(50) NOT NULL DEFAULT '0',
-  `value` int(11) NOT NULL DEFAULT '0',
-  `batchId` int(11) NOT NULL DEFAULT '0'
+CREATE TABLE `batch_settings` (
+  `id` int(11) NOT NULL,
+  `batchId` int(11) NOT NULL DEFAULT '0',
+  `male_female_group` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=no;1=yes',
+  `sdp1_grading` tinyint(1) NOT NULL DEFAULT '0',
+  `sdp2_grading` tinyint(1) NOT NULL DEFAULT '0',
+  `internal_evaluation` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `batch_settings`
+--
+
+INSERT INTO `batch_settings` (`id`, `batchId`, `male_female_group`, `sdp1_grading`, `sdp2_grading`, `internal_evaluation`) VALUES
+(1, 1, 1, 0, 0, 0);
 
 -- --------------------------------------------------------
 
@@ -75,14 +83,6 @@ CREATE TABLE `batch_tasks` (
   `createdDtm` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `batch_tasks`
---
-
-INSERT INTO `batch_tasks` (`taskId`, `batchId`, `sdpPart`, `taskName`, `taskDetail`, `taskWeek`, `taskDeadline`, `templateId`, `hasDeliverable`, `createdDtm`) VALUES
-(1, 1, '1', 'Deliverable 02: Project Proposal', '<p></p><p>Â· &nbsp; &nbsp; &nbsp; &nbsp;\r\nUse â€œTemplate-02â€ &nbsp;to write down initial proposal and submit\r\nhard copy to project coordinator.</p>\r\n\r\n<p>Â· &nbsp; &nbsp; &nbsp; &nbsp;\r\nDue Date: Monday, 14th September 2051 (Before 3:30pm)</p><br><p></p>', 2, '2015-09-14 15:30:00', 3, 1, '2016-04-26 23:49:01'),
-(2, 19, '1', 'Orientation Presentation', '<p>Orientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation Presentation<br></p>', 1, '2016-04-14 14:30:00', NULL, 1, '2016-04-27 00:14:46');
-
 -- --------------------------------------------------------
 
 --
@@ -96,17 +96,6 @@ CREATE TABLE `batch_templates` (
   `templateLocation` varchar(150) DEFAULT NULL,
   `uploadedDtm` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `batch_templates`
---
-
-INSERT INTO `batch_templates` (`templateId`, `batchId`, `templateName`, `templateLocation`, `uploadedDtm`) VALUES
-(1, 1, 'Handbook-Version-2-0.pdf', 'Handbook-Version-2-0.pdf', '2016-04-26 23:13:53'),
-(2, 1, 'Template -  01 - Project Team.doc', 'Template -  01 - Project Team.doc', '2016-04-26 23:13:56'),
-(3, 1, 'Template -  02 - Inital Proposal.doc', 'Template -  02 - Inital Proposal.doc', '2016-04-26 23:13:58'),
-(4, 1, 'Template -  04 - Proposal  Plan.doc', 'Template -  04 - Proposal  Plan.doc', '2016-04-26 23:14:01'),
-(5, 1, 'Template -  05 - Project Report.doc', 'Template -  05 - Project Report.doc', '2016-04-26 23:14:04');
 
 -- --------------------------------------------------------
 
@@ -125,13 +114,6 @@ CREATE TABLE `external_examiner` (
   `isActive` tinyint(1) NOT NULL DEFAULT '1',
   `createdDtm` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='examinerGroupInfo';
-
---
--- Dumping data for table `external_examiner`
---
-
-INSERT INTO `external_examiner` (`examinerId`, `examinerName`, `examinerEmail`, `examinerPhone`, `examinerPassword`, `company`, `designation`, `isActive`, `createdDtm`) VALUES
-(1, 'Bill Gates', 'gates@microsoft.com', '+923458541454', '123', 'Microsoft', 'Founder', 1, '2016-05-05 19:50:01');
 
 -- --------------------------------------------------------
 
@@ -159,12 +141,18 @@ CREATE TABLE `faculty` (
 
 INSERT INTO `faculty` (`facultyId`, `facultyName`, `facultyPhoneNo`, `facultyEmail`, `designation`, `facultyImage`, `facultyPassword`, `isAdmin`, `isCoordinator`, `isActive`, `createdDtm`) VALUES
 (0, 'Super Admin', '', 'superadmin@fypms.com', '--', NULL, '123', 1, 0, 1, '0000-00-00 00:00:00'),
-(24, 'Saud Khan', '03451234567', 'saudkhan@riu.edu.pk', 'Coordinator', '571faf21f35406.63893346.jpg', '123', 0, 1, 1, '2016-04-26 21:19:21'),
-(25, 'Adeel Zafar', '', 'adeel@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-04-26 22:24:34'),
-(26, 'Musharif Ahmed', '', 'musharif@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-04-26 22:25:11'),
-(27, 'Samir Obaid', '', 'samir@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-04-26 22:35:27'),
-(28, 'Muhammad Fawad Chaudry', '', 'fawad@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-04-26 22:37:14'),
-(29, 'Uzair Muhammad', '', 'uzair@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-04-26 22:38:13');
+(30, 'Saud Khan', '+923458541454', 'saudkhan@riu.edu.pk', 'Coordinator', '5734c6597d84b3.34254190.jpg', '123', 0, 1, 1, '2016-05-12 23:06:47'),
+(31, 'Muhammad Fawad Chaudry', '', 'fawad@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-05-14 13:24:27'),
+(32, 'Uzair Muhammad', '', 'uzair@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-05-14 13:24:57'),
+(33, 'Hajra Murtaza', '', 'hajra@gmail.com', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-05-14 13:25:17'),
+(34, 'Musharif Ahmed', '', 'musharif@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-05-14 13:25:38'),
+(35, 'Syed Sharjeel Ahmed Gilani', '', 'sharjeel@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-05-14 13:26:06'),
+(36, 'Muhammad Osama Raza', '', 'osama@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-05-14 13:26:23'),
+(37, 'Samir Obaid', '', 'samir@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-05-14 13:26:38'),
+(38, 'Rizwan Bin Faiz', '', 'rizwan@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-05-14 13:26:56'),
+(39, 'Sheheryar Malik', '', 'sheheryar@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-05-14 13:27:26'),
+(40, 'Adeel Zafar', '', 'adeel@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-05-14 13:27:45'),
+(41, 'Naveed Ikram', '', 'naveed@riu.edu.pk', 'Supervisor', NULL, '123', 0, NULL, 1, '2016-05-14 13:28:06');
 
 -- --------------------------------------------------------
 
@@ -183,8 +171,7 @@ CREATE TABLE `faculty_student_group` (
 --
 
 INSERT INTO `faculty_student_group` (`facultyStudentId`, `groupId`, `facultyId`) VALUES
-(1, 2, 24),
-(2, 12, 24);
+(1, 1, 30);
 
 -- --------------------------------------------------------
 
@@ -216,18 +203,6 @@ CREATE TABLE `grades` (
   `gradeDtm` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf32;
 
---
--- Dumping data for table `grades`
---
-
-INSERT INTO `grades` (`id`, `studentId`, `groupId`, `sdpPart`, `comments`, `grade`, `gradedBy`, `gradeDtm`) VALUES
-(1, 43, 2, 1, '', 'A+', 24, '2016-04-26 23:50:14'),
-(2, 44, 2, 1, '', 'A+', 24, '2016-04-26 23:50:14'),
-(3, 45, 2, 1, '', 'A+', 24, '2016-04-26 23:50:14'),
-(4, 43, 2, 2, '', 'B+', 1, '2016-04-27 00:06:34'),
-(5, 44, 2, 2, '', 'B', 1, '2016-04-27 00:06:34'),
-(6, 45, 2, 2, '', 'C+', 1, '2016-04-27 00:06:34');
-
 -- --------------------------------------------------------
 
 --
@@ -255,14 +230,6 @@ CREATE TABLE `group_uploads` (
   `uploadedDtm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
---
--- Dumping data for table `group_uploads`
---
-
-INSERT INTO `group_uploads` (`id`, `groupId`, `taskId`, `uploadFile`, `uploadedBy`, `uploadedDtm`) VALUES
-(1, 2, 1, 'group_2_deliverable_1.docx', 43, '2016-04-26 23:49:41'),
-(2, 3, 2, 'group_3_deliverable_2.docx', 112, '2016-04-27 00:15:32');
-
 -- --------------------------------------------------------
 
 --
@@ -276,23 +243,6 @@ CREATE TABLE `internal_evaluations` (
   `aeVote` int(11) NOT NULL COMMENT 'Allow External Exam',
   `ohVote` int(11) NOT NULL COMMENT 'Allow Partition in Open House'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `internal_evaluations`
---
-
-INSERT INTO `internal_evaluations` (`id`, `groupId`, `votedBy`, `aeVote`, `ohVote`) VALUES
-(4, 2, 24, 2, 2),
-(5, 12, 24, -1, -1),
-(6, 2, 25, 2, 2),
-(7, 2, 29, 1, 1),
-(8, 12, 29, -1, 1),
-(9, 2, 26, 1, 1),
-(10, 12, 26, 2, 2),
-(11, 2, 27, 2, 1),
-(12, 12, 27, -1, -1),
-(13, 2, 28, 2, 2),
-(14, 12, 28, 2, 2);
 
 -- --------------------------------------------------------
 
@@ -310,13 +260,6 @@ CREATE TABLE `meeting_logs` (
   `meeting_status` enum('Pending','Done','Cancelled','Postponed') NOT NULL DEFAULT 'Pending',
   `created_dtm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Maintain all meeting logs of supervisors with students';
-
---
--- Dumping data for table `meeting_logs`
---
-
-INSERT INTO `meeting_logs` (`id`, `supervisor_id`, `group_id`, `meeting_title`, `meeting_dtm`, `comments`, `meeting_status`, `created_dtm`) VALUES
-(1, 24, 2, 'Meeting 4', '2016-04-28 00:00:00', NULL, 'Pending', '2016-04-27 22:38:19');
 
 -- --------------------------------------------------------
 
@@ -340,13 +283,6 @@ CREATE TABLE `project_repository` (
   `id` int(11) NOT NULL,
   `batchId` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `project_repository`
---
-
-INSERT INTO `project_repository` (`id`, `batchId`) VALUES
-(1, 1);
 
 -- --------------------------------------------------------
 
@@ -375,26 +311,26 @@ CREATE TABLE `student` (
 --
 
 INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentEmail`, `studentPhoneNo`, `studentGender`, `studentPassword`, `studentImage`, `groupId`, `isLeader`, `batchId`, `isActive`, `createdDtm`) VALUES
-(14, 'Muneeb Khan', '7757', 'muneeb_420@gmail.com', '01234565', 'male', '123', '571fc1ed78e844.19123851.jpg', 12, NULL, 1, 1, '2016-04-03 13:30:06'),
-(15, 'Umair Qamar', '10776', 'umairqamar@live.com', '03458541454', 'male', '123', '571fc167eb6844.89367165.jpg', 12, 1, 1, 1, '2016-04-03 13:30:06'),
-(21, 'Bilal Hassan', '7471', 'bilalhassan@live.com', '+923458541454', 'male', '123', NULL, 12, NULL, 1, 1, '2016-04-03 13:30:06'),
-(43, 'Aizaz Ahmed Abbasi', '7736', 'aizaz@gmail.com', '923211234567', 'male', '123', '571fafa2118908.51169619.jpg', 2, 1, 1, 1, '2016-04-10 14:28:47'),
-(44, 'Najeeb Qureshi', '8781', 'najeeb@gmail.com', '1234567', 'male', '123', '571fafb8cf5792.07778878.jpg', 2, NULL, 1, 1, '2016-04-13 14:17:37'),
-(45, 'Muhammad Waqar Khan', '7740', 'waqar@gmail.com', '033569870', 'male', '123', '571fafaeb7f8e2.46039702.jpg', 2, NULL, 1, 1, '2016-04-14 22:03:41'),
+(14, 'Muneeb Khan', '7757', 'muneeb_420@gmail.com', '01234565', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-03 13:30:06'),
+(15, 'Umair Qamar', '10776', 'umairqamar@live.com', '03458541454', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-03 13:30:06'),
+(21, 'Bilal Hassan', '7471', 'bilalhassan@live.com', '+923458541454', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-03 13:30:06'),
+(43, 'Aizaz Ahmed Abbasi', '7736', 'aizaz@gmail.com', '923211234567', 'male', '123', '5734d46c70da79.56514541.jpg', 1, 1, 1, 1, '2016-04-10 14:28:47'),
+(44, 'Najeeb Qureshi', '8781', 'najeeb@gmail.com', '1234567', 'male', '123', '5734d476024d93.45721196.jpg', NULL, NULL, 1, 1, '2016-04-13 14:17:37'),
+(45, 'Muhammad Waqar Khan', '7740', 'waqar@gmail.com', '033569870', 'male', '123', '5734d47dc58770.26480061.jpg', NULL, NULL, 1, 1, '2016-04-14 22:03:41'),
 (46, 'Muhammad Fahad Khan', '7759', 'fahad@hotmail.com', '03356980', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:04:52'),
 (47, 'Mohsin Ali Abid', '8658', 'mohsin@gmail.com', '033569870', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:05:42'),
 (48, 'Mazhar Khan', '8627', 'mazhar@yahoo.com', '033564897', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:06:28'),
 (49, 'Usman Javaid', '8939', 'usman@gmail.com', '03369872', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:07:23'),
 (50, 'Sheraz Anwar', '8660', 'sheraz@hotmail.com', '033568970', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:08:05'),
 (51, 'Muhammad Laraib Khan', '8617', 'laraib@yahoo.com', '0336589741', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:09:02'),
-(52, 'Ayesha Hashim', '9214', 'ayesha@yahoo.com', '033658970', 'female', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:09:52'),
+(52, 'Ayesha Hashim', '9214', 'ayesha@yahoo.com', '033658970', 'female', '123', NULL, 2, 1, 1, 1, '2016-04-14 22:09:52'),
 (53, 'Mariya Sajjad', '9331', 'mariya@gmail.com', '033658970', 'female', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:11:07'),
 (54, 'Hina Arif', '9231', 'hina@gmail.com', '03325689', 'female', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:11:45'),
 (55, 'Muhammad Adeen Riaz', '8659', 'adeen@yahoo.com', '033658970', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:12:34'),
 (56, 'Jamal Hussain Siddiqui', '8621', 'jamal@hotmail.com', '033568970', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:13:29'),
 (57, 'Muhammad Shahzad', '8857', 'shahzad@hotmail.com', '033568970', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:14:14'),
 (58, 'Muhammad Farhan Ali', '7735', 'farhan@yahoo.com', '0335698741', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:14:56'),
-(59, 'Haseeb Ahmed', '7337', 'haseeb@yahoo.com', '03236116360', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:16:27'),
+(59, 'Haseed Ahmed', '7337', 'haseeb@yahoo.com', '03236116360', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:16:27'),
 (60, 'Muhammad Naeem', '7752', 'naeem@hotmail.com', '03135122852', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:18:17'),
 (61, 'Zeeshan Ali Khan', '8990', 'zeeshan@yahoo.com', '033568970', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:19:08'),
 (62, 'Ali Haq', '8647', 'ali@gmail.com', '033568970', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:19:46'),
@@ -435,49 +371,7 @@ INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentEmail`,
 (97, 'Madiha Arooj', '9270', 'madiha@gmail.com', '03358976', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 23:28:45'),
 (98, 'Maryam Ilyas', '9807', 'maryam@gmail.com', '033569870', 'female', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 23:58:18'),
 (99, 'Sundas Manzoor', '9734', 'sundas@hotmail.com', '033569870', 'female', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 23:59:34'),
-(100, 'IFrah Komal', '9584', 'irfah@gmail.com', '033569870', 'female', '123', NULL, NULL, NULL, 1, 1, '2016-04-15 00:00:34'),
-(101, 'Abdul Basit', '9477', 'basit@gmail.com', '033456987', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:11:34'),
-(102, 'M.Waleed Nasir', '9793', 'waleed@gmail.com', '033456987', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:12:19'),
-(103, 'Faizan Mujahid', '9358', 'mujahid@gmail.com', '03356987411', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:13:04'),
-(104, 'Abdul Majid Khan', '10433', 'khan@gmail.com', '03389745', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:13:54'),
-(105, 'Mirza Mobeen Ahmed', '10657', 'mirza@gmail.com', '03369870', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:14:52'),
-(106, 'Ijlal Hussain Amiry', '10501', 'ijlal@gmail.com', '033568970', 'male', '12', NULL, NULL, NULL, 19, 1, '2016-04-22 12:15:58'),
-(107, 'Bakhtawar Rubab', '10679', 'bakhtawar@gmail.com', '0336987012', 'female', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:17:21'),
-(108, 'Sehrish Saba Bhatti', '9643', 'sehrish@gmail.com', '', 'female', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:18:42'),
-(109, 'Lalarukh', '9619', 'lalarukh@gmail.com', '', 'female', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:20:08'),
-(110, 'Hamza Abbasi', '9465', 'hamza@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:21:34'),
-(111, 'Junaid Munir', '9406', 'junaid@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:24:31'),
-(112, 'Aitezaz Mohsin', '10412', 'aitezaz@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:25:15'),
-(113, 'Syed Ihtesham Hussain', '9724', 'syed@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:26:17'),
-(114, 'Umair Masood Bhatti', '9249', 'umair@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:27:00'),
-(115, 'Faiza Bashir', '9871', 'faiza@gmail.com', '', 'female', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:27:45'),
-(116, 'Fatima Aslam Khan', '9292', 'fatima@gmail.com', '', 'female', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:29:32'),
-(117, 'Sundas Saeed', '10395', 'sundas@gmail.com', '', 'female', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:33:15'),
-(118, 'Zoubaria Nourees', '10684', 'zoubairia@gmail.com', '', 'female', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:34:02'),
-(119, 'Sara Amir', '10392', 'sara@gmail.com', '', 'female', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:34:37'),
-(120, 'Amina Zahid', '10551', 'amina@gmail.com', '', 'female', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:35:15'),
-(121, 'Waqar Muneeb', '10639', 'waqar@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:36:05'),
-(122, 'Ahmad Azzam Amir', '10742', 'ahmad@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:36:56'),
-(123, 'Mirza Abdul Rehman', '10371', 'abdul@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:37:52'),
-(124, 'Rizwan Muhammad', '7527', 'rahi@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:38:45'),
-(125, 'Muhammad Danish Khan', '8623', 'danish@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:41:26'),
-(126, 'Waleed Zahid Baloch', '10370', 'zahid@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:42:20'),
-(127, 'Ayesha Naseer', '10394', 'ayesha@gmail.com', '', 'female', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:43:13'),
-(128, 'Benazir Ashraf', '10438', 'benazir@gmail.com', '', 'female', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:44:04'),
-(129, 'Fatima Haider', '10656', 'fatimaHaider@gmail.com', '', 'female', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:45:09'),
-(130, 'Sheran Sharif', '10432', 'sheran@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:45:53'),
-(131, 'Kashif Ali', '10485', 'kashif@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:46:44'),
-(132, 'Salman Asif', '10450', 'salman@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:47:46'),
-(133, 'Muhammad Asif', '8907', 'asif@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:48:28'),
-(134, 'Muhammad Suhail', '9172', 'suhail@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:49:08'),
-(135, 'Muhamad Shafee', '9286', 'shafee@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:49:47'),
-(136, 'Muhammad Sajid', '10369', 'sajid@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:50:31'),
-(137, 'Syed Ali Wasif Dariya Kazmi', '10490', 'kazmi@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:51:30'),
-(138, 'Abdullah Zaheer', '10363', 'zaheer@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:52:14'),
-(139, 'Majid Khawar', '10406', 'majid@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:52:51'),
-(140, 'Muhammad Suhaib', '9278', 'suhaib@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:53:32'),
-(141, 'Huzaifa Tahir', '9245', 'huzaifa@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:54:10'),
-(142, 'Muhammad Majid', '9207', 'muhammadMajid@gmail.com', '', 'male', '123', NULL, NULL, NULL, 19, 1, '2016-04-22 12:55:05');
+(100, 'IFrah Komal', '9584', 'irfah@gmail.com', '033569870', 'female', '123', NULL, NULL, NULL, 1, 1, '2016-04-15 00:00:34');
 
 -- --------------------------------------------------------
 
@@ -501,8 +395,8 @@ CREATE TABLE `student_group` (
 --
 
 INSERT INTO `student_group` (`groupId`, `projectName`, `batchId`, `sdpPart`, `groupLimit`, `inGroup`, `leaderId`, `createdDtm`) VALUES
-(2, 'Club Cricket Info', 1, 1, 3, 3, 43, '2016-04-26 23:00:54'),
-(12, 'Fyp Management System', 1, 1, 3, 3, 15, '2016-04-27 00:27:44');
+(1, 'Club Cricket Info', 1, 1, 3, 1, 43, '2016-05-12 23:17:47'),
+(2, 'Vine Tube', 1, 1, 3, 1, 52, '2016-05-14 17:05:22');
 
 -- --------------------------------------------------------
 
@@ -516,6 +410,14 @@ CREATE TABLE `student_group_request` (
   `groupId` int(11) NOT NULL COMMENT 'Request sent to group',
   `requestDtm` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Requests sent to join a group a stored here temporarilty';
+
+--
+-- Dumping data for table `student_group_request`
+--
+
+INSERT INTO `student_group_request` (`requestId`, `studentId`, `groupId`, `requestDtm`) VALUES
+(1, 45, 1, '2016-05-13 00:07:45'),
+(3, 44, 1, '2016-05-13 00:09:19');
 
 -- --------------------------------------------------------
 
@@ -538,10 +440,7 @@ CREATE TABLE `timeline_faculty` (
 --
 
 INSERT INTO `timeline_faculty` (`id`, `title`, `details`, `type`, `batchId`, `sdpPart`, `createdDtm`) VALUES
-(1, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Saud Khan is now supervising group Club Cricket Info', 'info', 1, 0, '2016-04-26 23:01:26'),
-(2, 'Consultant', '<p>\r\n\r\n</p><p>Mr. Asim Asfaq (asimizb@gmail.com) will be available for consultation for any project related advise during this semester.</p><ul><li><strong>Timing:</strong>&nbsp;11:30am - 01:00pm</li><li><strong>Day:</strong>&nbsp;Every Monday</li><li><strong>Location:</strong>&nbsp;Project Lab, Block A</li></ul>\r\n\r\n<br><p></p>', 'info', 1, NULL, '2016-04-26 23:44:47'),
-(3, 'Batch Upgraded', 'Fall 2016 has been upgraded to Senior Design Project Part 2', 'info', 1, 2, '2016-04-27 00:12:00'),
-(4, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Saud Khan is now supervising group Fyp Management System', 'info', 1, 0, '2016-04-28 20:14:05');
+(1, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Saud Khan is now supervising group Club Cricket Info', 'info', 1, 0, '2016-05-12 23:21:31');
 
 -- --------------------------------------------------------
 
@@ -565,12 +464,7 @@ CREATE TABLE `timeline_student` (
 --
 
 INSERT INTO `timeline_student` (`id`, `title`, `details`, `type`, `taskId`, `batchId`, `sdpPart`, `createdDtm`) VALUES
-(1, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Saud Khan is now supervising group Club Cricket Info', 'info', NULL, 1, 0, '2016-04-26 23:01:26'),
-(2, 'Consultant', '<p>\r\n\r\n</p><p>Mr. Asim Asfaq (asimizb@gmail.com) will be available for consultation for any project related advise during this semester.</p><ul><li><strong>Timing:</strong>&nbsp;11:30am - 01:00pm</li><li><strong>Day:</strong>&nbsp;Every Monday</li><li><strong>Location:</strong>&nbsp;Project Lab, Block A</li></ul>\r\n\r\n<br><p></p>', 'info', NULL, 1, NULL, '2016-04-26 23:15:36'),
-(3, 'Deliverable 02: Project Proposal', '<p></p><p>Â· &nbsp; &nbsp; &nbsp; &nbsp;\r\nUse â€œTemplate-02â€ &nbsp;to write down initial proposal and submit\r\nhard copy to project coordinator.</p>\r\n\r\n<p>Â· &nbsp; &nbsp; &nbsp; &nbsp;\r\nDue Date: Monday, 14th September 2051 (Before 3:30pm)</p><br><p></p>', 'task', 1, 1, 1, '2016-04-26 23:49:01'),
-(4, 'Batch Upgraded', 'Fall 2016 has been upgraded to Senior Design Project Part 2', 'info', NULL, 1, 2, '2016-04-27 00:12:00'),
-(5, 'Orientation Presentation', '<p>Orientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation PresentationOrientation Presentation<br></p>', 'task', 2, 19, 1, '2016-04-27 00:14:46'),
-(6, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Saud Khan is now supervising group Fyp Management System', 'info', NULL, 1, 0, '2016-04-28 20:14:05');
+(1, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Saud Khan is now supervising group Club Cricket Info', 'info', NULL, 1, 0, '2016-05-12 23:21:30');
 
 -- --------------------------------------------------------
 
@@ -590,12 +484,18 @@ CREATE TABLE `work_load` (
 --
 
 INSERT INTO `work_load` (`loadId`, `facultyId`, `totalLoad`, `currentLoad`) VALUES
-(1, 24, 6, 2),
-(2, 25, 3, 0),
-(3, 26, 1, 0),
-(4, 27, 1, 0),
-(5, 28, 1, 0),
-(6, 29, 1, 0);
+(1, 30, 3, 1),
+(2, 31, 1, 0),
+(3, 32, 3, 0),
+(4, 33, 2, 0),
+(5, 34, 3, 0),
+(6, 35, 3, 0),
+(7, 36, 2, 0),
+(8, 37, 3, 0),
+(9, 38, 3, 0),
+(10, 39, 3, 0),
+(11, 40, 2, 0),
+(12, 41, 2, 0);
 
 --
 -- Indexes for dumped tables
@@ -608,10 +508,10 @@ ALTER TABLE `batch`
   ADD PRIMARY KEY (`batchId`);
 
 --
--- Indexes for table `batch_configurations`
+-- Indexes for table `batch_settings`
 --
-ALTER TABLE `batch_configurations`
-  ADD PRIMARY KEY (`configId`);
+ALTER TABLE `batch_settings`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- Indexes for table `batch_tasks`
@@ -729,37 +629,37 @@ ALTER TABLE `work_load`
 -- AUTO_INCREMENT for table `batch`
 --
 ALTER TABLE `batch`
-  MODIFY `batchId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `batchId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
--- AUTO_INCREMENT for table `batch_configurations`
+-- AUTO_INCREMENT for table `batch_settings`
 --
-ALTER TABLE `batch_configurations`
-  MODIFY `configId` int(11) NOT NULL AUTO_INCREMENT;
+ALTER TABLE `batch_settings`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `batch_tasks`
 --
 ALTER TABLE `batch_tasks`
-  MODIFY `taskId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `taskId` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `batch_templates`
 --
 ALTER TABLE `batch_templates`
-  MODIFY `templateId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `templateId` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `external_examiner`
 --
 ALTER TABLE `external_examiner`
-  MODIFY `examinerId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `examinerId` int(255) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `faculty`
 --
 ALTER TABLE `faculty`
-  MODIFY `facultyId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `facultyId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 --
 -- AUTO_INCREMENT for table `faculty_student_group`
 --
 ALTER TABLE `faculty_student_group`
-  MODIFY `facultyStudentId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `facultyStudentId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `faculty_student_request`
 --
@@ -769,7 +669,7 @@ ALTER TABLE `faculty_student_request`
 -- AUTO_INCREMENT for table `grades`
 --
 ALTER TABLE `grades`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `group_requests`
 --
@@ -779,52 +679,52 @@ ALTER TABLE `group_requests`
 -- AUTO_INCREMENT for table `group_uploads`
 --
 ALTER TABLE `group_uploads`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `internal_evaluations`
 --
 ALTER TABLE `internal_evaluations`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `meeting_logs`
 --
 ALTER TABLE `meeting_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `project_repository`
 --
 ALTER TABLE `project_repository`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT for table `student`
 --
 ALTER TABLE `student`
-  MODIFY `studentId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=143;
+  MODIFY `studentId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=101;
 --
 -- AUTO_INCREMENT for table `student_group`
 --
 ALTER TABLE `student_group`
-  MODIFY `groupId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `groupId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `student_group_request`
 --
 ALTER TABLE `student_group_request`
-  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `requestId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `timeline_faculty`
 --
 ALTER TABLE `timeline_faculty`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `timeline_student`
 --
 ALTER TABLE `timeline_student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `work_load`
 --
 ALTER TABLE `work_load`
-  MODIFY `loadId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `loadId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

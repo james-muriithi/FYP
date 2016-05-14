@@ -112,7 +112,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <tr>
                                             <td><?php echo $row['batchName']; ?></td>
                                             <td><?php echo $row['sdpPart']; ?></td>
-                                            <td><?php echo $row['sdpPart']; ?></td>
+                                            <td><?php
+                                                $batchId = $row['batchId'];
+                                                echo $conn->query("SELECT studentId FROM student WHERE batchId ='$batchId' ")->num_rows;  ?>
+                                            </td>
                                             <td><?php echo $row['startingDate']; ?></td>
                                             <td><?php if ($row['isActive']){
                                                     echo "<span class=\"label label-success\">Active</span>";

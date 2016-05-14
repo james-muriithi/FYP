@@ -304,6 +304,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <th>CMS</th>
                                         <th>Name</th>
                                         <th>Email</th>
+                                        <th>Gender</th>
                                         <th>Group Status</th>
                                         <th><i class="fa fa-clock-o" aria-hidden="true"></i> Created</th>
                                         <th>Actions</th>
@@ -317,6 +318,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             <td><?php echo $row['studentCMS'] ;?></td>
                                             <td><?php echo $row['studentName'];?></td>
                                             <td><?php echo $row['studentEmail'] ;?></td>
+                                            <td><?php echo $row['studentGender'] ;?></td>
                                             <td>
                                                 <?php if ($row['isLeader'] == 1 ){ ?>
                                                     <span class="label label-info">Group Leader</span>

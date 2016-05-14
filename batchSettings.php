@@ -81,6 +81,23 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     }
 
+    /*****************************
+     * Male female group settings
+     *****************************/
+    if (isset($_POST['btnMfGroup'])){
+        $batchId = filter_input(INPUT_POST,'batchId',FILTER_SANITIZE_NUMBER_INT);
+        $value = filter_input(INPUT_POST,'mf_group',FILTER_SANITIZE_NUMBER_INT);
+
+        $sql = "UPDATE batch_settings SET male_female_group='$value' WHERE batchId='$batchId' ";
+
+        if ($conn->query($sql) === TRUE) {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=t&settings='.$batchId);die;
+        } else {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=f&settings='.$batchId);die;
+        }
+
+    }
+
 
 
 }
@@ -223,9 +240,62 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             </ul>
                                         </form>
 
+                                        <br>
+
+
+
+
+
                                     <?php
                                     }
                                     ?>
+
+
+
+                                    <table class="table">
+                                        <tr>
+
+                                            <th>Configuration</th>
+                                            <th>Value</th>
+                                            <th>Action</th>
+                                        </tr>
+                                        <?php
+                                        /***
+                                         * Show batch settings
+                                         */
+                                        $sql = "SELECT * FROM batch_settings WHERE batchId = '$batchId' ";
+                                        $result = $conn->query($sql);
+
+                                        if ($result->num_rows > 0) {
+                                            // output data of each row
+                                            while($row = $result->fetch_assoc()) { ?>
+                                                <tr>
+                                                    <form action="" method="post">
+                                                        <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
+                                                        <td>Male Female Group</td>
+                                                        <td>
+                                                            <select name="mf_group" id="mf_group">
+                                                                <option value="0"  <?php if ($row['male_female_group'] == 0){echo "selected";}?>>Not Allowed</option>
+                                                                <option value="1"  <?php if ($row['male_female_group'] == 1){echo "selected";}?>>Allowed</option>
+                                                            </select>
+                                                        </td>
+                                                        <td><button type="submit" class="btn btn-default btn-sm" name="btnMfGroup">Submit</button></td>
+                                                    </form>
+                                                </tr>
+
+                                                <?php
+                                            }
+                                        } else {
+
+                                        }
+
+                                        ?>
+
+
+                                    </table>
+
+
+
 
 
 

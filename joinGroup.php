@@ -17,6 +17,7 @@ $check = true;
 //Getting values from SESSION
 $studentId = $_SESSION['usrId'];
 $gender = $_SESSION["usrGender"];
+$batchId = $_SESSION["BatchID"];
 
 
 /****
@@ -169,7 +170,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                         </tr>
                         </thead>
                         <?php
-                        $sql = " SELECT student.studentId,student_group.createdDtm,projectName,studentCMS,studentName,student_group.groupId FROM student_group INNER JOIN student ON student.studentId = student_group.leaderId WHERE inGroup < groupLimit AND studentGender = '$gender' " ;
+                        /************************
+                         * Check batch settings
+                         ***********************/
+                        $sql = "SELECT * FROM batch_settings WHERE batchId ='$batchId' ";
+                        $result = $conn->query($sql);
+
+                        if ($result->num_rows > 0) {
+                            // output data of each row
+                            while($row = $result->fetch_assoc()) {
+                                $male_female_group = $row['male_female_group'];
+                            }
+                        }
+
+                        if ($male_female_group == 0){
+                            //Not Allowed
+                            $sql = " SELECT student.studentId,student_group.createdDtm,projectName,studentCMS,studentName,student_group.groupId FROM student_group INNER JOIN student ON student.studentId = student_group.leaderId WHERE inGroup < groupLimit AND studentGender = '$gender' " ;
+                        }
+                        else if ($male_female_group == 1){
+                            //Allowed
+                            $sql = " SELECT student.studentId,student_group.createdDtm,projectName,studentCMS,studentName,student_group.groupId FROM student_group INNER JOIN student ON student.studentId = student_group.leaderId WHERE inGroup < groupLimit " ;
+                        }
+
+                        //$sql = " SELECT student.studentId,student_group.createdDtm,projectName,studentCMS,studentName,student_group.groupId FROM student_group INNER JOIN student ON student.studentId = student_group.leaderId WHERE inGroup < groupLimit AND studentGender = '$gender' " ;
                         $result = $conn->query($sql);
                         while($row = $result->fetch_assoc()) { ?>
                             <tr>
