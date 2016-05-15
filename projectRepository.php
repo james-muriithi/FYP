@@ -5,6 +5,11 @@ require_once("includes/header.php");
 require_once("includes/config.php");
 session_start();
 
+/******************************************************
+ * Check if repository user of Coordinator is logged in
+ *****************************************************/
+
+
 //Check if COORDINATOR is logged in else log out
 if(!isset($_SESSION["isCord"]))
 {
@@ -273,6 +278,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <div class="box no-border">
                         <div class="box-header">
                             <h3 class="box-title">List of Projects</h3>
+                            <?php
+                            if(isset($_SESSION["isCord"])){ ?>
+                                <div class="box-tools">
+                                    <a href="./repositoryAccess.php" target="_blank" class="btn btn-default btn-xs "><i class="fa fa-external-link" aria-hidden="true"></i> Give Access</a>
+                                </div>
+                                <?php
+                            }
+                            ?>
                         </div>
                         <!-- /.box-header -->
                         <div class="box-body">
