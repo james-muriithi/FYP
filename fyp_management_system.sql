@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 15, 2016 at 01:32 PM
+-- Generation Time: May 15, 2016 at 07:33 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -82,6 +82,13 @@ CREATE TABLE `batch_tasks` (
   `hasDeliverable` tinyint(4) NOT NULL DEFAULT '0' COMMENT '1=has deliverable',
   `createdDtm` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `batch_tasks`
+--
+
+INSERT INTO `batch_tasks` (`taskId`, `batchId`, `sdpPart`, `taskName`, `taskDetail`, `taskWeek`, `taskDeadline`, `templateId`, `hasDeliverable`, `createdDtm`) VALUES
+(1, 1, '1', 'Orientation Presentation', '<p>asfdsa</p>', 1, NULL, NULL, 1, '2016-05-15 20:53:12');
 
 -- --------------------------------------------------------
 
@@ -230,6 +237,13 @@ CREATE TABLE `group_uploads` (
   `uploadedDtm` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `group_uploads`
+--
+
+INSERT INTO `group_uploads` (`id`, `groupId`, `taskId`, `uploadFile`, `uploadedBy`, `uploadedDtm`) VALUES
+(1, 1, 1, 'group_1_deliverable_1.pdf', 43, '2016-05-15 20:53:32');
+
 -- --------------------------------------------------------
 
 --
@@ -284,6 +298,34 @@ CREATE TABLE `project_repository` (
   `batchId` int(11) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Dumping data for table `project_repository`
+--
+
+INSERT INTO `project_repository` (`id`, `batchId`) VALUES
+(1, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `repository_users`
+--
+
+CREATE TABLE `repository_users` (
+  `user_id` int(11) NOT NULL,
+  `user_name` varchar(50) NOT NULL DEFAULT '0',
+  `user_email` varchar(50) NOT NULL DEFAULT '0',
+  `user_password` varchar(50) DEFAULT NULL,
+  `access_type` tinyint(4) NOT NULL DEFAULT '1' COMMENT '1= full-access '
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `repository_users`
+--
+
+INSERT INTO `repository_users` (`user_id`, `user_name`, `user_email`, `user_password`, `access_type`) VALUES
+(3, 'Umair Qamar', 'umairqamar@live.com', '123', 1);
+
 -- --------------------------------------------------------
 
 --
@@ -315,8 +357,8 @@ INSERT INTO `student` (`studentId`, `studentName`, `studentCMS`, `studentEmail`,
 (15, 'Umair Qamar', '10776', 'umairqamar@live.com', '03458541454', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-03 13:30:06'),
 (21, 'Bilal Hassan', '7471', 'bilalhassan@live.com', '+923458541454', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-03 13:30:06'),
 (43, 'Aizaz Ahmed Abbasi', '7736', 'aizaz@gmail.com', '923211234567', 'male', '123', '5734d46c70da79.56514541.jpg', 1, 1, 1, 1, '2016-04-10 14:28:47'),
-(44, 'Najeeb Qureshi', '8781', 'najeeb@gmail.com', '1234567', 'male', '123', '5734d476024d93.45721196.jpg', NULL, NULL, 1, 1, '2016-04-13 14:17:37'),
-(45, 'Muhammad Waqar Khan', '7740', 'waqar@gmail.com', '033569870', 'male', '123', '5734d47dc58770.26480061.jpg', NULL, NULL, 1, 1, '2016-04-14 22:03:41'),
+(44, 'Najeeb Qureshi', '8781', 'najeeb@gmail.com', '1234567', 'male', '123', '5734d476024d93.45721196.jpg', 1, NULL, 1, 1, '2016-04-13 14:17:37'),
+(45, 'Muhammad Waqar Khan', '7740', 'waqar@gmail.com', '033569870', 'male', '123', '5734d47dc58770.26480061.jpg', 1, NULL, 1, 1, '2016-04-14 22:03:41'),
 (46, 'Muhammad Fahad Khan', '7759', 'fahad@hotmail.com', '03356980', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:04:52'),
 (47, 'Mohsin Ali Abid', '8658', 'mohsin@gmail.com', '033569870', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:05:42'),
 (48, 'Mazhar Khan', '8627', 'mazhar@yahoo.com', '033564897', 'male', '123', NULL, NULL, NULL, 1, 1, '2016-04-14 22:06:28'),
@@ -395,7 +437,7 @@ CREATE TABLE `student_group` (
 --
 
 INSERT INTO `student_group` (`groupId`, `projectName`, `batchId`, `sdpPart`, `groupLimit`, `inGroup`, `leaderId`, `createdDtm`) VALUES
-(1, 'Club Cricket Info', 1, 1, 3, 1, 43, '2016-05-12 23:17:47'),
+(1, 'Club Cricket Info', 1, 1, 3, 3, 43, '2016-05-12 23:17:47'),
 (2, 'Vine Tube', 1, 1, 3, 1, 52, '2016-05-14 17:05:22');
 
 -- --------------------------------------------------------
@@ -410,14 +452,6 @@ CREATE TABLE `student_group_request` (
   `groupId` int(11) NOT NULL COMMENT 'Request sent to group',
   `requestDtm` datetime DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Requests sent to join a group a stored here temporarilty';
-
---
--- Dumping data for table `student_group_request`
---
-
-INSERT INTO `student_group_request` (`requestId`, `studentId`, `groupId`, `requestDtm`) VALUES
-(1, 45, 1, '2016-05-13 00:07:45'),
-(3, 44, 1, '2016-05-13 00:09:19');
 
 -- --------------------------------------------------------
 
@@ -464,7 +498,8 @@ CREATE TABLE `timeline_student` (
 --
 
 INSERT INTO `timeline_student` (`id`, `title`, `details`, `type`, `taskId`, `batchId`, `sdpPart`, `createdDtm`) VALUES
-(1, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Saud Khan is now supervising group Club Cricket Info', 'info', NULL, 1, 0, '2016-05-12 23:21:30');
+(1, '<i class="fa fa-info-circle" aria-hidden="true"></i> Info', 'Saud Khan is now supervising group Club Cricket Info', 'info', NULL, 1, 0, '2016-05-12 23:21:30'),
+(2, 'Orientation Presentation', '<p>asfdsa</p>', 'task', 1, 1, 1, '2016-05-15 20:53:12');
 
 -- --------------------------------------------------------
 
@@ -586,6 +621,12 @@ ALTER TABLE `project_repository`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `repository_users`
+--
+ALTER TABLE `repository_users`
+  ADD PRIMARY KEY (`user_id`);
+
+--
 -- Indexes for table `student`
 --
 ALTER TABLE `student`
@@ -639,7 +680,7 @@ ALTER TABLE `batch_settings`
 -- AUTO_INCREMENT for table `batch_tasks`
 --
 ALTER TABLE `batch_tasks`
-  MODIFY `taskId` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `taskId` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `batch_templates`
 --
@@ -679,7 +720,7 @@ ALTER TABLE `group_requests`
 -- AUTO_INCREMENT for table `group_uploads`
 --
 ALTER TABLE `group_uploads`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `internal_evaluations`
 --
@@ -694,7 +735,12 @@ ALTER TABLE `meeting_logs`
 -- AUTO_INCREMENT for table `project_repository`
 --
 ALTER TABLE `project_repository`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `repository_users`
+--
+ALTER TABLE `repository_users`
+  MODIFY `user_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT for table `student`
 --
@@ -719,7 +765,7 @@ ALTER TABLE `timeline_faculty`
 -- AUTO_INCREMENT for table `timeline_student`
 --
 ALTER TABLE `timeline_student`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `work_load`
 --
