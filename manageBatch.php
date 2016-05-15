@@ -117,9 +117,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                 echo $conn->query("SELECT studentId FROM student WHERE batchId ='$batchId' ")->num_rows;  ?>
                                             </td>
                                             <td><?php echo $row['startingDate']; ?></td>
-                                            <td><?php if ($row['isActive']){
+                                            <td><?php if ($row['isActive'] == 1){
                                                     echo "<span class=\"label label-success\">Active</span>";
-                                                }else if ($row['isActive']){
+                                                }else if ($row['isActive'] == 0){
                                                     echo "<span class=\"label label-danger\">Inactive</span>";
                                                 }  ?>
                                             </td>

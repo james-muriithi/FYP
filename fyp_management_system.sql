@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 14, 2016 at 02:34 PM
+-- Generation Time: May 15, 2016 at 01:32 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -53,16 +53,16 @@ CREATE TABLE `batch_settings` (
   `batchId` int(11) NOT NULL DEFAULT '0',
   `male_female_group` tinyint(1) NOT NULL DEFAULT '0' COMMENT '0=no;1=yes',
   `sdp1_grading` tinyint(1) NOT NULL DEFAULT '0',
-  `sdp2_grading` tinyint(1) NOT NULL DEFAULT '0',
-  `internal_evaluation` tinyint(1) NOT NULL DEFAULT '0'
+  `internal_evaluation` tinyint(1) NOT NULL DEFAULT '0',
+  `sdp2_grading` tinyint(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
 -- Dumping data for table `batch_settings`
 --
 
-INSERT INTO `batch_settings` (`id`, `batchId`, `male_female_group`, `sdp1_grading`, `sdp2_grading`, `internal_evaluation`) VALUES
-(1, 1, 1, 0, 0, 0);
+INSERT INTO `batch_settings` (`id`, `batchId`, `male_female_group`, `sdp1_grading`, `internal_evaluation`, `sdp2_grading`) VALUES
+(1, 1, 0, 1, 0, 1);
 
 -- --------------------------------------------------------
 

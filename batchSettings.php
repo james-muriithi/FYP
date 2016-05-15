@@ -98,6 +98,83 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     }
 
+    /*****************************
+     * SDP 1 Grading
+     *****************************/
+    if (isset($_POST['btnSdp1grading'])){
+        $batchId = filter_input(INPUT_POST,'batchId',FILTER_SANITIZE_NUMBER_INT);
+        $value = filter_input(INPUT_POST,'sdp1grading',FILTER_SANITIZE_NUMBER_INT);
+
+        $sql = "UPDATE batch_settings SET sdp1_grading='$value' WHERE batchId='$batchId' ";
+
+        if ($conn->query($sql) === TRUE) {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=t&settings='.$batchId);die;
+        } else {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=f&settings='.$batchId);die;
+        }
+
+    }
+
+    /*****************************
+     * Internal Demo Evaluation
+     *****************************/
+    if (isset($_POST['btnInternalEval'])){
+        $batchId = filter_input(INPUT_POST,'batchId',FILTER_SANITIZE_NUMBER_INT);
+        $value = filter_input(INPUT_POST,'internalEval',FILTER_SANITIZE_NUMBER_INT);
+
+        $sql = "UPDATE batch_settings SET internal_evaluation='$value' WHERE batchId='$batchId' ";
+
+        if ($conn->query($sql) === TRUE) {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=t&settings='.$batchId);die;
+        } else {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=f&settings='.$batchId);die;
+        }
+
+    }
+
+    /*****************************
+     * SDP 2 Grading
+     *****************************/
+    if (isset($_POST['btnSdp2grading'])){
+        $batchId = filter_input(INPUT_POST,'batchId',FILTER_SANITIZE_NUMBER_INT);
+        $value = filter_input(INPUT_POST,'sdp2grading',FILTER_SANITIZE_NUMBER_INT);
+
+        $sql = "UPDATE batch_settings SET sdp2_grading='$value' WHERE batchId='$batchId' ";
+
+        if ($conn->query($sql) === TRUE) {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=t&settings='.$batchId);die;
+        } else {
+            header('Location:' . $_SERVER['PHP_SELF'] . '?status=f&settings='.$batchId);die;
+        }
+
+    }
+
+    /*****************************
+     * Deactivate Batch
+     *****************************/
+    if (isset($_POST['btnDeactivate'])){
+        $batchId = filter_input(INPUT_POST,'batchId',FILTER_SANITIZE_NUMBER_INT);
+        // Set autocommit to off
+        mysqli_autocommit($conn, FALSE);
+        $sql = "UPDATE batch SET isActive=0 WHERE batchId= '$batchId' ";
+
+        if ($conn->query($sql) === TRUE) {
+            $sql = "UPDATE student SET isActive=0 WHERE batchId= '$batchId' ";
+
+            if ($conn->query($sql) === TRUE) {
+                // Commit transaction
+                mysqli_commit($conn);
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=t&settings='.$batchId);die;
+            }else{
+                header('Location:' . $_SERVER['PHP_SELF'] . '?status=f&settings='.$batchId);die;
+            }
+
+        }
+
+
+
+    }
+
 
 
 }
@@ -188,7 +265,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
 
-                                    <form action="" method="post" onsubmit="return confirm('Are you sure you ?');" data-toggle="validator">
+                                    <form action="" method="post" onsubmit="return confirm('Are you sure  ?');" data-toggle="validator">
                                         <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
 
                                         <ul class="todo-list ui-sortable">
@@ -207,23 +284,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 
                                     <?php if ($sdpPart ==1){ ?>
-                                        <form action="" method="post" onsubmit="return confirm('Are you sure you ?');" data-toggle="validator">
-                                            <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
 
-                                            <ul class="todo-list ui-sortable">
-                                                <li class="">
-                                                    <!-- drag handle -->
-                                                  <span class="handle ui-sortable-handle">
-                                                    <i class="fa fa-cog" aria-hidden="true"></i>
-                                                  </span>
-                                                    <span class="text">Lock SDP Part 1 Grading</span>
-                                                    <small class="label label-primary"><?php echo $batchName;?></small>
-                                                    <button type="submit" name="btnLockGrade" class="btn btn-defualt  btn-xs pull-right">Submit</button>
-                                                </li>
-                                            </ul>
-                                        </form>
 
-                                        <form action="" method="post" onsubmit="return confirm('Are you sure you ?');" data-toggle="validator">
+                                        <form action="" method="post" onsubmit="return confirm('Are you sure  ?');" data-toggle="validator">
 
                                             <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
 
@@ -240,7 +303,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                             </ul>
                                         </form>
 
-                                        <br>
+
 
 
 
@@ -249,6 +312,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     <?php
                                     }
                                     ?>
+                                    <form action="" method="post" onsubmit="return confirm('This action will deactivate Batch and all the students in it.THIS ACTION IS IRREVERSIBLE. Are you sure you want to continue ?');" data-toggle="validator">
+                                        <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
+
+                                        <ul class="todo-list ui-sortable">
+                                            <li class="">
+                                                <!-- drag handle -->
+                                                  <span class="handle ui-sortable-handle">
+                                                    <i class="fa fa-cog" aria-hidden="true"></i>
+                                                  </span>
+                                                <span class="text">Deactivate this Batch</span>
+                                                <small class="label label-primary"><?php echo $batchName;?></small>
+                                                <button type="submit" name="btnDeactivate" class="btn btn-defualt  btn-xs pull-right">Submit</button>
+                                            </li>
+                                        </ul>
+                                    </form>
+
 
 
 
@@ -280,6 +359,50 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                                             </select>
                                                         </td>
                                                         <td><button type="submit" class="btn btn-default btn-sm" name="btnMfGroup">Submit</button></td>
+                                                    </form>
+                                                </tr>
+
+
+                                                <tr>
+                                                    <form action="" method="post">
+                                                        <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
+                                                        <td>SDP-1 Grading</td>
+                                                        <td>
+                                                            <select name="sdp1grading" id="sdp1grading">
+                                                                <option value="0"  <?php if ($row['sdp1_grading'] == 0){echo "selected";}?>>Not Allowed</option>
+                                                                <option value="1"  <?php if ($row['sdp1_grading'] == 1){echo "selected";}?>>Allowed</option>
+                                                            </select>
+                                                        </td>
+                                                        <td><button type="submit" class="btn btn-default btn-sm" name="btnSdp1grading">Submit</button></td>
+                                                    </form>
+                                                </tr>
+
+
+                                                <tr>
+                                                    <form action="" method="post">
+                                                        <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
+                                                        <td>Internal Demo Evaluation</td>
+                                                        <td>
+                                                            <select name="internalEval" id="internalEval">
+                                                                <option value="0"  <?php if ($row['internal_evaluation'] == 0){echo "selected";}?>>Not Allowed</option>
+                                                                <option value="1"  <?php if ($row['internal_evaluation'] == 1){echo "selected";}?>>Allowed</option>
+                                                            </select>
+                                                        </td>
+                                                        <td><button type="submit" class="btn btn-default btn-sm" name="btnInternalEval">Submit</button></td>
+                                                    </form>
+                                                </tr>
+
+                                                <tr>
+                                                    <form action="" method="post">
+                                                        <input type="hidden" name="batchId" value="<?php echo $batchId;?>">
+                                                        <td>SDP-2 Grading</td>
+                                                        <td>
+                                                            <select name="sdp2grading" id="sdp2grading">
+                                                                <option value="0"  <?php if ($row['sdp2_grading'] == 0){echo "selected";}?>>Not Allowed</option>
+                                                                <option value="1"  <?php if ($row['sdp2_grading'] == 1){echo "selected";}?>>Allowed</option>
+                                                            </select>
+                                                        </td>
+                                                        <td><button type="submit" class="btn btn-default btn-sm" name="btnSdp2grading">Submit</button></td>
                                                     </form>
                                                 </tr>
 

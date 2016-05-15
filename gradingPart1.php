@@ -12,6 +12,22 @@ if(!isset($_SESSION["facultyId"]))
 }
 $facultyId = $_SESSION['facultyId'];
 
+/***************************************
+ * Check if Coordinator allowed grading
+ ***************************************/
+$sql = "SELECT * FROM batch JOIN batch_settings ON batch_settings.batchId = batch.batchId WHERE isActive = 1 AND sdpPart =1 LIMIT 1";
+$result = $conn->query($sql);
+
+if ($result->num_rows > 0) {
+    // output data of each row
+    while($row = $result->fetch_assoc()) {
+        $male_female_group = $row['male_female_group'];
+        $sdp1_grading = $row['sdp1_grading'];
+        $internal_evaluation = $row['internal_evaluation'];
+        $sdp2_grading = $row['sdp2_grading'];
+    }
+}
+
 
 
 //Check if form is submitted by GET
@@ -204,177 +220,196 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     }
                     ?>
 
+                    <?php
+                    /*****
+                     * If coordinater allowed SPD-1 grading
+                     */
+                    if ($sdp1_grading == 1){ ?>
+                        <div class="box">
+                            <div class="box-header">
+                                <h3 class="box-title">Grade Supervising groups</h3>
+                                <p class="text-muted">Select a group you are supervising and Grade SDP - 1</p>
+                            </div>
+                            <!-- /.box-header -->
+                            <div class="box-body  ">
+                                <div class="form-group">
+                                    <label for="chooseGroup" class="col-sm-2 control-label">Choose Group</label>
+                                    <div class="col-sm-10">
+                                        <div class="dropdown">
+                                            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                                Choose a Group
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                                                <li><a href="<?php echo $_SERVER['PHP_SELF'];?>">---</a></li>
+                                                <?php
+                                                $sql = "SELECT * FROM faculty_student_group JOIN student_group ON faculty_student_group.groupId = student_group.groupId WHERE facultyId= '$facultyId'";
+                                                $result = $conn->query($sql);
 
-                    <div class="box">
-                        <div class="box-header">
-                            <h3 class="box-title">Grade Supervising groups</h3>
-                            <p class="text-muted">Select a group you are supervising and Grade SDP - 1</p>
-                        </div>
-                        <!-- /.box-header -->
-                        <div class="box-body  ">
-                            <div class="form-group">
-                                <label for="chooseGroup" class="col-sm-2 control-label">Choose Group</label>
-                                <div class="col-sm-10">
-                                    <div class="dropdown">
-                                        <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                                            Choose a Group
-                                            <span class="caret"></span>
-                                        </button>
-                                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                                            <li><a href="<?php echo $_SERVER['PHP_SELF'];?>">---</a></li>
+                                                if ($result->num_rows > 0) {
+                                                    // output data of each row
+                                                    while($row = $result->fetch_assoc()) { ?>
+                                                        <li><a href="<?php echo $_SERVER['PHP_SELF'].'?group='.$row['groupId'];?>"><?php echo $row['projectName'];?></a></li>
+                                                    <?php    }
+                                                } else { ?>
+                                                    <li><a href="<?php echo $_SERVER['PHP_SELF'];?>">No Groups Available</a></li>
+                                                <?php   }
+                                                ?>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--Show Group Members-->
+                                <?php
+                                if (isset($_GET['group']) AND is_numeric($_GET['group']) AND $grade_check == FALSE ){ ?>
+
+                                    <br/>
+                                    <h2 class="page-header">
+                                        <i class="fa fa-list-alt"></i> <?php echo $projName;?>
+                                        <small class="pull-right">Supervisor: <?php if (isset($supervisorName)){echo $supervisorName;}?></small>
+                                    </h2>
+
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th>CMS</th>
+                                            <th>Name</th>
+                                            <th>Set Grade</th>
+                                            <th>Comments/Review</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <form role="form" action="" id="gradeStudents" name="gradeStudents" method="POST" data-toggle="validator">
                                             <?php
-                                            $sql = "SELECT * FROM faculty_student_group JOIN student_group ON faculty_student_group.groupId = student_group.groupId WHERE facultyId= '$facultyId'";
+                                            $sql = "SELECT *  FROM student WHERE student.groupId ='$groupId' ";
+                                            $result = $conn->query($sql);
+                                            if ($result->num_rows > 0) {
+                                            // output data of each row
+                                            while($row = $result->fetch_assoc()) { ?>
+                                            <!--HIDDEN INPUTS-->
+                                            <input type="hidden" name="studentId[]" id="studentId[]" value="<?php echo $row['studentId'];?>">
+                                            <input type="hidden" name="count" id="count" value="<?php echo $result->num_rows; ?>">
+                                            <input type="hidden" name="groupId" id="groupId" value="<?php echo $groupId; ?>">
+                                            <tr>
+                                                <td><?php echo $row['studentCMS'];?></td>
+                                                <td><?php echo $row['studentName'];?></td>
+                                                <td><select class="form-control" name="grade[]" required>
+                                                        <option value="">Select Grade</option>
+                                                        <option value="A+">A+</option>
+                                                        <option value="A">A</option>
+                                                        <option value="B+">B+</option>
+                                                        <option value="B">B</option>
+                                                        <option value="C+">C+</option>
+                                                        <option value="C">C</option>
+                                                        <option value="D+">D+</option>
+                                                        <option value="D">D</option>
+                                                        <option value="F">F</option>
+                                                    </select>
+                                                </td>
+                                                <td><input type="text" class="form-control" id="comments[]" name="comments[]" placeholder="Comments/Reviews if any"></td>
+                                                <!--                                        <td><button type="submit" name="btnGradeStudents" form="gradeStudents" class="btn btn-default btn-sm ">Grade Student</button></div></td>-->
+                                                <?php } } ?>
+                                            </tr>
+
+                                        </form>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="box-footer">
+                                        <a href="<?php echo $_SERVER['PHP_SELF'];?>" class="btn btn-default" >Cancel</a>
+                                        <button type="submit" name="btnGradeStudents" form="gradeStudents" class="btn btn-primary pull-right">Grade Students</button>
+                                    </div>
+
+                                    <?php
+                                }else if (isset($grade_check)) {
+                                    if ($grade_check == TRUE){
+
+
+                                        ?>
+                                        <br/><br/>
+
+                                        <div class="callout callout-info">
+                                            <h4>Already Graded!</h4>
+
+                                            <p>This group has already been graded.You can edit Grades until coordinator locks them</p>
+                                        </div>
+
+                                        <table class="table table-condensed">
+                                            <tr>
+                                                <th style="width: 20px;">CMS</th>
+                                                <th>Name</th>
+                                                <th sty="width: 10px;">Grade</th>
+                                                <th sty="width: 10px;">Actions</th>
+
+                                            </tr>
+                                            <?php
+                                            $sql = "SELECT * FROM grades JOIN student ON student.studentId = grades.studentId WHERE grades.groupId = '$groupId' AND sdpPart = 1";
                                             $result = $conn->query($sql);
 
                                             if ($result->num_rows > 0) {
                                                 // output data of each row
-                                                while($row = $result->fetch_assoc()) { ?>
-                                                    <li><a href="<?php echo $_SERVER['PHP_SELF'].'?group='.$row['groupId'];?>"><?php echo $row['projectName'];?></a></li>
-                                                <?php    }
-                                            } else { ?>
-                                                <li><a href="<?php echo $_SERVER['PHP_SELF'];?>">No Groups Available</a></li>
-                                            <?php   }
+                                                while($row = $result->fetch_assoc()) {
+                                                    $gradedBy = $row['gradedBy'];
+                                                    ?>
+                                                    <tr>
+                                                        <td><?php echo $row['studentCMS'];?></td>
+                                                        <td><?php echo $row['studentName'];?></td>
+                                                        <td><?php echo $row['grade'];?></td>
+                                                        <td><a href="<?php echo $_SERVER['PHP_SELF']."?group=".$row['groupId']."&edit=".$row['id'];?>" class="btn btn-default btn-sm">Edit</a></td>
+                                                    </tr>
+
+                                                    <?php
+                                                }
+                                            }
                                             ?>
-                                        </ul>
-                                    </div>
-                                </div>
+                                        </table>
+
+                                        <?php
+                                    }   }
+
+                                ?>
+
+
+
+                            </div>
+                            <!-- /.box-body -->
+                        </div>
+                        <!-- /.box -->
+
+                    <?php
+                    }
+
+                    /*****
+                     * If coordinator internal demo evaluation
+                     */
+                    if ($internal_evaluation == 1){ ?>
+
+                        <!-- general form elements -->
+                        <div class="box no-border">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">Internal Demo Evaluation</h3>
+                            </div>
+                            <!-- /.box-header -->
+
+                            <div class="box-body">
+                                <a href="./internalEvaluations.php" target="_blank" class="btn btn-default btn-flat btn-sm"><i class="fa fa-external-link" aria-hidden="true"></i> Goto Internal Demo Evaluation</a>
+                            </div>
+                            <!-- /.box-body -->
+
+                            <div class="box-footer">
+
                             </div>
 
-                            <!--Show Group Members-->
-                            <?php
-                            if (isset($_GET['group']) AND is_numeric($_GET['group']) AND $grade_check == FALSE ){ ?>
-
-                                <br/>
-                                <h2 class="page-header">
-                                    <i class="fa fa-list-alt"></i> <?php echo $projName;?>
-                                    <small class="pull-right">Supervisor: <?php if (isset($supervisorName)){echo $supervisorName;}?></small>
-                                </h2>
-
-                                <table class="table table-striped">
-                                    <thead>
-                                    <tr>
-                                        <th>CMS</th>
-                                        <th>Name</th>
-                                        <th>Set Grade</th>
-                                        <th>Comments/Review</th>
-                                        <!--                                        <th>Action</th>-->
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <form role="form" action="" id="gradeStudents" name="gradeStudents" method="POST" data-toggle="validator">
-                                        <?php
-                                        $sql = "SELECT *  FROM student WHERE student.groupId ='$groupId' ";
-                                        $result = $conn->query($sql);
-                                        if ($result->num_rows > 0) {
-                                        // output data of each row
-                                        while($row = $result->fetch_assoc()) { ?>
-                                        <!--HIDDEN INPUTS-->
-                                        <input type="hidden" name="studentId[]" id="studentId[]" value="<?php echo $row['studentId'];?>">
-                                        <input type="hidden" name="count" id="count" value="<?php echo $result->num_rows; ?>">
-                                        <input type="hidden" name="groupId" id="groupId" value="<?php echo $groupId; ?>">
-                                        <tr>
-                                            <td><?php echo $row['studentCMS'];?></td>
-                                            <td><?php echo $row['studentName'];?></td>
-                                            <td><select class="form-control" name="grade[]" required>
-                                                    <option value="">Select Grade</option>
-                                                    <option value="A+">A+</option>
-                                                    <option value="A">A</option>
-                                                    <option value="B+">B+</option>
-                                                    <option value="B">B</option>
-                                                    <option value="C+">C+</option>
-                                                    <option value="C">C</option>
-                                                    <option value="D+">D+</option>
-                                                    <option value="D">D</option>
-                                                    <option value="F">F</option>
-                                                </select>
-                                            </td>
-                                            <td><input type="text" class="form-control" id="comments[]" name="comments[]" placeholder="Comments/Reviews if any"></td>
-                                            <!--                                        <td><button type="submit" name="btnGradeStudents" form="gradeStudents" class="btn btn-default btn-sm ">Grade Student</button></div></td>-->
-                                            <?php } } ?>
-                                        </tr>
-
-                                    </form>
-                                    </tbody>
-                                </table>
-
-                                <div class="box-footer">
-                                    <a href="<?php echo $_SERVER['PHP_SELF'];?>" class="btn btn-default" >Cancel</a>
-                                    <button type="submit" name="btnGradeStudents" form="gradeStudents" class="btn btn-primary pull-right">Grade Students</button>
-                                </div>
-
-                                <?php
-                            }else if (isset($grade_check)) {
-                                if ($grade_check == TRUE){
-
-
-                                    ?>
-                                    <br/><br/>
-
-                                    <div class="callout callout-info">
-                                        <h4>Already Graded!</h4>
-
-                                        <p>This group has already been graded.You can edit Grades until coordinator locks them</p>
-                                    </div>
-
-                                    <table class="table table-condensed">
-                                        <tr>
-                                            <th style="width: 20px;">CMS</th>
-                                            <th>Name</th>
-                                            <th sty="width: 10px;">Grade</th>
-                                            <th sty="width: 10px;">Actions</th>
-
-                                        </tr>
-                                        <?php
-                                        $sql = "SELECT * FROM grades JOIN student ON student.studentId = grades.studentId WHERE grades.groupId = '$groupId' AND sdpPart = 1";
-                                        $result = $conn->query($sql);
-
-                                        if ($result->num_rows > 0) {
-                                            // output data of each row
-                                            while($row = $result->fetch_assoc()) {
-                                                $gradedBy = $row['gradedBy'];
-                                                ?>
-                                                <tr>
-                                                    <td><?php echo $row['studentCMS'];?></td>
-                                                    <td><?php echo $row['studentName'];?></td>
-                                                    <td><?php echo $row['grade'];?></td>
-                                                    <td><a href="<?php echo $_SERVER['PHP_SELF']."?group=".$row['groupId']."&edit=".$row['id'];?>" class="btn btn-default btn-sm">Edit</a></td>
-                                                </tr>
-
-                                                <?php
-                                            }
-                                        }
-                                        ?>
-                                    </table>
-
-                                    <?php
-                                }   }
-
-                            ?>
-
-
-
-                        </div>
-                        <!-- /.box-body -->
-                    </div>
-                    <!-- /.box -->
-
-                    <!-- general form elements -->
-                    <div class="box no-border">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Internal Demo Evaluation</h3>
-                        </div>
-                        <!-- /.box-header -->
-
-                        <div class="box-body">
-                            <a href="./internalEvaluations.php" target="_blank" class="btn btn-default btn-flat btn-sm"><i class="fa fa-external-link" aria-hidden="true"></i> Goto Internal Demo Evaluation</a>
-                        </div>
-                        <!-- /.box-body -->
-
-                        <div class="box-footer">
-
                         </div>
 
-                    </div>
+                    <?php
+                    }
+
+                    ?>
+
+
+
 
                   
 
