@@ -50,15 +50,24 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
                 if ($stmt->affected_rows > 0) {
 
-                    //MAKE a folder with BATCH name
-                    if (!file_exists('uploads/'.$batchName)) {
-                        mkdir('uploads/'.$batchName, 0777, true);
+                    //Ad to batch settings
+                    $last_id = $stmt->insert_id;
+                    $sql = "INSERT INTO batch_settings (batchId) VALUES ('$last_id')";
 
-                        // Commit transaction
-                        $stmt->close();
-                        $conn->close();
-                        header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
+                    if ($conn->query($sql) === TRUE) {
+
+                        //MAKE a folder with BATCH name
+                        if (!file_exists('uploads/'.$batchName)) {
+                            mkdir('uploads/'.$batchName, 0777, true);
+
+                            // Commit transaction
+                            $stmt->close();
+                            $conn->close();
+                            header('Location:' . $_SERVER['PHP_SELF'] . '?status=t');die;
+                        }
                     }
+
+
                 }
                 else{
                     //SQL Error

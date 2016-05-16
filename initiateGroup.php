@@ -16,38 +16,75 @@ $batchId = $_SESSION['BatchID'];
 $studentId = $_SESSION['usrId'];
 
 
-
+    $check = true;
     /* Check if:
      * - User already initiated a group
      * - User is already in a group
      * - User sent request to group
      */
 
-    $sql = "SELECT * FROM student WHERE batchId = '$batchId' AND studentId = '$studentId' LIMIT 1";
+    //Check for request sent already
+    $sql = "SELECT * FROM student_group_request WHERE studentId = '$studentId' LIMIT 1";
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
-        while($row = $result->fetch_assoc()) {
-            if ($row['groupId'] != null OR $row['isLeader'] == 1){
+        //User sent request to group already
+        $check = false;
+    } else {
+        //Check if group leader or in a group
+        $sql = "SELECT * FROM student WHERE studentId = '$studentId' LIMIT 1";
+        $result = $conn->query($sql);
 
-                //User is already in a group
-                $check = false;
-            }
-            else{
-                $check = true;
-
-                $sql = "SELECT studentId FROM student_group_request WHERE studentId = '$studentId' LIMIT 1";
-                $result = $conn->query($sql);
-
-                if ($result->num_rows > 0) {
-                    //User already sent request to group
-                    $check = false;
-                }else{
-                    $check = true;
-                }
+        if ($result->num_rows > 0) {
+            // output data of each row
+            while($row = $result->fetch_assoc()) {
+                $isLeader = $row['isLeader'];
+                $groupId = $row['groupId'];
             }
         }
+        if ($isLeader == 1 OR !is_null($groupId)){
+            $check = false;
+        }
+        else{
+            //$check = true;
+        }
+
     }
+
+
+
+
+
+
+//    $sql = "SELECT * FROM student WHERE batchId = '$batchId' AND studentId = '$studentId' LIMIT 1";
+//    $result = $conn->query($sql);
+//
+//    if ($result->num_rows > 0) {
+//        while($row = $result->fetch_assoc()) {
+//            if ($row['isLeader'] == 1){
+//
+//                //User is already initiated a group
+//                $check = false;
+//            }
+//            else if (!is_null($row['groupId'])){
+//                //User is already in a group
+//                $check = false;
+//            }
+//            else{
+//                $check = true;
+//
+//                $sql = "SELECT studentId FROM student_group_request WHERE studentId = '$studentId' LIMIT 1";
+//                $result = $conn->query($sql);
+//
+//                if ($result->num_rows > 0) {
+//                    //User already sent request to group
+//                    $check = false;
+//                }else{
+//                    $check = true;
+//                }
+//            }
+//        }
+//    }
 
 
 

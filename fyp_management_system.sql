@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 16, 2016 at 07:19 PM
+-- Generation Time: May 16, 2016 at 08:15 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -126,8 +126,7 @@ CREATE TABLE `faculty` (
 --
 
 INSERT INTO `faculty` (`facultyId`, `facultyName`, `facultyPhoneNo`, `facultyEmail`, `designation`, `facultyImage`, `facultyPassword`, `isAdmin`, `isCoordinator`, `isActive`, `createdDtm`) VALUES
-(0, 'Super Admin', '', 'superadmin@fypms.com', '--', NULL, '123', 1, 0, 1, '0000-00-00 00:00:00'),
-(42, 'Saud Khan', '3458541454', 'saudkhan@riu.edu.pk', 'Coordinator', NULL, '123', 0, 1, 1, '2016-05-16 22:19:15');
+(0, 'Super Admin', '', 'superadmin@fypms.com', '--', NULL, '123', 1, 0, 1, '0000-00-00 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -363,13 +362,6 @@ CREATE TABLE `work_load` (
   `totalLoad` int(255) NOT NULL,
   `currentLoad` int(11) DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='workload_Info';
-
---
--- Dumping data for table `work_load`
---
-
-INSERT INTO `work_load` (`loadId`, `facultyId`, `totalLoad`, `currentLoad`) VALUES
-(1, 42, 3, 0);
 
 --
 -- Indexes for dumped tables
@@ -609,7 +601,7 @@ ALTER TABLE `timeline_student`
 -- AUTO_INCREMENT for table `work_load`
 --
 ALTER TABLE `work_load`
-  MODIFY `loadId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `loadId` int(255) NOT NULL AUTO_INCREMENT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

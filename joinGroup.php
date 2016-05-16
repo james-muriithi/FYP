@@ -182,6 +182,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                 $male_female_group = $row['male_female_group'];
                             }
                         }
+                        
 
                         if ($male_female_group == 0){
                             //Not Allowed

@@ -29,7 +29,7 @@ if (isset($_SESSION["usrId"])) {
         }
         if ($inGroup <= $groupLimit){
             //Check if he has group requests
-            $sql = "SELECT * from student_group JOIN student_group_request WHERE leaderId = '$studentId'  ";
+            $sql = "SELECT * FROM student JOIN student_group ON student.studentId = student_group.leaderId JOIN student_group_request ON student_group_request.groupId = student_group.groupId WHERE leaderId = '$studentId' ";
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
                 $numOfRequests = $result->num_rows;
