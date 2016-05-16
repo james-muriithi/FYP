@@ -156,7 +156,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <form id="registerFaculty" action="" method="post" data-toggle="validator">
 
       <div class="form-group has-feedback">
-        <input type="text" name="facultyName" class="form-control" placeholder="Enter Full name" required/>
+        <input type="text" name="facultyName" pattern="[a-zA-Z][a-zA-Z ]{4,}" class="form-control" placeholder="Enter Full name" required/>
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
 

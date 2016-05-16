@@ -165,7 +165,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                             </div>
 
                             <div class="form-group has-feedback">
-                                <input type="text" name="name"  class="form-control" placeholder="Enter Full name" maxlength="30" minlength="5" required/> <!--TODO : Regex for name-->
+                                <input type="text" name="name" pattern="[a-zA-Z][a-zA-Z ]{4,}"  class="form-control" placeholder="Enter Full name" maxlength="30" minlength="5" required/> <!--TODO : Regex for name-->
                                 <span class="glyphicon glyphicon-user form-control-feedback"></span>
                             </div>
 

@@ -179,7 +179,7 @@ if((isset($_POST['externalName'])) && (isset($_POST['externalEmail']))) {
     <form id="registerExternal" action="" method="post" data-toggle="validator">
 
       <div class="form-group has-feedback">
-        <input type="text" name="name" class="form-control" placeholder="Full name" required/>
+        <input type="text" name="name" pattern="[a-zA-Z][a-zA-Z ]{4,}" class="form-control" placeholder="Full name" required/>
         <span class="glyphicon glyphicon-user form-control-feedback"></span>
       </div>
 
