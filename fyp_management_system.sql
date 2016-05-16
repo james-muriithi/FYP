@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: May 16, 2016 at 08:15 PM
+-- Generation Time: May 16, 2016 at 08:48 PM
 -- Server version: 10.1.10-MariaDB
 -- PHP Version: 7.0.3
 
@@ -526,7 +526,7 @@ ALTER TABLE `external_examiner`
 -- AUTO_INCREMENT for table `faculty`
 --
 ALTER TABLE `faculty`
-  MODIFY `facultyId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `facultyId` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 --
 -- AUTO_INCREMENT for table `faculty_student_group`
 --

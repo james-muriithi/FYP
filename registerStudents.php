@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             }
 
             //Check if student already exists with email & cms
-            $sql = "SELECT * FROM student WHERE studentCMS = '$cms' OR studentEmail = '$email' LIMIT 1";
+            $sql = "SELECT * FROM student WHERE (studentCMS = '$cms' OR studentEmail = '$email') AND isActive = 1 LIMIT 1";
             $result = $conn->query($sql);
 
             if ($result->num_rows > 0) {
